@@ -1,0 +1,29 @@
+.php-loja {
+    display: grid;
+    grid-template-areas:
+        "header"
+        "main"
+        "footer";
+    grid-template-rows: auto 1fr auto;
+    height: 100vh;
+
+    header {
+      grid-area: header;
+      background-color: #f8f9fa;
+      padding: 20px;
+      text-align: center;
+    }
+
+    main {
+      grid-area: main;
+      background-color: #e9ecef;
+      padding: 20px;
+    }
+
+    footer {
+      grid-area: footer;
+      background-color: #f8f9fa;
+      padding: 20px;
+      text-align: center;
+    }
+}
