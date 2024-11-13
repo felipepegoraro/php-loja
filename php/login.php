@@ -19,7 +19,7 @@ if ($result->num_rows > 0) {
         echo json_encode(["error" => "Senha incorreta"]);
     }
 } else {
-    echo json_encode(["error" => "Usuário inválido"]);
+    echo json_encode(["error" => "Usuário invalido"]);
 }
 
 $stmt->close();

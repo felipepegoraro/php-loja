@@ -15,7 +15,7 @@ const LoginScreen = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost/login.php', loginData, {
+      const response = await axios.post('http://localhost/php-loja-back/login.php', loginData, {
         headers: {
           'Content-Type': 'application/json',
         },

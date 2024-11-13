@@ -28,7 +28,7 @@ if ($tabela && preg_match('/^[a-zA-Z0-9_]+$/', $tabela)) {
         echo json_encode(["error" => "Nenhum dado encontrado"]);
     }
 } else {
-    echo json_encode(["error" => "Nome de tabela inválido ou ausente"]);
+    echo json_encode(["error" => "Nome de tabela invalido ou ausente"]);
 }
 
 $conn->close();

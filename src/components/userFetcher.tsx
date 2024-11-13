@@ -7,7 +7,7 @@ const UserFetcher = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        axios.get(`http://localhost/user-fetch.php?tabela=tb_usuario`)
+        axios.get(`http://localhost/php-loja-back/user-fetch.php?tabela=tb_usuario`)
             .then(response => {
                 if (response.data.error) {
                     setError(response.data.error);
