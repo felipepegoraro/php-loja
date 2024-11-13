@@ -1,0 +1,31 @@
+/* Header Styles */
+.navbar {
+  background-color: #111 !important;
+}
+.navbar .navbar-brand {
+  color: var(--primary-color);
+}
+.navbar .navbar-brand:hover {
+  color: var(--primary-color);
+}
+.navbar .nav-link {
+  color: var(--gray);
+}
+.navbar .nav-link:hover {
+  color: var(--white);
+}
+.navbar .cta-button {
+  background-color: var(--white);
+  color: var(--primary-color);
+  border: 1px solid var(--white);
+  border-radius: 12px;
+  padding: 10px 30px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+.navbar .cta-button:hover {
+  background-color: rgba(242, 242, 242, 0.9333333333);
+  color: var(--primary-color);
+}
+
+/*# sourceMappingURL=header.css.map */

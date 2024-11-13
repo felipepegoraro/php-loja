@@ -7,7 +7,7 @@
 .php-loja header {
   grid-area: header;
   background-color: #f8f9fa;
-  padding: 20px;
+  padding: 30px;
   text-align: center;
 }
 .php-loja main {
@@ -18,7 +18,7 @@
 .php-loja footer {
   grid-area: footer;
   background-color: #f8f9fa;
-  padding: 20px;
+  padding: 30px;
   text-align: center;
 }
 

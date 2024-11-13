@@ -1,0 +1,56 @@
+/* Footer Styles */
+
+.footer {
+    background-color: #111 !important;
+    font-family: var(--font-montserrat);
+  }
+  
+  .footer-logo {
+    width: 180px; 
+  }
+  
+  .footer-description {
+    font-size: 24px;
+    line-height: 1.5;
+  }
+  
+  .footer-heading {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .footer ul {
+    align-items: center ;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .footer ul li {
+    list-style-type: none;
+  }
+  
+  .footer ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px; 
+  }
+  
+  .footer ul li a:hover {
+    color: #bbb;
+  }
+  
+  .footer p {
+    font-size: 14px;
+
+  }
+  
+  @media (max-width: 768px) {
+    .footer .row {
+      text-align: center;
+    }
+  
+    .footer .col-md-4 {
+   
+    }
+  }
+  

@@ -1,0 +1,46 @@
+/* Header Styles */
+
+.navbar {
+    background-color: #111 !important;
+    .navbar-brand{
+        color: var(--primary-color);
+        &:hover {
+            color: var(--primary-color); 
+        }
+    }
+    .nav-link {
+        color: var(--gray);
+        &:hover{
+            color: var(--white);
+        }
+    }
+
+    .cta-button {
+        background-color: var(--white);
+        color: var(--primary-color);
+        border: 1px solid var(--white);
+        border-radius: 12px;
+        padding: 10px 30px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .cta-button:hover {
+        background-color: #f2f2f2ee;
+        color: var(--primary-color);
+    }
+
+}
+
+
+
+// @keyframes pulse {
+//     0%, 100% {
+//         transform: scale(1);
+//         box-shadow: 0 0 0 rgba(0, 0, 0, 0.2);
+//     }
+//     50% {
+//         transform: scale(1.05);
+//         box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+//     }
+// }
