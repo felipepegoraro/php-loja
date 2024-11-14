@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useUser } from '../context/userContext';
 
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const {setUser}  = useUser();
+  const nav = useNavigate();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -23,11 +26,20 @@ const LoginScreen = () => {
         },
       });
 
-      const result = response.data; // {success: true, error: string}
+      const result = response.data; // {success: true, user: User, error: string}
+
       if (result.success) {
         setErrorMessage('');
-        // TODO: SAIR DESSA PAGINA!
-        alert('Login bem-sucedido!');
+
+        console.log(result.user);
+        
+        setUser({
+          nome: result.user.nome,
+          email: result.user.email,
+          admin: result.user.admin,
+        });
+
+        nav(result.user?.admin ? "/AdminHomePage" : "/Catalogo");
       } else {
         setErrorMessage(result.error || 'Erro ao fazer login');
       }
