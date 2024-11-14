@@ -1,15 +1,10 @@
--- abrir o mysql
--- executar: source SEU_DIRETORIO/create_tables.sql
-
-USE php_loja;
-
--- SET FOREIGN_KEY_CHECKS = 0;
--- DROP TABLE IF EXISTS tb_itens_pedido;
--- DROP TABLE IF EXISTS tb_itens;
--- DROP TABLE IF EXISTS tb_subcategoria;
--- DROP TABLE IF EXISTS tb_categoria;
--- DROP TABLE IF EXISTS tb_usuario;
--- SET FOREIGN_KEY_CHECKS = 1;
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS tb_itens_pedido;
+DROP TABLE IF EXISTS tb_itens;
+DROP TABLE IF EXISTS tb_subcategoria;
+DROP TABLE IF EXISTS tb_categoria;
+DROP TABLE IF EXISTS tb_usuario;
+SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE IF NOT EXISTS tb_usuario (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -24,7 +19,8 @@ CREATE TABLE IF NOT EXISTS tb_usuario (
     bairro VARCHAR(100),
     complemento VARCHAR(100),
     cidade VARCHAR(100),
-    estado CHAR(2)
+    estado CHAR(2),
+    admin BOOLEAN NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS tb_categoria (

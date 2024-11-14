@@ -1,10 +1,4 @@
 -- ============= INSERÇÃO DE DADOS ============= 
-
-INSERT INTO tb_usuario (nome, email, data_nascimento, telefone, senha, cep, rua, numero, bairro, complemento, cidade, estado)
-VALUES 
-('João Silva', 'joao.silva@example.com', '1990-05-15', '11987654321', 'senha123', '12345-678', 'Rua A', '123', 'Centro', 'Apto 101', 'São Paulo', 'SP'),
-('Julia Oliveira', 'maria.oliveira@example.com', '1985-11-30', '11976543210', 'senha456', '98765-432', 'Rua B', '456', 'Jardim', 'Casa 202', 'Rio de Janeiro', 'RJ');
-
 INSERT INTO tb_categoria (nome) VALUES 
     ('Eletrônicos'),
     ('Eletrodomésticos'),

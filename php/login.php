@@ -13,7 +13,15 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     if (password_verify($pass, $row['senha'])) { 
-        echo json_encode(["success" => true]);
+        echo json_encode([
+            "success" => true,
+            "user" => [
+                "id" => $row['id'],
+                "email" => $row['email'],
+                "nome" => $row['nome'],
+                "admin" => $row['admin']
+            ]
+        ]);
     } else {
         echo json_encode(["error" => "Senha incorreta"]);
     }

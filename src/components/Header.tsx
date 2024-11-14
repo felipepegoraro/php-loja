@@ -1,8 +1,43 @@
 import "../styles/css/header.css"
+import {useNavigate} from 'react-router-dom';
+import { useUser } from '../context/userContext';
+
+const LoginButton = () => {
+  const { user, isLoggedIn, setUser } = useUser();
+  const navigate = useNavigate();
+
+  const handleLogOff = () => {
+    setUser(null);
+    navigate('/Login');
+  };
+
+  if (isLoggedIn) {
+    return (
+      <>
+        <button className="cta-button mt-2 ms-5 d-none d-lg-block">
+          {`Profile: ${user?.nome}`}
+        </button>
+        <button
+          className="cta-button mt-2 ms-5 d-none d-lg-block"
+          onClick={handleLogOff}
+        >
+          Sair
+        </button>
+      </>
+    );
+  }
+
+  return (
+    <a href="/Login" className="cta-button mt-2 ms-5 d-none d-lg-block">
+      Login
+    </a>
+  );
+};
+
 
 const Header = () => {
-    return (
 
+    return (
         <>
             <header>
                 <nav className="navbar navbar-expand-lg navbar-dark navbar-dark fixed-top">
@@ -24,9 +59,8 @@ const Header = () => {
                                     <a className="nav-link" href="/">Suporte</a>
                                 </li>
                             </ul>
-                            <a href="/Login" className="cta-button ms-5 d-none d-lg-block">Login</a>
-                            <a href="/Login" className="cta-button d-lg-none d-block w-100 mt-2">Login</a>
                         </div>
+                        <LoginButton/>
                     </div>
                 </nav>
             </header>
