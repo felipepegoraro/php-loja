@@ -12,8 +12,7 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    if ($pass === $row['senha']){
-    // if (password_verify($pass, $row['senha'])) { // USAR QND COLOCAR HASH
+    if (password_verify($pass, $row['senha'])) { 
         echo json_encode(["success" => true]);
     } else {
         echo json_encode(["error" => "Senha incorreta"]);

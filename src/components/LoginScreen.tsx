@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { Link } from "react-router-dom";
+
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -59,6 +61,10 @@ const LoginScreen = () => {
         <button type="submit">Entrar</button>
       </form>
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+      
+      <Link to="/Register" className="btn-register">
+        Não tem uma conta? Cadastre-se
+      </Link>
     </div>
   );
 };
