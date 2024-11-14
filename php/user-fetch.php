@@ -1,6 +1,4 @@
 <?php
-// curl http://localhost/user-fetch.php?tabela=tb_usuario
-
 $conn = include 'connect-db.php';
 
 $tabela = isset($_GET['tabela']) ? $_GET['tabela'] : null;
