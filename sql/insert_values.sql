@@ -16,12 +16,13 @@ INSERT INTO tb_categoria (nome) VALUES
     ('Supermercado');
 
 INSERT INTO tb_subcategoria (idCategoria, nome) VALUES
-    -- Subcategorias de Eletrônicos
     (1, 'Celulares'),
+    (1, 'Fones de Ouvido'),  -- Nova subcategoria
     (1, 'Computadores'),
     (1, 'Tablets'),
     (1, 'Televisores'),
     (1, 'Câmeras'),
+    (1, 'Outros'),
 
     -- Subcategorias de Eletrodomésticos
     (2, 'Geladeiras'),

@@ -1,3 +1,9 @@
+export type ItemSubcategoria = {
+    id: number,
+    nome: string
+    idCategoria: number;
+}
+
 export type ItemCategoria = {
     id: number,
     nome: string
@@ -8,6 +14,8 @@ export type Item = {
     idSubCategoria: number;
     nome: string;
     descricao: string;
-    foto: Buffer | null;
+    foto: File | Buffer | null;
     preco: number;
+    categoria: string;
+    subcategoria: string;
 };

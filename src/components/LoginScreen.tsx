@@ -39,7 +39,7 @@ const LoginScreen = () => {
           admin: result.user.admin,
         });
 
-        nav(result.user?.admin ? "/AdminHomePage" : "/Catalogo");
+        nav(result.user?.admin ? "/admin/Homepage" : "/Catalogo");
       } else {
         setErrorMessage(result.error || 'Erro ao fazer login');
       }

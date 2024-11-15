@@ -1,4 +1,5 @@
 <?php
+session_start();
 $conn = include 'connect-db.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
@@ -13,6 +14,13 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     if (password_verify($pass, $row['senha'])) { 
+        $_SESSION['user'] = [
+            'id' => $row['id'],
+            'email' => $row['email'],
+            'nome' => $row['nome'],
+            'admin' => $row['admin']
+        ];
+
         echo json_encode([
             "success" => true,
             "user" => [
