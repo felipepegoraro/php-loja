@@ -13,6 +13,7 @@ const Catalogo = () => {
                 const res = await axios.get("http://localhost/php-loja-back/get-products.php", {
                     timeout: 10000
                 });
+
                 setProducts(res.data);
                 setLoading(false);
             }
@@ -30,14 +31,14 @@ const Catalogo = () => {
     if (loading) return <img height="50px" src="gif-loading.gif" alt="loading gif"/>;
 
     return (
-        <div className="container">
+        <main className="container">
             <h1>Catálogo de Produtos</h1>
             <div className="row">
                 {Array.isArray(products) && products.map((produto: Item, i:number) => (
                     <ProductCard key={i} {...produto} />
                 ))}
             </div>
-        </div>
+        </main>
     );
 };
 

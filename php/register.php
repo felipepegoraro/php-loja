@@ -21,7 +21,6 @@ try {
             ]);
         } else {
 
-
             $user = (object) [
                 'nome' => $data['nome'],
                 'email' => $data['email'],
@@ -35,14 +34,15 @@ try {
                 'complemento' => $data['complemento'],
                 'cidade' => $data['cidade'],
                 'estado' => $data['estado'],
+                'admin' => false
             ];
 
 
-            $stmt = $conn->prepare("INSERT INTO tb_usuario (nome, email, data_nascimento, telefone, senha, cep, rua, numero, bairro, complemento, cidade, estado) 
-                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt = $conn->prepare("INSERT INTO tb_usuario (nome, email, data_nascimento, telefone, senha, cep, rua, numero, bairro, complemento, cidade, estado, admin) 
+                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             
             $stmt->bind_param(
-                'ssssssssssss',
+                'ssssssssssssi',
                 $user->nome,
                 $user->email,
                 $user->dataNascimento,
@@ -54,7 +54,8 @@ try {
                 $user->bairro,
                 $user->complemento,
                 $user->cidade,
-                $user->estado
+                $user->estado,
+                $user->admin
             );
 
             if ($stmt->execute()) {

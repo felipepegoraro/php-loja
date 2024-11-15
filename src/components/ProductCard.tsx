@@ -2,6 +2,7 @@ import type {Item} from '../types/item';
 
 const ProductCard = (produto: Item) => {
     console.log("produto: (" + produto.id + "): " + produto.nome);
+
     return (
         <div className="col-md-4">
             <div className="card">
@@ -12,7 +13,7 @@ const ProductCard = (produto: Item) => {
                 />
                 <div className="card-body">
                     <h5 className="card-title">{produto.nome}</h5>
-                    <p className="card-text">{produto.idSubCategoria}</p>
+                    <p className="card-text">{produto.categoria + " > " + produto.subcategoria}</p>
                     <p className="card-text">{produto.descricao}</p>
                     <p className="card-text">Preço: R$ {produto.preco}</p>
                 </div>

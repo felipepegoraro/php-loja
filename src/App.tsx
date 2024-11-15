@@ -9,13 +9,13 @@ import './styles/css/php-loja.css'
 const App = () => {
     return (
         <div className="php-loja">
-            <BrowserRouter>
-                <UserProvider>
+            <UserProvider>
+                <BrowserRouter>
                     <Header />
                     <AppRoutes/>
                     <Footer />
-                </UserProvider>
-            </BrowserRouter>
+                </BrowserRouter>
+            </UserProvider>
         </div>
     );
 }
