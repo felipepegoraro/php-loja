@@ -1,4 +1,4 @@
-.register-container {
+.login-container {
   display: flex;
   gap: 20px;
   flex-direction: row;
@@ -7,4 +7,4 @@
   background: linear-gradient(to right, #0077ff, #00d4ff);
 }
 
-/*# sourceMappingURL=register.css.map */
+/*# sourceMappingURL=login.css.map */

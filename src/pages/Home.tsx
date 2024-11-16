@@ -3,7 +3,7 @@ import UserFetcher from '../components/userFetcher';
 
 const Home = () => {
     return (
-        <main className="container">
+        <main className="home-container">
             <h1>Olá</h1>
         </main>
     );
