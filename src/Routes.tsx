@@ -3,7 +3,7 @@ import Login from "./pages/Login"
 import Catalogo from "./pages/Catalogo"
 import Register from "./pages/Register";
 import AdminHomePage from "./pages/admin/AdminHomePage";
-import RegisterProductPage from "./pages/admin/RegisterProductPage";
+import RegisterProductPage from "./pages/admin/registerProductPage";
 
 import { Route, Routes } from "react-router-dom";
 
