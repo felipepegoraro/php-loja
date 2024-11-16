@@ -31,7 +31,7 @@ const Catalogo = () => {
     if (loading) return <img height="50px" src="gif-loading.gif" alt="loading gif"/>;
 
     return (
-        <main className="container">
+        <main className="catalogo-container">
             <h1>Catálogo de Produtos</h1>
             <div className="row">
                 {Array.isArray(products) && products.map((produto: Item, i:number) => (

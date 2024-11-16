@@ -2,13 +2,14 @@ import { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from '../context/userContext';
+import "../styles/css/login-screen.css"
 
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const {setUser}  = useUser();
+  const { setUser } = useUser();
   const nav = useNavigate();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -32,7 +33,7 @@ const LoginScreen = () => {
         setErrorMessage('');
 
         console.log(result.user);
-        
+
         setUser({
           nome: result.user.nome,
           email: result.user.email,
@@ -49,35 +50,38 @@ const LoginScreen = () => {
   };
 
   return (
-    <div>
-      <h2>Faça login</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>Email</label>
-          <input
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Senha</label>
-          <input
-            type="password"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Entrar</button>
-      </form>
-      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-      
-      <Link to="/Register" className="btn-register">
-        Não tem uma conta? Cadastre-se
-      </Link>
-    </div>
+      <div className="login-box">
+        <h2>Faça login</h2>
+        <form onSubmit={handleLogin}>
+          <div className="input-group">
+            <label>Email</label>
+            <input
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="input-field"
+            />
+          </div>
+          <div className="input-group">
+            <label>Senha</label>
+            <input
+              type="password"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+              required
+              className="input-field"
+            />
+          </div>
+          <button type="submit" className="btn-submit">Entrar</button>
+        </form>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
+
+        <Link to="/Register" className="btn-register">
+          Não tem uma conta? Cadastre-se
+        </Link>
+      </div>
+
   );
 };
 
