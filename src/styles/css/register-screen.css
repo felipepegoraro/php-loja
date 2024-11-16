@@ -1,0 +1,31 @@
+.form-section-title {
+  margin-top: 20px;
+  margin-bottom: 40px;
+  font-size: 2rem;
+  color: var(--text-color);
+  text-align: center;
+  letter-spacing: 5px;
+  text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+  border-bottom: 4px solid var(--primary-color);
+  border-radius: 10px;
+  padding-bottom: 10px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.form-group {
+  margin: 15px 0px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.form-group:hover {
+  transform: translateY(-5px);
+}
+
+.form {
+  justify-content: center !important;
+}
+.form .row {
+  justify-content: center;
+}
+
+/*# sourceMappingURL=register-screen.css.map */

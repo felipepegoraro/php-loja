@@ -1,3 +1,27 @@
+.register-container {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
 
+.register-header {
+  margin: 30px;
+  text-align: center;
+  color: var(--text-color);
+}
+
+.register-title {
+  font-size: 3rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 5px rgba(0, 119, 255, 0.5);
+  margin-bottom: 20px;
+}
 
 /*# sourceMappingURL=register.css.map */

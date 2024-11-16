@@ -4,7 +4,7 @@ import Catalogo from "./pages/Catalogo"
 import Register from "./pages/Register";
 
 import AdminHomePage from "./pages/admin/AdminHomePage";
-import RegisterProductPage from "./pages/admin/registerProductPage";
+import RegisterProductPage from "./pages/admin/RegisterProductPage";
 
 import { Route, Routes } from "react-router-dom";
 
