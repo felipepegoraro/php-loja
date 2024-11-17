@@ -8,7 +8,7 @@ import axios from 'axios';
 //     object-fit: contain;
 // }
 
-const addToCart = async (
+export const addToCart = async (
     userId: number,
     item: Item,
     quantidade: number
@@ -39,10 +39,13 @@ const addToCart = async (
     };
 };
 
+interface ProductCardProps {
+    produto: Item;
+    addCartFunction: () => void;
+};
 
-const ProductCard = (produto: Item) => {
-    console.log("produto: (" + produto.id + "): " + produto.nome);
-
+const ProductCard = (props: ProductCardProps) => {
+    const {produto, addCartFunction} = props;
     const {user} = useUser();
 
     return user && (
@@ -66,10 +69,9 @@ const ProductCard = (produto: Item) => {
                     comprar
                 </button>
                 
-                <button className="btn btn-secondary" onClick={async () => await addToCart(user.id, produto, 1)}>
+                <button className="btn btn-secondary" onClick={async () => addCartFunction()}>
                     adicionar ao carrinho
                 </button>
-
             </div>
         </div>
     );
