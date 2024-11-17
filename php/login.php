@@ -21,6 +21,8 @@ if ($result->num_rows > 0) {
             'admin' => $row['admin']
         ];
 
+        session_write_close();
+
         echo json_encode([
             "success" => true,
             "user" => [

@@ -30,7 +30,7 @@ const UserFetcher = () => {
 
             <ul>
                 {users.map(user => (
-                    <li key={user.id}>{user.nome} - {user.email}</li>
+                    <li key={user.id}>{user.email}</li>
                 ))}
             </ul>
         </div>

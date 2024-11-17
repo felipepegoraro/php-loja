@@ -1,7 +1,10 @@
 import Home from "./pages/Home"
 import Login from "./pages/Login"
-import Catalogo from "./pages/Catalogo"
+import Catalogo from "./pages/Catalogo";
 import Register from "./pages/Register";
+
+import NotFound from "./pages/NotFound";
+
 import AdminHomePage from "./pages/admin/AdminHomePage";
 import RegisterProductPage from "./pages/admin/registerProductPage";
 
@@ -18,6 +21,8 @@ const AppRoutes = () => {
                 
                 <Route path="/admin/Homepage" element={<AdminHomePage/>}/>
                 <Route path="/admin/RegisterProduct" element={<RegisterProductPage/>}/>
+
+                <Route path="*" element={<NotFound />} />
             </Routes>
 
     )
