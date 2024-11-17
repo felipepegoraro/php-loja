@@ -1,9 +1,9 @@
-import LoginScreen from '../components/LoginScreen';
-import UserFetcher from '../components/userFetcher';
+// import LoginScreen from '../components/LoginScreen';
+// import UserFetcher from '../components/userFetcher';
 
 const Home = () => {
     return (
-        <main className="home-container">
+        <main className="container">
             <h1>Olá</h1>
         </main>
     );

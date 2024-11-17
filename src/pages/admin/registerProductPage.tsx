@@ -1,69 +1,128 @@
+import {useEffect, useState} from 'react';
 import { useUser } from '../../context/userContext';
-import { useState } from 'react';
 import CategorySelector from '../../components/CategorySelector';
 import axios from 'axios';
-import type { Item } from '../../types/item';
+import type { Item, ItemCategoria, ItemSubcategoria } from '../../types/item';
 
 const RegisterProductPage = () => {
-  const { user } = useUser();
-  const [product, setProduct] = useState<Item>({} as Item);
-  const [error, setError] = useState<string>('');
+    const { user } = useUser();
+    const [categories, setCategories] = useState<ItemCategoria[]>([]);
+    const [subcategories, setSubcategories] = useState<ItemSubcategoria[]>([]);
+    const [error, setError] = useState<string>('');
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { id, value } = e.target;
-    setProduct(prevState => ({
-      ...prevState,
-      [id]: id === 'preco' ? parseFloat(value) || 0 : value,
-    }));
-  };
+    const [product, setProduct] = useState<Item>({
+        id: 0,
+        idSubCategoria: 0,
+        nome: '',
+        descricao: '',
+        foto: null,
+        preco: 0,
+        categoria: '',
+        subcategoria: '',
+    });
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target && e.target.files) {
-      setProduct(prevState => ({
-        ...prevState,
-        foto: e.target.files?.item(0),
-      }) as Item);
+    useEffect(()=>{
+        const fetchCategories = async () => {
+            try {
+                const {data} = await axios.get("http://localhost/php-loja-back/get-categorias.php");    
+                setCategories(data);
+            } catch(e){
+                console.log("erro ao buscar categorias: ", e);
+            }
+        };
+        
+        const fetchSubcategories = async () => {
+            try {
+                const { data } = await axios.get('http://localhost/php-loja-back/get-subcategorias.php');
+                setSubcategories(data);
+            } catch (err) {
+                console.error("erro ao buscar subcategorias", err);
+            }
+        };
+
+        fetchCategories();
+        fetchSubcategories();
+    },[]);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { id, value } = e.target;
+        setProduct(prevState => ({
+          ...prevState,
+          [id]: id === 'preco' ? parseFloat(value) || 0 : value,
+        }));
+      };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target && e.target.files) {
+            setProduct(prevState => ({
+                ...prevState,
+                foto: e.target.files?.item(0),
+            }) as Item);
+        }
+    };
+
+    const handleCategoriaChange = (categoriaId: string) => {
+        const selectedCategorie = categories.find(cat => String(cat.id) === categoriaId);
+        if (selectedCategorie){
+            setProduct(prevState => ({
+                ...prevState,
+                categoria: selectedCategorie?.nome
+            }));
+        }
+    };
+
+    const handleSubcategoriaChange = (subcategoriaId: string) => {
+        const selectedSubcategorie = subcategories.find(subcat => String(subcat.id) === subcategoriaId);
+        if (selectedSubcategorie){
+            setProduct(prevState => ({
+                ...prevState,
+                idSubCategoria: selectedSubcategorie?.id,
+                subcategoria: selectedSubcategorie?.nome
+            }));
+        }
+    };
+
+    const handleFormSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+
+        formData.append('nome', product.nome);
+        formData.append('descricao', product.descricao);
+        formData.append('preco', String(product.preco));
+        formData.append('categoria', product.categoria);
+        formData.append('idSubCategoria', String(product.idSubCategoria));
+        formData.append('subcategoria', product.subcategoria);
+
+        if (product.foto) formData.append('foto', product.foto as Blob);
+
+        console.log(formData);
+
+        try {
+            const response = await axios.post('http://localhost/php-loja-back/register-product.php', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            withCredentials: true
+          });
+
+          console.log(response);
+        } catch (err) {
+            setError('Erro ao cadastrar produto. Tente novamente.');
+        }
+    };
+
+
+    if (!user || !user!.admin){
+        return (
+            <main className="container">
+                <h1>ACESSO INVÁLIDO</h1>
+            </main>
+        );
     }
-  };
 
-  const handleCategoriaChange = (categoriaId: string) => {
-    setProduct(prevState => ({
-      ...prevState,
-      categoria: categoriaId
-    }));
-  };
 
-  const handleSubcategoriaChange = (subcategoriaId: string) => {
-    setProduct(prevState => ({
-      ...prevState,
-      subcategoria: subcategoriaId
-    }));
-  };
-
-  const handleFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-    formData.append('nome', product.nome);
-    formData.append('descricao', product.descricao);
-    formData.append('preco', String(product.preco));
-    formData.append('foto', product.foto as Blob);
-    formData.append('subcategoria', product.subcategoria);
-
-    try {
-      const response = await axios.post('http://localhost/php-loja-back/register-product.php', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      console.log(response.data);
-    } catch (err) {
-      setError('Erro ao cadastrar produto. Tente novamente.');
-    }
-  };
-
-  return user?.admin ? (
+    return (
     <main className="container">
       <h2>Cadastrar Produto</h2>
 
@@ -126,8 +185,6 @@ const RegisterProductPage = () => {
 
       {error && <p className="text-danger">{error}</p>}
     </main>
-  ) : (
-    <p>Você não tem permissão para acessar esta página.</p>
   );
 };
 

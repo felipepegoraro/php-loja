@@ -2,6 +2,7 @@ import "../styles/css/header.css"
 import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
 import { useUser } from '../context/userContext';
+import axios from 'axios';
 
 const LoginButton = () => {
   const { user, isLoggedIn, setUser } = useUser();
@@ -12,11 +13,19 @@ const LoginButton = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  const handleLogOff = async () => {
+    try {
+      await axios.get('http://localhost/php-loja-back/logout.php', { withCredentials: true });
 
-  const handleLogOff = () => {
-    setUser(null);
-    navigate('/Login');
+      setUser(null);
+      localStorage.removeItem('user');
+
+      navigate('/Login');
+    } catch (error) {
+      console.error("Erro ao fazer logout:", error);
+    }
   };
+
 
   if (isLoggedIn) {
     return (

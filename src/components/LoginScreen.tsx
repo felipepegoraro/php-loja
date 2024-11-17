@@ -25,9 +25,10 @@ const LoginScreen = () => {
         headers: {
           'Content-Type': 'application/json',
         },
+        withCredentials: true
       });
 
-      const result = response.data; // {success: true, user: User, error: string}
+      const result = response.data;
 
       if (result.success) {
         setErrorMessage('');
