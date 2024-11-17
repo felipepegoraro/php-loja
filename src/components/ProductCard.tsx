@@ -1,9 +1,51 @@
 import type {Item} from '../types/item';
+import {useUser} from '../context/userContext';
+import axios from 'axios';
+
+// .card-img-top {
+//     width: 100%;
+//     height: 200px;
+//     object-fit: contain;
+// }
+
+const addToCart = async (
+    userId: number,
+    item: Item,
+    quantidade: number
+) => {
+    if (quantidade <= 0 || !item) return;
+
+    const obj = {
+        'idUsuario': String(userId),
+        'idItem': item.id,
+        'quantidade': String(quantidade),
+        'preco': item.preco,
+        'status': "ativo"
+    }
+
+    try {
+        const res = await axios.post("http://localhost/php-loja-back/cart-add.php", obj, { 
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
+            }
+        );
+
+        console.log(res.data);
+        if (res.data.success) console.log(res.data.message);
+        else console.log("erro: ", res.data.message);
+
+    } catch(e) {
+        console.log("erro ao adicionar no carrinho: ", e);
+    };
+};
+
 
 const ProductCard = (produto: Item) => {
     console.log("produto: (" + produto.id + "): " + produto.nome);
 
-    return (
+    const {user} = useUser();
+
+    return user && (
         <div className="col-md-4">
             <div className="card">
                 <img
@@ -24,9 +66,7 @@ const ProductCard = (produto: Item) => {
                     comprar
                 </button>
                 
-                <button className="btn btn-secondary" onClick={() => {
-                    console.log("testando ne porra")
-                }}>
+                <button className="btn btn-secondary" onClick={async () => await addToCart(user.id, produto, 1)}>
                     adicionar ao carrinho
                 </button>
 

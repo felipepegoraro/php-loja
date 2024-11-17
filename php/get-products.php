@@ -51,4 +51,3 @@ if ($result->num_rows > 0){
 echo json_encode($products, JSON_UNESCAPED_UNICODE);
 $conn->close();
 ?>
-

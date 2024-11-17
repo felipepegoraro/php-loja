@@ -30,6 +30,9 @@ ideias // todolist
 - CRIAR TELA RESUMO DO PEDIDO // mostrando itens/preco/add +ou-/remover/selecionar
 - ??? ESQUEMA DE PAGAMENTO ???
 
+NAO CONSEGUI COLOCAR UM DIRETORIO cart/ dentro do php para separar add.php,update.php etc
+entao fiz cart-add.php etc porque nao tava indo de JEITO NENHUM
+
 ## Requisitos Funcionais
 
 OK:
