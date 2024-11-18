@@ -1,5 +1,7 @@
-import type {Item} from '../types/item';
-import {useUser} from '../context/userContext';
+import type { Item } from '../types/item';
+import { useUser } from '../context/userContext';
+import { useNavigate } from 'react-router-dom';
+
 import axios from 'axios';
 
 export const addToCart = async (
@@ -18,17 +20,17 @@ export const addToCart = async (
     }
 
     try {
-        const res = await axios.post("http://localhost/php-loja-back/cart-add.php", obj, { 
-                headers: { 'Content-Type': 'application/json' },
-                withCredentials: true
-            }
+        const res = await axios.post("http://localhost/php-loja-back/cart-add.php", obj, {
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true
+        }
         );
 
         console.log(res.data);
         if (res.data.success) console.log(res.data.message);
         else console.log("erro: ", res.data.message);
 
-    } catch(e) {
+    } catch (e) {
         console.log("erro ao adicionar no carrinho: ", e);
     };
 };
@@ -39,10 +41,11 @@ interface ProductCardProps {
 };
 
 const ProductCard = (props: ProductCardProps) => {
-    const {produto, addCartFunction} = props;
-    const {user} = useUser();
+    const navigate = useNavigate();
+    const { produto, addCartFunction } = props;
+    const { user } = useUser();
 
-    return user && (
+    return (
         <div className="col-md-4">
             <div className="card">
                 <img
@@ -68,8 +71,10 @@ const ProductCard = (props: ProductCardProps) => {
                 }}>
                     comprar
                 </button>
-                
-                <button className="btn btn-secondary" onClick={async () => addCartFunction()}>
+
+                <button className="btn btn-secondary" onClick={
+                    user ? async () => addCartFunction() : () => navigate("/Login")}
+                >
                     adicionar ao carrinho
                 </button>
             </div>

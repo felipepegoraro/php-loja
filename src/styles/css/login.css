@@ -7,4 +7,10 @@
   background: linear-gradient(to right, #0077ff, #00d4ff);
 }
 
+@media screen and (max-width: 990px) {
+  .login-container {
+    flex-direction: column;
+  }
+}
+
 /*# sourceMappingURL=login.css.map */

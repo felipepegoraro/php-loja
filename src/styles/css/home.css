@@ -1,0 +1,83 @@
+body {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa;
+  color: #343a40;
+}
+
+.hero-section {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://via.placeholder.com/1920x600") no-repeat center center/cover;
+  color: white;
+  padding: 100px 0;
+}
+
+.hero-section h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.hero-section p {
+  font-size: 1.25rem;
+  margin-bottom: 30px;
+}
+
+.featured-products {
+  padding: 50px 0;
+}
+
+.featured-products h2 {
+  margin-bottom: 30px;
+  color: #212529;
+}
+
+.product-card {
+  border: none;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.product-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.product-card img {
+  border-radius: 4px;
+}
+
+.product-card .card-body {
+  text-align: center;
+}
+
+.price {
+  font-size: 1.5rem;
+  color: #28a745;
+  margin: 10px 0;
+}
+
+.product-categories .category-card {
+  text-align: center;
+  max-width: 200px;
+  min-width: 200px;
+  max-height: 200px;
+  margin: 10px;
+}
+
+.product-categories img {
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+}
+
+/* Testimonials */
+.testimonials blockquote {
+  font-size: 1.2rem;
+  color: #555;
+  margin: 20px 0;
+  border-left: 5px solid var(--primary-color);
+  padding-left: 20px;
+}
+
+/*# sourceMappingURL=home.css.map */
