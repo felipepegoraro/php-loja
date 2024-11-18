@@ -36,9 +36,10 @@ const LoginScreen = () => {
         console.log(result.user);
 
         setUser({
-          nome: result.user.nome,
-          email: result.user.email,
-          admin: result.user.admin,
+            id: result.user.id,
+            nome: result.user.nome,
+            email: result.user.email,
+            admin: result.user.admin,
         });
 
         nav(result.user?.admin ? "/admin/Homepage" : "/Catalogo");

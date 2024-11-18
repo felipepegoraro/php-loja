@@ -1,12 +1,57 @@
 import type {Item} from '../types/item';
+import {useUser} from '../context/userContext';
+import axios from 'axios';
 
-const ProductCard = (produto: Item) => {
-    console.log("produto: (" + produto.id + "): " + produto.nome);
+export const addToCart = async (
+    userId: number,
+    item: Item,
+    quantidade: number
+) => {
+    if (quantidade <= 0 || !item) return;
 
-    return (
+    const obj = {
+        'idUsuario': String(userId),
+        'idItem': item.id,
+        'quantidade': String(quantidade),
+        'preco': item.preco,
+        'status': "ativo"
+    }
+
+    try {
+        const res = await axios.post("http://localhost/php-loja-back/cart-add.php", obj, { 
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
+            }
+        );
+
+        console.log(res.data);
+        if (res.data.success) console.log(res.data.message);
+        else console.log("erro: ", res.data.message);
+
+    } catch(e) {
+        console.log("erro ao adicionar no carrinho: ", e);
+    };
+};
+
+interface ProductCardProps {
+    produto: Item;
+    addCartFunction: () => void;
+};
+
+const ProductCard = (props: ProductCardProps) => {
+    const {produto, addCartFunction} = props;
+    const {user} = useUser();
+
+    return user && (
         <div className="col-md-4">
             <div className="card">
                 <img
+                    style={{
+                        width: "100%",
+                        height: "250px",
+                        objectFit: "contain",
+                        background: "#eff"
+                    }}
                     src={`data:image/png;base64,${produto.foto}`}
                     alt={produto.nome}
                     className="card-img-top"
@@ -24,12 +69,9 @@ const ProductCard = (produto: Item) => {
                     comprar
                 </button>
                 
-                <button className="btn btn-secondary" onClick={() => {
-                    console.log("testando ne porra")
-                }}>
+                <button className="btn btn-secondary" onClick={async () => addCartFunction()}>
                     adicionar ao carrinho
                 </button>
-
             </div>
         </div>
     );

@@ -2,15 +2,16 @@ import { ReactNode, createContext, useState, useContext, useEffect } from 'react
 import axios from 'axios';
 
 interface SimplUser {
-  nome: string;
-  email: string;
-  admin: boolean;
+    id: number;
+    nome: string;
+    email: string;
+    admin: boolean;
 }
 
 interface UserContextType {
-  user: SimplUser | null;
-  setUser: (newUser: SimplUser | null) => void;
-  isLoggedIn: boolean;
+    user: SimplUser | null;
+    setUser: (newUser: SimplUser | null) => void;
+    isLoggedIn: boolean;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
