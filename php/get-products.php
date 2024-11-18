@@ -48,6 +48,7 @@ if ($result->num_rows > 0){
     exit();
 }
 
+// TODO: colocar [success => true, data => $products] esqueci
 echo json_encode($products, JSON_UNESCAPED_UNICODE);
 $conn->close();
 ?>

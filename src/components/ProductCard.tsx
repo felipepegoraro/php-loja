@@ -2,12 +2,6 @@ import type {Item} from '../types/item';
 import {useUser} from '../context/userContext';
 import axios from 'axios';
 
-// .card-img-top {
-//     width: 100%;
-//     height: 200px;
-//     object-fit: contain;
-// }
-
 export const addToCart = async (
     userId: number,
     item: Item,
@@ -52,6 +46,12 @@ const ProductCard = (props: ProductCardProps) => {
         <div className="col-md-4">
             <div className="card">
                 <img
+                    style={{
+                        width: "100%",
+                        height: "250px",
+                        objectFit: "contain",
+                        background: "#eff"
+                    }}
                     src={`data:image/png;base64,${produto.foto}`}
                     alt={produto.nome}
                     className="card-img-top"
