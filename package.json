@@ -52,5 +52,8 @@
   "overrides": {
     "nth-check": "$nth-check",
     "postcss": "$postcss"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.25.9"
   }
 }

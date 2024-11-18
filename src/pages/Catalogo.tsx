@@ -27,7 +27,7 @@ const Catalogo = () => {
                 const res = await axios.get("http://localhost/php-loja-back/cart-get.php", {timeout: 1000});
 
                 if (res.data.success && Array.isArray(res.data.values))
-                    setCart(res.data.values.filter((i: Cart) => i.idUsuario == user.id))
+                    setCart(res.data.values.filter((i: Cart) => i.idUsuario === user.id))
             } catch(error){
                 console.log("erro ao acessar carrinho", error);
             }
@@ -49,7 +49,7 @@ const Catalogo = () => {
         }
 
         fetchProducts();
-        fetchCartItems();
+        // fetchCartItems();
     },[user])
 
     const getTotalCarrinho = () => {
@@ -64,7 +64,7 @@ const Catalogo = () => {
     if (loading) return <img height="50px" src="gif-loading.gif" alt="loading gif"/>;
 
     // TODO: design aqui
-    return user ? (
+    return (
         <main className="catalogo-container container" >
             <h1>Catálogo de Produtos</h1>
             <div className="row" style={{position: "relative"}}>
@@ -98,10 +98,13 @@ const Catalogo = () => {
                                 className="btn btn-success"
                                 onClick={async () => {
                                     if (selectedProduct) {
-                                        await addToCart(user.id, selectedProduct, quantidade);
-                                        setShowmodal(false);
-                                        setQuantidade(1);
-                                        await fetchCartItems();
+                                        if(user){
+                                            await addToCart(user.id, selectedProduct, quantidade);
+                                            setShowmodal(false);
+                                            setQuantidade(1);
+                                            await fetchCartItems();
+                                        }
+                                      
                                     }
                                 }}
                             >
@@ -121,11 +124,7 @@ const Catalogo = () => {
                 />
             )}
         </main>
-    ) :
-    <p>
-        mostrar os itens mas remover os botoes aqui ja que o usuario 
-        nao esta logado nao pode finalizar nem add coisa no carrinho
-    </p>
+    )
 };
 
 export default Catalogo;

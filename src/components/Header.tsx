@@ -1,25 +1,28 @@
 import "../styles/css/header.css"
 import { useNavigate } from 'react-router-dom';
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import { useUser } from '../context/userContext';
 import axios from 'axios';
+
 
 const LoginButton = () => {
   const { user, isLoggedIn, setUser } = useUser();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
+
+  useEffect(()=>{
+    
+  },[user]);
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
   const handleLogOff = async () => {
     try {
-      await axios.get('http://localhost/php-loja-back/logout.php', { withCredentials: true });
-
       setUser(null);
       localStorage.removeItem('user');
-
+      await axios.get('http://localhost/php-loja-back/logout.php', { withCredentials: true });
       navigate('/Login');
     } catch (error) {
       console.error("Erro ao fazer logout:", error);
@@ -64,6 +67,7 @@ const LoginButton = () => {
 
   );
 };
+
 
 
 const Header = () => {
