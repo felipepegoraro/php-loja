@@ -5,6 +5,7 @@ import axios from "axios";
 import ProductCard from '../components/ProductCard';
 import { useUser } from "../context/userContext";
 
+
 const Home = () => {
     const [products, setProducts] = useState<Item[]>([]);
     const [loading, setLoading] = useState(true);
@@ -60,7 +61,7 @@ const Home = () => {
                 </div>
             </header>
             <section className="featured-products">
-                <div className="container">
+                <div className="container fp">
                     <h2 className="text-center">Produtos em Destaque</h2>
                     <div className="row">
 
@@ -75,7 +76,7 @@ const Home = () => {
             </section>
 
             <section className="product-categories">
-                <div className="container">
+                <div className="container pg">
                     <h2 className="text-center">Categorias</h2>
                     <div className="row ">
                         {categories.slice(0,6).map((categoria: ItemCategoria, index: number) => (
@@ -92,12 +93,12 @@ const Home = () => {
                 <div className="container text-center">
                     <h2>O que nossos clientes dizem</h2>
                     <blockquote>
-                        <p>"Produtos incríveis e entrega super rápida. Recomendo muito!"</p>
-                        <footer>- João Silva</footer>
+                        <p>- João Silva</p>
+                        <footer>"Produtos incríveis e entrega super rápida. Recomendo muito!"</footer>
                     </blockquote>
                     <blockquote>
-                        <p>"Ótima experiência de compra, preços justos e excelente atendimento."</p>
-                        <footer>- Maria Oliveira</footer>
+                        <p>- Maria Oliveira</p>
+                        <footer>"Ótima experiência de compra, preços justos e excelente atendimento."</footer>
                     </blockquote>
                 </div>
             </section>

@@ -1,13 +1,18 @@
-body {
-  font-family: "Poppins", sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f8f9fa;
-  color: #343a40;
+@charset "UTF-8";
+.home-page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+}
+
+.home-page-container h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .hero-section {
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://via.placeholder.com/1920x600") no-repeat center center/cover;
+  background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5)), url("/public/assets/hero-banner.png");
   color: white;
   padding: 100px 0;
 }
@@ -22,13 +27,16 @@ body {
   margin-bottom: 30px;
 }
 
-.featured-products {
-  padding: 50px 0;
+.fp {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 60px !important;
 }
 
 .featured-products h2 {
+  font-size: 35px;
   margin-bottom: 30px;
-  color: #212529;
+  color: var(--text-color);
 }
 
 .product-card {
@@ -51,15 +59,28 @@ body {
   text-align: center;
 }
 
-.price {
-  font-size: 1.5rem;
-  color: #28a745;
-  margin: 10px 0;
+.product-categories {
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1)), linear-gradient(to right, #0077ff, #00d4ff);
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  color: var(--white);
+  margin: 0 30px;
+}
+
+.pg {
+  margin-top: 40px;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 40px !important;
+}
+
+.product-categories h2 {
+  font-size: 35px;
 }
 
 .product-categories .category-card {
+  color: #ffffff;
   text-align: center;
-  max-width: 200px;
   min-width: 200px;
   max-height: 200px;
   margin: 10px;
@@ -71,13 +92,27 @@ body {
   border-radius: 8px;
 }
 
-/* Testimonials */
+.testimonials h2 {
+  font-size: 35px;
+  margin-bottom: 60px;
+}
+
 .testimonials blockquote {
   font-size: 1.2rem;
   color: #555;
   margin: 20px 0;
-  border-left: 5px solid var(--primary-color);
-  padding-left: 20px;
+  padding-left: 25px; /* Ajuste para dar espaço à pseudo-borda */
+  position: relative;
+}
+
+.testimonials blockquote::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px; /* Largura da borda simulada */
+  background: linear-gradient(to bottom, #0077ff, #00d4ff); /* Gradiente */
 }
 
 /*# sourceMappingURL=home.css.map */

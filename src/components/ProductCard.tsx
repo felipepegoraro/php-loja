@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
 
+
 export const addToCart = async (
     userId: number,
     item: Item,
@@ -47,7 +48,7 @@ const ProductCard = (props: ProductCardProps) => {
 
     return (
         <div className="col-md-4">
-            <div className="card">
+            <div className="card" style={{ minHeight: "496px"}}>
                 <img
                     style={{
                         width: "100%",
