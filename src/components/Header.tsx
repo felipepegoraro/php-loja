@@ -1,27 +1,26 @@
-import "../styles/css/header.css"
+import "../styles/css/header.css";
 import { useNavigate } from 'react-router-dom';
-import { useState , useEffect } from "react";
-import { useUser } from '../context/userContext';
+import { useEffect, useState } from "react";
+import { useUser } from '../context/userContext'; // Supondo que você tenha um UserContext configurado
 import axios from 'axios';
 
-
 const LoginButton = () => {
-  const { user, isLoggedIn, setUser } = useUser();
+  const { user, setUser } = useUser();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
-
-  useEffect(()=>{
-    
-  },[user]);
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  useEffect(() => {
+    setIsDropdownOpen(false)
+  }, [user])
+
   const handleLogOff = async () => {
     try {
       setUser(null);
-      localStorage.removeItem('user');
+      localStorage.removeItem('user'); // Limpa o localStorage ou cookies
       await axios.get('http://localhost/php-loja-back/logout.php', { withCredentials: true });
       navigate('/Login');
     } catch (error) {
@@ -29,30 +28,25 @@ const LoginButton = () => {
     }
   };
 
-
-  if (isLoggedIn) {
+  if (user) {
     return (
-      <>
-        <div className="profile-container ms-4">
-          <span className="profile-name" onClick={toggleDropdown}>{user?.nome}</span>
-          <div className={`dropdown-menu ${isDropdownOpen ? 'open' : ''}`}>
-            <ul>
-              <li>Minha Conta</li>
-              <li>Configurações</li>
-              <li onClick={handleLogOff}>Sair</li>
-            </ul>
-          </div>
-          <div className="profile-button" onClick={toggleDropdown}>
-            <img
-              src={/*user?.profilePicture || adicionar depois*/ 'https://via.placeholder.com/50'}
-              alt="User"
-              className="profile-image"
-            />
-          </div>
-
-
+      <div className="profile-container ms-4">
+        <span className="profile-name" onClick={toggleDropdown}>{user?.nome}</span>
+        <div className={`dropdown-menu ${isDropdownOpen ? 'open' : ''}`}>
+          <ul>
+            <li>Minha Conta</li>
+            <li>Configurações</li>
+            <li onClick={handleLogOff}>Sair</li>
+          </ul>
         </div>
-      </>
+        <div className="profile-button" onClick={toggleDropdown}>
+          <img
+            src={'https://via.placeholder.com/50'}
+            alt="User"
+            className="profile-image"
+          />
+        </div>
+      </div>
     );
   }
 
@@ -63,48 +57,40 @@ const LoginButton = () => {
       </a>
       <a href="/Login" className="cta-button d-lg-none d-block w-100 mt-2">Login</a>
     </>
-
-
   );
 };
-
-
 
 const Header = () => {
 
   return (
-    <>
-      <header>
-        <nav className="navbar navbar-expand-lg navbar-dark navbar-dark fixed-top">
-          <div className="container">
-            <a className="navbar-brand" href="/">Loja-PHP</a>
-            <div className="collapse navbar-collapse" id="navbarNav">
-              <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li className="nav-item">
-                  <a className="nav-link" href="/Catalogo">Catálogo</a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="/">Sobre nós</a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="/">Suporte</a>
-                </li>
-              </ul>
-              <div className="navbar-btn-container"> {/* Envolvendo o LoginButton */}
-                <LoginButton />
-              </div>
+    <header>
+      <nav className="navbar navbar-expand-lg navbar-dark navbar-dark fixed-top">
+        <div className="container">
+          <a className="navbar-brand" href="/">Loja-PHP</a>
+          <div className="collapse navbar-collapse" id="navbarNav">
+            <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li className="nav-item">
+                <a className="nav-link" href="/Catalogo">Catálogo</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="/">Sobre nós</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="/">Suporte</a>
+              </li>
+            </ul>
+            <div className="navbar-btn-container"> {/* Envolvendo o LoginButton */}
+              <LoginButton />
             </div>
-
-            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-              <span className="navbar-toggler-icon"></span>
-            </button>
-
-
           </div>
-        </nav>
-      </header>
-    </>
+
+          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
+          </button>
+        </div>
+      </nav>
+    </header>
   );
 }
 
