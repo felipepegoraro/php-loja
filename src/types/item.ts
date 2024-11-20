@@ -7,6 +7,7 @@ export type ItemSubcategoria = {
 export type ItemCategoria = {
     id: number,
     nome: string
+    foto: File | Buffer | null;
 }
 
 export type Item = {

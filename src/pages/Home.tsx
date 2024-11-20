@@ -45,6 +45,9 @@ const Home = () => {
         fetchCategories();
     }, [user]);
 
+        console.log("categorias:", categories);
+        console.log("produtos:", products);
+
 
     if (loading) return <img height="50px" src="gif-loading.gif" alt="loading gif" />;
     return (
@@ -65,11 +68,15 @@ const Home = () => {
                     <h2 className="text-center">Produtos em Destaque</h2>
                     <div className="row">
 
-                        {Array.isArray(products) && products.slice(0, 3).map((produto: Item, i: number) => (
-                            <ProductCard key={i} produto={produto} addCartFunction={() => {
+                        {Array.isArray(products) ? 
+                            products.slice(0, 3).map((produto: Item, i: number) => (
+                                <ProductCard key={i} produto={produto} addCartFunction={() => {
 
-                            }} />
-                        ))}
+                                }} />
+                            ))
+                            :
+                            <p>nenhum produto encontrado!</p>
+                        }
 
                     </div>
                 </div>
@@ -81,7 +88,9 @@ const Home = () => {
                     <div className="row ">
                         {categories.slice(0,6).map((categoria: ItemCategoria, index: number) => (
                             <div className="col category-card" key={index}>
-                                <img src="https://via.placeholder.com/300x200" alt={categoria.nome} /> {/*  src={`category-${index + 1}.jpg`} */}
+                                <img 
+                                    src={categoria.foto ? `data:image/png;base64,${categoria.foto}` : "https://via.placeholder.com/300x200"}
+                                    alt={categoria.nome} />
                                 <h5>{categoria.nome}</h5>
                             </div>
                         ))}

@@ -14,7 +14,8 @@ if ($result->num_rows > 0){
     while ($row = $result->fetch_assoc()){
         $categorias[] = [
             "id" => $row['id'],
-            "nome" => $row['nome']
+            "nome" => $row['nome'],
+            "foto" => base64_encode($row['foto'])
         ];
     }
 } else {
