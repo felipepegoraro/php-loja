@@ -59,7 +59,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ onCategoriaChange, 
           onChange={handleCategoriaChange}
         >
           <option value="">Selecione uma Categoria</option>
-          {categorias.map((categoria) => (
+          {Array.isArray(categorias) && categorias.map((categoria) => (
             <option key={categoria.id} value={categoria.id}>
               {categoria.nome}
             </option>
