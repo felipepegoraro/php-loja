@@ -1,4 +1,5 @@
 SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS tb_pedido;
 DROP TABLE IF EXISTS tb_itens_pedido;
 DROP TABLE IF EXISTS tb_itens;
 DROP TABLE IF EXISTS tb_subcategoria;
@@ -47,13 +48,24 @@ CREATE TABLE IF NOT EXISTS tb_itens (
     FOREIGN KEY (idSubCategoria) REFERENCES tb_subcategoria(id)
 );
 
+CREATE TABLE IF NOT EXISTS tb_pedido (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idUsuario INT,
+    data DATE NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'pendente', -- status do pedido (pendente, pago, enviado, etc.)
+    total DECIMAL(10, 2),
+    FOREIGN KEY (idUsuario) REFERENCES tb_usuario(id)
+);
+
 CREATE TABLE IF NOT EXISTS tb_itens_pedido (
     id INT AUTO_INCREMENT PRIMARY KEY,
     idUsuario INT,
     idItem INT,
     quantidade INT NOT NULL,
-    preco DECIMAL(10, 2) NOT NULL,
-    finalizado BOOLEAN NOT NULL DEFAULT FALSE,
+    preco DECIMAL(10,2) NOT NULL,
+    finalizado TINYINT(1) NOT NULL DEFAULT 0,
+    idPedido INT,
+    FOREIGN KEY (idPedido) REFERENCES tb_pedido(id),
     FOREIGN KEY (idUsuario) REFERENCES tb_usuario(id),
     FOREIGN KEY (idItem) REFERENCES tb_itens(id)
 );

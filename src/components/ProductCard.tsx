@@ -67,13 +67,7 @@ const ProductCard = (props: ProductCardProps) => {
                     <p className="card-text">Preço: R$ {produto.preco}</p>
                 </div>
 
-                <button className="btn btn-primary" onClick={() => {
-                    console.log("testando ne porra")
-                }}>
-                    comprar
-                </button>
-
-                <button className="btn btn-secondary" onClick={
+                <button className="btn btn-primary" onClick={
                     user ? async () => addCartFunction() : () => navigate("/Login")}
                 >
                     adicionar ao carrinho

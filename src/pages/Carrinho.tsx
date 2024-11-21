@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useUser } from '../context/userContext';
-import type {User} from '../types/user';
 
 import type { Cart } from '../types/cart';
 
@@ -9,6 +8,8 @@ const Carrinho = () => {
     const [cart, setCart] = useState<Cart[]>([]);
     const { user, isLoggedIn } = useUser();
     const [loading, setLoading] = useState(true);
+
+    console.log("carrinho: ", cart);
 
     // Precisa urgente refatorar eu sei.
     // criar uma classe carrinho etc 
@@ -62,15 +63,41 @@ const Carrinho = () => {
                 } else {
                     console.log("erro: ", res.data.message);
                 }
-            }
-            catch (error) {
+            } catch (error) {
                 console.log("erro ao limpar carrinho: ", error);
             }
         }
     };
 
+    const checkout = async () => {
+        if (isLoggedIn && user){
+            const obj = {idUsuario: user.id};
+            try {
+                const res =  await axios.post("http://localhost/php-loja-back/checkout.php", 
+                obj,
+                    {
+                        withCredentials: true,
+                        timeout: 1000,
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    }
+                );
+
+                if (res.data.success){
+                    console.log(res.data.message);
+                    setCart([]);
+                } else {
+                    console.log(res.data.message);
+                }
+            } catch (error){
+                console.log("erro ao fazer checkout: ", error);
+            } 
+        }  
+    };
+
     const fetchCartItems = async () => {
-        if (!user || !user.id) {
+        if (!isLoggedIn || !user) {
             console.error("Usuário inválido.");
             return;
         }
@@ -83,11 +110,13 @@ const Carrinho = () => {
 
             if (res.data.success && Array.isArray(res.data.values)) {
                 setCart(res.data.values.filter((i: Cart) => String(i.idUsuario) === String(user.id) && i.status === 'ativo'));
+                console.log(res.data.values);
             }
         } catch (error) {
             console.log("erro ao acessar carrinho", error);
         }
         setLoading(false);
+        console.log("carrinho: ", cart);
     }
 
 
@@ -136,21 +165,24 @@ const Carrinho = () => {
             ) : (
                 <p>Seu carrinho está vazio.</p>
             )}
-
-            <button className="btn btn-primary">fazer checkout</button>
-            <button 
-                className="btn btn-danger" 
-                onClick={async () => await clearCart()}
-                disabled={loading || cart.length === 0}
-            >
-                limpar carrinho
+            <button className="btn btn-primary" 
+                onClick={async () => await checkout()} 
+                disabled={loading || cart.length === 0}>
+                Fazer Checkout
             </button>
 
-            <button className="btn btn-secondary" onClick={ async () => {
-                await cartRestoreItem(user.id);
-                await fetchCartItems();
-            }}>
-                restaurar últimos itens apagados
+            <button className="btn btn-danger" 
+                onClick={async () => await clearCart()}
+                disabled={loading || cart.length === 0}>
+                Limpar carrinho
+            </button>
+
+            <button className="btn btn-secondary" 
+                onClick={ async () => { 
+                    await cartRestoreItem(user.id);
+                    await fetchCartItems(); 
+                }}>
+                Restaurar últimos itens apagados
             </button>
 
             <p>total: calcular-total</p>

@@ -40,12 +40,12 @@ const Catalogo = () => {
                 const res = await axios.get("http://localhost/php-loja-back/get-products.php", {timeout: 1000});
 
                 setProducts(res.data);
-                setLoading(false);
             }
             catch(error) {
                 console.log("erro ao buscar produtos: ", error);
-                setLoading(false);
             }
+
+            setLoading(false);
         }
 
         fetchProducts();
@@ -53,7 +53,6 @@ const Catalogo = () => {
     },[user])
 
     const getTotalCarrinho = () => {
-        console.log("get: ", cart);
         return cart.length > 0 
             ? cart.reduce((total, item) => total + (item.preco * item.quantidade), 0)
             : 0

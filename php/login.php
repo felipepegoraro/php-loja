@@ -1,6 +1,7 @@
 <?php
-session_start();
 $conn = include 'connect-db.php';
+
+session_start();
 
 $data = json_decode(file_get_contents("php://input"), true);
 $user = $data['email'];
