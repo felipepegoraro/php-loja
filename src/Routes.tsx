@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound";
 
 import AdminHomePage from "./pages/admin/AdminHomePage";
 import RegisterProductPage from "./pages/admin/registerProductPage";
+import OrderHistory from "./pages/admin/orderHistory";
 
 import { Route, Routes } from "react-router-dom";
 
@@ -23,6 +24,7 @@ const AppRoutes = () => {
                 
                 <Route path="/admin/Homepage" element={<AdminHomePage/>}/>
                 <Route path="/admin/RegisterProduct" element={<RegisterProductPage/>}/>
+                <Route path="/admin/OrderHistory" element={<OrderHistory/>}/>
 
                 <Route path="*" element={<NotFound />} />
             </Routes>

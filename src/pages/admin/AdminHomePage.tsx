@@ -13,7 +13,10 @@ const AdminHomePage = () => {
 
     return (
         <main className="container">
-            <a href="/admin/registerProduct">cadastrar produto</a>
+            <ul>
+                <li><a href="/admin/registerProduct">cadastrar produto</a></li>
+                <li><a href="/admin/orderHistory">historico de compras</a></li>
+            </ul>
         </main>
     )
 }
