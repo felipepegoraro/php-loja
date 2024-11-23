@@ -16,7 +16,37 @@ $query = "
     INNER JOIN tb_categoria c ON s.idCategoria = c.id
 ";
 
-$result = $conn->query($query);
+
+$categoriaId = isset($_GET['categoriaId']) ? (int)$_GET['categoriaId'] : 0;
+$ordem = isset($_GET['ordem']) ? $_GET['ordem'] : null;
+$searchTerm = isset($_GET['searchTerm']) ? $_GET['searchTerm'] : '';
+
+if ($categoriaId > 0) {
+    $query .= " WHERE c.id = ?";
+}
+if (!empty($searchTerm)) {
+    $query .= ($categoriaId > 0 ? " AND " : " WHERE ") . "i.nome LIKE ?";
+}
+if ($ordem === 'ASC' || $ordem === 'DESC') {
+    $query .= " ORDER BY i.preco " . $ordem;
+}
+
+
+
+$stmt = $conn->prepare($query);
+
+if ($categoriaId > 0 && !empty($searchTerm)) {
+    $searchTerm = $searchTerm . '%';
+    $stmt->bind_param('is', $categoriaId, $searchTerm);
+} elseif ($categoriaId > 0) {
+    $stmt->bind_param('i', $categoriaId);
+} elseif (!empty($searchTerm)) {
+    $searchTerm = $searchTerm . '%';
+    $stmt->bind_param('s', $searchTerm); 
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
 
 if (!$result) {
     die('Erro na consulta: ' . $conn->error);

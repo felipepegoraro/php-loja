@@ -1,7 +1,8 @@
 import "../styles/css/header.css";
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
-import { useUser } from '../context/userContext'; // Supondo que você tenha um UserContext configurado
+import { useUser } from '../context/userContext';
+
 import axios from 'axios';
 
 const LoginButton = () => {
@@ -20,7 +21,7 @@ const LoginButton = () => {
   const handleLogOff = async () => {
     try {
       setUser(null);
-      localStorage.removeItem('user'); // Limpa o localStorage ou cookies
+      localStorage.removeItem('user'); 
       await axios.get('http://localhost/php-loja-back/logout.php', { withCredentials: true });
       navigate('/Login');
     } catch (error) {
@@ -31,6 +32,13 @@ const LoginButton = () => {
   if (user) {
     return (
       <div className="profile-container ms-4">
+         <a href="/Carrinho" className="cart-btn ms-3">
+            <img
+              src="/assets/carrinho-de-compras.png" // Imagem do ícone do carrinho
+              alt="Carrinho"
+              className="cart-icon"
+            />
+          </a>
         <span className="profile-name" onClick={toggleDropdown}>{user?.nome}</span>
         <div className={`dropdown-menu ${isDropdownOpen ? 'open' : ''}`}>
           <ul>

@@ -1,10 +1,16 @@
 import type { Item } from '../types/item';
 import { useUser } from '../context/userContext';
 import { useNavigate } from 'react-router-dom';
-
+import "../styles/css/productcard.css"
 import axios from 'axios';
 
 
+const formatPrice = (price: number): string => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(price);
+  };
 export const addToCart = async (
     userId: number,
     item: Item,
@@ -48,14 +54,9 @@ const ProductCard = (props: ProductCardProps) => {
 
     return (
         <div className="col-md-4">
-            <div className="card" style={{ minHeight: "496px"}}>
+            <div className="pc card">
                 <img
-                    style={{
-                        width: "100%",
-                        height: "250px",
-                        objectFit: "contain",
-                        background: "#eff"
-                    }}
+                  
                     src={`data:image/png;base64,${produto.foto}`}
                     alt={produto.nome}
                     className="card-img-top"
@@ -64,7 +65,7 @@ const ProductCard = (props: ProductCardProps) => {
                     <h5 className="card-title">{produto.nome}</h5>
                     <p className="card-text">{produto.categoria + " > " + produto.subcategoria}</p>
                     <p className="card-text">{produto.descricao}</p>
-                    <p className="card-text">Preço: R$ {produto.preco}</p>
+                    <p className="card-text">Preço: R$ {formatPrice(produto.preco)}</p>
                 </div>
 
                 <button className="btn btn-primary" onClick={

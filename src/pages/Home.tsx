@@ -45,8 +45,8 @@ const Home = () => {
         fetchCategories();
     }, [user]);
 
-        console.log("categorias:", categories);
-        console.log("produtos:", products);
+    console.log("categorias:", categories);
+    console.log("produtos:", products);
 
 
     if (loading) return <img height="50px" src="gif-loading.gif" alt="loading gif" />;
@@ -66,9 +66,10 @@ const Home = () => {
             <section className="featured-products">
                 <div className="container fp">
                     <h2 className="text-center">Produtos em Destaque</h2>
-                    <div className="row">
+                    <div className="container">  <div className="row">
 
-                        {Array.isArray(products) ? 
+
+                        {Array.isArray(products) ?
                             products.slice(0, 3).map((produto: Item, i: number) => (
                                 <ProductCard key={i} produto={produto} addCartFunction={() => {
 
@@ -78,7 +79,11 @@ const Home = () => {
                             <p>nenhum produto encontrado!</p>
                         }
 
-                    </div>
+
+
+
+                    </div></div>
+
                 </div>
             </section>
 
@@ -86,9 +91,9 @@ const Home = () => {
                 <div className="container pg">
                     <h2 className="text-center">Categorias</h2>
                     <div className="row ">
-                        {categories.slice(0,6).map((categoria: ItemCategoria, index: number) => (
+                        {categories.slice(0, 5).map((categoria: ItemCategoria, index: number) => (
                             <div className="col category-card" key={index}>
-                                <img 
+                                <img
                                     src={categoria.foto ? `data:image/png;base64,${categoria.foto}` : "https://via.placeholder.com/300x200"}
                                     alt={categoria.nome} />
                                 <h5>{categoria.nome}</h5>
