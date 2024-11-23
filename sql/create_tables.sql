@@ -75,7 +75,6 @@ CREATE TABLE IF NOT EXISTS tb_carrinho (
     idUsuario INT,
     idItem INT,
     quantidade INT NOT NULL,
-    preco DECIMAL(10, 2) NOT NULL,
     status VARCHAR(20) NOT NULL DEFAULT 'ativo', -- 'ativo', 'removido'
     FOREIGN KEY (idUsuario) REFERENCES tb_usuario(id),
     FOREIGN KEY (idItem) REFERENCES tb_itens(id)

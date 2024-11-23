@@ -82,6 +82,16 @@
   transform: scale(1.1);
 }
 
+.cart-btn {
+  display: inline-block;
+  margin-left: 15px;
+}
+
+.cart-icon {
+  width: 40px;
+  height: 40px;
+}
+
 .dropdown-menu {
   display: none;
   position: absolute;
