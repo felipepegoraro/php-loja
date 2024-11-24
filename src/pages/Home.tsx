@@ -13,45 +13,35 @@ const Home = () => {
     const { user } = useUser();
 
     useEffect(() => {
-        const fetchProducts = async () => {
+        const fetchData = async () => {
             try {
-                const res = await axios.get("http://localhost/php-loja-back/get-products.php", { timeout: 1000 });
-                const allproducts = res.data;
-                // const destaques = allProducts.filter(product => product.quantidadeVendida > 100); // implementar depois filtro de destaques
+                const [productsRes, categoriesRes] = await Promise.all([
+                    axios.get("http://localhost/php-loja-back/get-products.php", { timeout: 1000 }),
+                    axios.get("http://localhost/php-loja-back/get-categorias.php", { timeout: 1000 })
+                ]);
 
-                setProducts(allproducts);
-                setLoading(false);
+                const fetchedProducts = productsRes.data;
+                const fetchedCategories = categoriesRes.data;
 
-            }
-            catch (error) {
-                console.log("erro ao buscar produtos: ", error);
-                setLoading(false);
-            }
-        }
-
-        const fetchCategories = async () => {
-            try {
-                const res = await axios.get("http://localhost/php-loja-back/get-categorias.php", { timeout: 1000 });
-                setCategories(res.data);
-                setLoading(false);
-
-            }
-            catch (error) {
-                console.log("erro ao buscar produtos: ", error);
+                // tentando minimizar o num de renderizações...
+                setProducts((prev) => JSON.stringify(prev) !== JSON.stringify(fetchedProducts) ? fetchedProducts : prev);
+                setCategories((prev) => JSON.stringify(prev) !== JSON.stringify(fetchedCategories) ? fetchedCategories : prev);
+            } catch (error) {
+                console.error("Erro ao buscar dados:", error);
+            } finally {
                 setLoading(false);
             }
-        }
-        fetchProducts();
-        fetchCategories();
-    }, [user]);
+        };
+
+        fetchData();
+    }, []);
 
     console.log("categorias:", categories);
     console.log("produtos:", products);
 
-
     if (loading) return <img height="50px" src="gif-loading.gif" alt="loading gif" />;
-    return (
 
+    return (
         <main className="home-page-container">
 
             <header className="hero-section">
@@ -63,27 +53,28 @@ const Home = () => {
                     </a>
                 </div>
             </header>
+
             <section className="featured-products">
                 <div className="container fp">
                     <h2 className="text-center">Produtos em Destaque</h2>
                     <div className="container">  <div className="row">
 
-
                         {Array.isArray(products) ?
                             products.slice(0, 3).map((produto: Item, i: number) => (
-                                <ProductCard key={i} produto={produto} addCartFunction={() => {
+                                <ProductCard key={i} produto={produto} onAddToCart={() => {
+                                    if (!user){
+                                        console.log("deve estar logado para adicionar ao carrinho")
+                                        return;
+                                    }
 
+                                    console.log("simulando add ao carrinho");
                                 }} />
                             ))
                             :
                             <p>nenhum produto encontrado!</p>
                         }
 
-
-
-
                     </div></div>
-
                 </div>
             </section>
 
@@ -116,7 +107,6 @@ const Home = () => {
                     </blockquote>
                 </div>
             </section>
-
 
         </main>
     );

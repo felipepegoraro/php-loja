@@ -1,77 +1,64 @@
+// Estilos
+import "../styles/css/productcard.css";
+
+import Utils from '../types/Utils';
 import type { Item } from '../types/item';
-import { useUser } from '../context/userContext';
-import { useNavigate } from 'react-router-dom';
-import "../styles/css/productcard.css"
+
+// import { useUser } from '../context/userContext';
 import axios from 'axios';
 
+interface ProductCardProps {
+    produto: Item;
+    onAddToCart: () => void;
+}
 
-const formatPrice = (price: number): string => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format(price);
-  };
 export const addToCart = async (
     userId: number,
     item: Item,
     quantidade: number
-) => {
+): Promise<void> => {
     if (quantidade <= 0 || !item) return;
 
-    const obj = {
-        'idUsuario': String(userId),
-        'idItem': item.id,
-        'quantidade': String(quantidade),
-        'preco': item.preco,
-        'status': "ativo"
-    }
+    const payload = {
+        idUsuario: String(userId),
+        idItem: item.id,
+        quantidade: String(quantidade),
+        preco: item.preco,
+        status: "ativo",
+    };
 
     try {
-        const res = await axios.post("http://localhost/php-loja-back/cart-add.php", obj, {
+        const response = await axios.post("http://localhost/php-loja-back/cart-add.php", payload, {
             headers: { 'Content-Type': 'application/json' },
-            withCredentials: true
-        }
-        );
+            withCredentials: true,
+        });
 
-        console.log(res.data);
-        if (res.data.success) console.log(res.data.message);
-        else console.log("erro: ", res.data.message);
-
-    } catch (e) {
-        console.log("erro ao adicionar no carrinho: ", e);
-    };
+        const { data } = response;
+        console.log(data.success ? data.message : `Erro: ${data.message}`);
+    } catch (error) {
+        console.error("Erro ao adicionar ao carrinho:", error);
+    }
 };
 
-interface ProductCardProps {
-    produto: Item;
-    addCartFunction: () => void;
-};
-
-const ProductCard = (props: ProductCardProps) => {
-    const navigate = useNavigate();
-    const { produto, addCartFunction } = props;
-    const { user } = useUser();
+const ProductCard: React.FC<ProductCardProps> = ({ produto, onAddToCart }) => {
+    const { nome, categoria, subcategoria, descricao, preco, foto } = produto;
 
     return (
         <div className="col-md-4">
             <div className="pc card">
                 <img
-                  
-                    src={`data:image/png;base64,${produto.foto}`}
-                    alt={produto.nome}
+                    src={`data:image/png;base64,${foto}`}
+                    alt={nome}
                     className="card-img-top"
                 />
                 <div className="card-body">
-                    <h5 className="card-title">{produto.nome}</h5>
-                    <p className="card-text">{produto.categoria + " > " + produto.subcategoria}</p>
-                    <p className="card-text">{produto.descricao}</p>
-                    <p className="card-text">Preço: R$ {formatPrice(produto.preco)}</p>
+                    <h5 className="card-title">{nome}</h5>
+                    <p className="card-text">{`${categoria} > ${subcategoria}`}</p>
+                    <p className="card-text">{descricao}</p>
+                    <p className="card-text">Preço: {Utils.formatPrice(preco)}</p>
                 </div>
-
-                <button className="btn btn-primary" onClick={
-                    user ? async () => addCartFunction() : () => navigate("/Login")}
-                >
-                    adicionar ao carrinho
+                <button className="btn btn-primary" onClick={onAddToCart}>
+                    Adicionar ao carrinho
                 </button>
             </div>
         </div>

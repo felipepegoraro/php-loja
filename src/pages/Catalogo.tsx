@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import "../styles/css/catalogo.css"
+
+import "../styles/css/catalogo.css";
+
 import type { Item, ItemCategoria } from '../types/item';
 import type { Cart } from '../types/cart';
-
 
 import Modal from '../components/Modal';
 import ProductCard, { addToCart } from '../components/ProductCard';
@@ -78,6 +79,7 @@ const Catalogo = () => {
         fetchCategories();
         fetchProducts();
         fetchCartItems();
+        console.log(searchTerm);
     }, [user, idcategoria, ordem , searchTerm],)
 
     const getTotalCarrinho = () => {
@@ -93,8 +95,6 @@ const Catalogo = () => {
 
     // TODO: design aqui
     return (
-
-
         <main className="catalogo-container" >
             <h1>Catálogo de Produtos</h1>
             <div className="filters-search-bar">
@@ -133,7 +133,7 @@ const Catalogo = () => {
             <div className='container'>
                 <div className="row" style={{ position: "relative" }}>
                     {Array.isArray(products) && products.map((produto: Item, i: number) => (
-                        <ProductCard key={i} produto={produto} addCartFunction={() => {
+                        <ProductCard key={i} produto={produto} onAddToCart={() => {
                             setSelectedProduct(produto)
                             setShowmodal(!showmodal);
                         }} />

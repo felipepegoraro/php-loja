@@ -73,29 +73,35 @@ const Carrinho = () => {
     };
 
     const checkout = async () => {
-        if (isLoggedIn && user) {
-            const obj = { idUsuario: user.id };
-            try {
-                const res = await axios.post("http://localhost/php-loja-back/checkout.php",
-                    obj,
-                    {
-                        withCredentials: true,
-                        timeout: 1000,
-                        headers: {
-                            "Content-Type": "application/json"
-                        }
-                    }
-                );
+        if (!isLoggedIn && !user){
+            console.log("erro: usuário inválido");
+            return;
+        }
 
-                if (res.data.success) {
-                    console.log(res.data.message);
-                    setCart([]);
-                } else {
-                    console.log(res.data.message);
+        const obj = { idUsuario: user!.id };
+
+        try {
+            const res = await axios.post("http://localhost/php-loja-back/checkout.php",
+                obj,
+                {
+                    withCredentials: true,
+                    timeout: 1000,
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
                 }
-            } catch (error) {
-                console.log("erro ao fazer checkout: ", error);
+            );
+
+            console.log("final: ", res.data);
+
+            if (res.data.success) {
+                console.log(res.data.message);
+                setCart([]);
+            } else {
+                console.log(res.data.message);
             }
+        } catch (error) {
+            console.log("erro ao fazer checkout: ", error);
         }
     };
 
@@ -112,11 +118,15 @@ const Carrinho = () => {
             });
             
             console.log("Valores recebidos:", res.data);
-            if (res.data && Array.isArray(res.data.cart)) {
-                setCart(res.data.cart); // Atualiza o estado cart com os itens recebidos
-            } else {
-                console.error("Formato de dados inesperado no carrinho.");
+
+            if (!res.data.success){
+                setCart([]);
+                console.log("Erro: ", res.data.message);
+                return;
             }
+
+            setCart(res.data.cart);
+
         } catch (error) {
             console.log("erro ao acessar carrinho", error);
         }
