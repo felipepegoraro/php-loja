@@ -42,8 +42,8 @@ const LoginButton = () => {
         <span className="profile-name ms-4" onClick={toggleDropdown}>{user?.nome}</span>
         <div className={`dropdown-menu ${isDropdownOpen ? 'open' : ''}`}>
           <ul>
-            <li>Minha Conta</li>
-            <li>Configurações</li>
+            <li onClick={() => navigate('/Account')}>Minha Conta</li>
+            <li onClick={() => navigate('/Settings')}>Configurações</li>
             <li onClick={handleLogOff}>Sair</li>
           </ul>
         </div>
@@ -84,7 +84,7 @@ const Header = () => {
                 <a className="nav-link" href="/About">Sobre nós</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/">Suporte</a>
+                <a className="nav-link" href="/Suporte">Suporte</a>
               </li>
             </ul>
             <div className="navbar-btn-container"> {/* Envolvendo o LoginButton */}

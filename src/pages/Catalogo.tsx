@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
-// import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
 import "../styles/css/catalogo.css";
 import type { Item, ItemCategoria } from '../types/item';
 import type { Cart } from '../types/cart';
 
-import ProductCard, { addToCart } from '../components/ProductCard';
+import ProductCard from '../components/ProductCard';
 import { useUser } from '../context/userContext';
-import ToastNotification, {ToastProps} from '../components/ToastNofitication';
+import ToastNotification, { ToastProps } from '../components/ToastNofitication';
+import CartService from '../services/CartService';
 
 const Catalogo = () => {
     const [products, setProducts] = useState<Item[]>([]);
@@ -24,17 +23,8 @@ const Catalogo = () => {
 
     const fetchCartItems = async () => {
         if (user) {
-            try {
-                const res = await axios.get("http://localhost/php-loja-back/cart-get.php", { 
-                    withCredentials: true,
-                    timeout: 1000 
-                });
-                if (res.data.success && Array.isArray(res.data.values)) {
-                    setCart(res.data.values.filter((i: Cart) => String(i.idUsuario) === String(user.id)));
-                }
-            } catch (error) {
-                console.log("Erro ao acessar carrinho", error);
-            }
+            const fetchedCart = await CartService.fetchCartItems();
+            setCart(fetchedCart.filter((i: Cart) => String(i.idUsuario) === String(user.id)));
         }
     };
 
@@ -67,9 +57,9 @@ const Catalogo = () => {
         fetchCartItems();
     }, [user, idcategoria, ordem, searchTerm]);
 
-    const getTotalCarrinho = () => {
-        return cart.length > 0 ? cart.reduce((total, item) => total + item.quantidade, 0) : 0;
-    };
+    // const getTotalCarrinho = () => {
+    //     return cart.length > 0 ? cart.reduce((total, item) => total + item.quantidade, 0) : 0;
+    // };
 
     const renderLoading = () => (
         <img height="50px" src="gif-loading.gif" alt="loading gif" />
@@ -116,13 +106,14 @@ const Catalogo = () => {
             {loading 
             ? renderLoading()
             : <div className={`row ${center}`} style={{ position: "relative" }}>
-                {Array.isArray(products) && products.map((produto, i) => (
+                {Array.isArray(products) 
+                ? products.map((produto, i) => (
                     <ProductCard
                         key={i}
                         produto={produto}
                         onAddToCart={async () => {
                             if (user) {
-                                await addToCart(user.id, produto, 1);
+                                await CartService.addToCart(user.id, produto, 1);
                                 const newToast = {
                                     id: Date.now(),
                                     title: `Produto [${produto.id}] adicionado`,
@@ -135,7 +126,9 @@ const Catalogo = () => {
                             }
                         }}
                     />
-                ))}
+                ))
+                : <p>Nenhum produto encontrado!</p>
+                }
             </div>
             }
         </div>

@@ -4,67 +4,80 @@
 # desc: adiciona um item ao carrinho de compras do usuário
 
 $conn = include 'connect-db.php';
-
 $data = json_decode(file_get_contents('php://input'), true);
 
-
-if (!$conn){
-    echo json_encode(["success" => false, "message" => "erro ao conectar banco"]);
+function response($success, $message) {
+    echo json_encode(['success' => $success, 'message' => $message]);
     exit;
 }
 
-if (
-    !isset($data['idUsuario']) ||
-    !isset($data['idItem']) ||
-    !isset($data['quantidade']) ||
-    !isset($data['status'])
-) {
-    echo json_encode(["success" => false, "message" => "requisição inválida"]);
-    $conn->close();
-    exit;
+function checkConnection($conn) {
+    if (!$conn) {
+        response(false, "Erro ao conectar banco");
+    }
 }
 
-$stmt_check = $conn->prepare("SELECT id FROM tb_carrinho WHERE idUsuario = ? AND idItem = ?");
-if (!$stmt_check) {
-    echo json_encode(['success' => false, 'message' => 'Erro ao preparar consulta de verificação: ' . $conn->error]);
-    $conn->close();
-    exit;
+function validateRequestData($data) {
+    if (!isset($data['idUsuario']) || !isset($data['idItem']) || !isset($data['quantidade']) || !isset($data['status'])) {
+        response(false, "Requisição inválida");
+    }
 }
 
+function prepareStatement($conn, $query) {
+    $stmt = $conn->prepare($query);
+    if (!$stmt) {
+        response(false, "Erro ao preparar a consulta: " . $conn->error);
+    }
+    return $stmt;
+}
+
+function updateItem($conn, $quantidade, $idUsuario, $idItem, $status = null) {
+    $query = $status ? 
+        "UPDATE tb_carrinho SET quantidade = quantidade + ?, status = ? WHERE idUsuario = ? AND idItem = ?" :
+        "UPDATE tb_carrinho SET quantidade = quantidade + ? WHERE idUsuario = ? AND idItem = ?";
+    
+    $stmt = prepareStatement($conn, $query);
+    if ($status) {
+        $stmt->bind_param("issi", $quantidade, $status, $idUsuario, $idItem);
+    } else {
+        $stmt->bind_param("iii", $quantidade, $idUsuario, $idItem);
+    }
+
+    if ($stmt->execute()) {
+        response(true, 'Quantidade atualizada no carrinho [' . $idItem . ']');
+    } else {
+        response(false, 'Erro ao atualizar o carrinho.');
+    }
+}
+
+function insertItem($conn, $idUsuario, $idItem, $quantidade, $status) {
+    $stmt = prepareStatement($conn, "INSERT INTO tb_carrinho (idUsuario, idItem, quantidade, status) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("iiis", $idUsuario, $idItem, $quantidade, $status);
+
+    if ($stmt->execute()) {
+        response(true, 'Adicionado ao carrinho com sucesso [' . $idItem . ']');
+    } else {
+        response(false, 'Erro ao adicionar produto ao carrinho.');
+    }
+}
+
+checkConnection($conn);
+validateRequestData($data);
+
+$stmt_check = prepareStatement($conn, "SELECT id, status FROM tb_carrinho WHERE idUsuario = ? AND idItem = ?");
 $stmt_check->bind_param("ii", $data['idUsuario'], $data['idItem']);
 $stmt_check->execute();
 $result = $stmt_check->get_result();
 
-if ($result->num_rows > 0) { // CASO JA EEXISTA ESSE ITEM NO CARRIN OH NAO PRECISA INSERIR ELE DE NOVO BSSDTA AUMENTAR A QUANTIDADE
-    $stmt_update = $conn->prepare("UPDATE tb_carrinho SET quantidade = quantidade + ? WHERE idUsuario = ? AND idItem = ?");
-    if (!$stmt_update) {
-        echo json_encode(['success' => false, 'message' => 'Erro ao preparar consulta de atualização: ' . $conn->error]);
-        $conn->close();
-        exit;
-    }
-
-    $stmt_update->bind_param("iii", $data['quantidade'], $data['idUsuario'], $data['idItem']);
-    if ($stmt_update->execute()) {
-        echo json_encode(['success' => true, 'message' => 'Quantidade atualizada no carrinho ['. $data['idItem'] . ']']);
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    if ($row['status'] == 'removido') {
+        updateItem($conn, $data['quantidade'], $data['idUsuario'], $data['idItem'], 'ativo');
     } else {
-        echo json_encode(['success' => false, 'message' => 'Erro ao atualizar o carrinho.']);
+        updateItem($conn, $data['quantidade'], $data['idUsuario'], $data['idItem']);
     }
-    $stmt_update->close();
 } else {
-    $stmt_insert = $conn->prepare("INSERT INTO tb_carrinho (idUsuario, idItem, quantidade, status) VALUES (?, ?, ?, ?)");
-    if (!$stmt_insert) {
-        echo json_encode(['success' => false, 'message' => 'Erro ao preparar a consulta de inserção: ' . $conn->error]);
-        $conn->close();
-        exit;
-    }
-
-    $stmt_insert->bind_param("iiis", $data['idUsuario'], $data['idItem'], $data['quantidade'], $data['status']);
-    if ($stmt_insert->execute()) {
-        echo json_encode(['success' => true, 'message' => 'Adicionado ao carrinho com sucesso ['. $data['idItem'] . ']']);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Erro ao adicionar produto ao carrinho.']);
-    }
-    $stmt_insert->close();
+    insertItem($conn, $data['idUsuario'], $data['idItem'], $data['quantidade'], $data['status']);
 }
 
 $stmt_check->close();
