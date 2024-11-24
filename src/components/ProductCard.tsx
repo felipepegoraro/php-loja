@@ -53,7 +53,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ produto, onAddToCart }) => {
                 />
                 <div className="card-body">
                     <h5 className="card-title">{nome}</h5>
-                    <p className="card-text">{`${categoria} > ${subcategoria}`}</p>
+                    { categoria && subcategoria 
+                        ? <p className="card-text">{`${categoria} > ${subcategoria}`}</p>
+                        : null
+                    }
                     <p className="card-text">{descricao}</p>
                     <p className="card-text">Preço: {Utils.formatPrice(preco)}</p>
                 </div>
