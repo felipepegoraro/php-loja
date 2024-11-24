@@ -24,6 +24,7 @@
   max-height: 100%;
   max-width: 100%;
   border-radius: 8px;
+  padding: 8px;
 }
 
 /* Estilos para quando não houver imagem */
@@ -41,6 +42,9 @@
 /* Estilos para o corpo do cartão */
 .card-body {
   padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
 }
 
 .card-title {

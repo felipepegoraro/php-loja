@@ -16,6 +16,7 @@
 //   orderId: number;
 // }
 
+import type {Item} from './item';
 import type {Order, OrderItem} from './order';
 import axios from 'axios';
 
@@ -29,11 +30,7 @@ export default class SalesMetrics {
         total:number
     }> = [];
 
-    private topitems: Array<{
-        itemId: number,
-        itemNome: string,
-        total: number
-    }> = [];
+    private topitems: Array<Item & {totalVendido: number}> = [];
 
     constructor () {
         return this;
@@ -42,12 +39,17 @@ export default class SalesMetrics {
     async fetchOrder(){
         try {
             const response = await axios.get(`${this.URL}order-get.php`, {withCredentials: true});
-            if (response.data.success) {
-                this.orders = response.data.message;
-                console.log('Pedidos carregados:', this.orders);
-            } else {
+            if (!response.data.success) {
                 console.error('Erro ao carregar pedidos:', response.data.message);
+                return;
             }
+
+            if (response.data.special) {
+                console.log(response.data.message);
+                return;
+            }
+
+            this.orders = response.data.value;
         } catch (error) {
             console.error('Erro ao fazer a requisição', error);
         }
@@ -138,15 +140,21 @@ export default class SalesMetrics {
         return growthRate;
     }
 
+    // esse aqui ignora categoria e subcategoria pq teria q fazer 4 inner join e obviamente isso nao é bom ne
     async fetchTopItems(type: "quantidade" | "valor", maxItems: number) {
         try {
             const response = await axios.get(`${this.URL}top-itens.php?type=${type}&limit=${maxItems}`, { withCredentials: true });
-            if (response.data.success) {
-                this.topitems = response.data.data;
-                console.log('Produtos mais vendidos:', this.topitems);
-            } else {
+            if (!response.data.success) {
                 console.error('Erro ao obter os produtos mais vendidos:', response.data.message);
+                return;
             }
+
+            if (response.data.special){
+                console.log(response.data.message);
+                return;
+            }
+
+            this.topitems = response.data.data;
         } catch (error) {
             console.error('Erro ao fazer a requisição', error);
         }

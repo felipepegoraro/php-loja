@@ -35,6 +35,6 @@ while ($row = $result->fetch_assoc()) {
 $query->close();
 $conn->close();
 
-echo json_encode(["success" => true, "message" => $pedidos]);
+echo json_encode(["success" => true, "value" => $pedidos]);
 exit;
 ?>

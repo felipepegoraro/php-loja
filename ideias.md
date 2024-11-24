@@ -1,20 +1,20 @@
 # Projeto PHP-LOJA
 ideias // todolist
 
-- [ ] definir um NOME
-- [ ] login/logout 
+- [X] definir um NOME
+- [X] login/logout 
 
 - oq terá no header???
     -[X] coloquei sobre,suporte,catálogo e login.
     -[X] nome / logo a decidir
-    -[ ] adicionar carrinho de compra 
+    -[x] adicionar carrinho de compra 
     -[ ] pensar em mais coisas
 
-- [ ] definir a paleta de cores pro site.
+- [x] definir a paleta de cores pro site.
 
-- [ ] design; modificar formulario de /admin/register products
-- [ ] design; modificar catalogo // itens de tamanhos fixo e menores
-- [ ] fazer carrinho de compras
+- [x] design; modificar formulario de /admin/register products
+- [x] design; modificar catalogo // itens de tamanhos fixo e menores
+- [x] fazer carrinho de compras
 
 - tela de editar 
     - [ ] nome/senha
@@ -23,11 +23,11 @@ ideias // todolist
 - [ ] regex nos formularios
 
 - NO CATALOGO:
-    - [ ] filtro por categoria e por subcategoria
-    - [ ] filtro por preco
-    - [ ] TALVEZ: indicar os mais comprados
+    - [X] filtro por categoria e por subcategoria
+    - [X] filtro por preco
+    - [X] TALVEZ: indicar os mais comprados
 
-- CRIAR TELA RESUMO DO PEDIDO // mostrando itens/preco/add +ou-/remover/selecionar
+- [X] CRIAR TELA RESUMO DO PEDIDO // mostrando itens/preco/add +ou-/remover/selecionar
 - ??? ESQUEMA DE PAGAMENTO ???
 
 NAO CONSEGUI COLOCAR UM DIRETORIO cart/ dentro do php para separar add.php,update.php etc
@@ -40,6 +40,7 @@ OK:
 - RF002: Cadastro de Usuário
 - RF003: Visualização do Cardápio
 - RF004: Detalhes do Item
+- RF005: Resumo do Pedido
 
 FALTANDO:
-- RF005: Resumo do Pedido
+- nada.

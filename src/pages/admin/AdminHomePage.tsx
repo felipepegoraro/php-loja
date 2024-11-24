@@ -1,9 +1,9 @@
-import {useUser} from '../../context/userContext';
+import { useUser } from '../../context/userContext';
 
 const AdminHomePage = () => {
-    const {user} = useUser();
+    const { user } = useUser();
 
-    if (!user || !user.admin){
+    if (!user || !user.admin) {
         return (
             <main className="container">
                 <h1>ACESSO INVÁLIDO</h1>
@@ -18,7 +18,8 @@ const AdminHomePage = () => {
                 <li><a href="/admin/orderHistory">historico de compras</a></li>
             </ul>
         </main>
-    )
-}
+    );
+};
 
 export default AdminHomePage;
+

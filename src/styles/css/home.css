@@ -52,13 +52,15 @@
   border-radius: 20px;
   color: var(--white);
   margin: 0 30px;
+  padding: 0 50px;
 }
 
 .pg {
-  margin-top: 40px;
+  padding-top: 40px;
+  padding-bottom: 40px;
   display: flex !important;
   flex-direction: column !important;
-  gap: 40px !important;
+  gap: 15px !important;
 }
 
 .product-categories h2 {
@@ -67,10 +69,9 @@
 
 .product-categories .category-card {
   color: #ffffff;
-  text-align: center;
+  text-align: center !important;
   min-width: 200px;
   max-height: 200px;
-  margin: 10px;
 }
 
 .product-categories img {

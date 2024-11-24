@@ -3,6 +3,10 @@ import Login from "./pages/Login"
 import Catalogo from "./pages/Catalogo";
 import Register from "./pages/Register";
 import Carrinho from "./pages/Carrinho";
+import About from "./pages/About";
+import Suporte from "./pages/Suporte";
+import Account from './pages/Account'; 
+import Settings from './pages/Settings';
 
 import NotFound from "./pages/NotFound";
 
@@ -21,6 +25,12 @@ const AppRoutes = () => {
                 <Route path="/Catalogo" element={<Catalogo />} />
                 <Route path="/Register" element={<Register/>}/>
                 <Route path="/Carrinho" element={<Carrinho/>}/>
+
+                <Route path="/About" element={<About/>}/>
+                <Route path="/Suporte" element={<Suporte/>}/>
+
+                <Route path="/Settings" element={<Settings/>}/>
+                <Route path="/Account" element={<Account/>}/>
                 
                 <Route path="/admin/Homepage" element={<AdminHomePage/>}/>
                 <Route path="/admin/RegisterProduct" element={<RegisterProductPage/>}/>

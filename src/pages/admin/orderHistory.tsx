@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import SalesMetrics from '../../types/SalesMetrics';
+import type {Item} from '../../types/item';
 
 const OrderHistory = () => {
     const [settings, setSettings] = useState<{ sortBy: 'valor' | 'quantidade'; maxItems: number }>({
@@ -82,8 +83,8 @@ const OrderHistory = () => {
                     </select>
                 </div>
                 <ul>
-                    {metrics.getTopItems().map((i: {itemId: number, itemNome: string, total: number}, index: number) => (
-                        <li key={index}>id({i.itemId}): {i.itemNome}: {settings.sortBy === "valor" ? "R$ " : "x"}{i.total}</li>
+                    {metrics.getTopItems().map((i: Item & {totalVendido: number}, index: number) => (
+                        <li key={index}>id({i.id}): {i.nome}: {settings.sortBy === "valor" ? "R$ " : "x"}{i.totalVendido}</li>
                     ))}
                 </ul>
             </div>

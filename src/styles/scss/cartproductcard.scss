@@ -3,11 +3,10 @@
     border-radius: 12px; /* Bordas mais arredondadas */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
     background-color: #fff; /* Cor de fundo branca */
+}
 
-  }
-  
-  /* Estilos para o container da imagem */
-  .cart-item-image-container {
+/* Estilos para o container da imagem */
+.cart-item-image-container {
     height: 250px; /* Define a altura do container */
     width: 100%;
     overflow: hidden;
@@ -16,18 +15,20 @@
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-  
-  /* Estilos para a imagem do produto */
-  .cart-item-image {
+}
+
+/* Estilos para a imagem do produto */
+.cart-item-image {
     object-fit: contain;
     max-height: 100%;
     max-width: 100%;
     border-radius: 8px;
-  }
-  
-  /* Estilos para quando não houver imagem */
-  .no-image {
+    padding: 8px;
+
+}
+
+/* Estilos para quando não houver imagem */
+.no-image {
     font-size: 14px;
     color: #666;
     text-align: center;
@@ -36,42 +37,42 @@
     background-color: #eaeaea;
     border-radius: 8px;
     width: 100%;
-  }
-  
-  /* Estilos para o corpo do cartão */
-  .card-body {
+}
+
+/* Estilos para o corpo do cartão */
+.card-body {
     padding: 16px;
-  }
-  
-  .card-title {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.card-title {
     font-size: 2.25rem;
     font-weight: 600;
     color: #333;
     margin-bottom: 12px;
-  }
-  
+}
 
-  
-  .cart-item-meta p,
-  .cart-item-price p {
+.cart-item-meta p,
+.cart-item-price p {
     font-size: 14px;
     color: #777;
     margin-bottom: 8px;
-  }
-  
-  /* Estilo do preço */
-  .cart-item-price p {
+}
+
+/* Estilo do preço */
+.cart-item-price p {
     font-size: 1.8rem;
     font-weight: bold;
     color: var(--primary-color); /* Cor vermelha para destaque no preço */
-  }
-  
-  /* Ajustando o espaçamento e alinhamento */
-  .cart-item-meta {
+}
+
+/* Ajustando o espaçamento e alinhamento */
+.cart-item-meta {
     margin-bottom: 16px;
-  }
-  
-  .cart-item-quantity {
+}
+
+.cart-item-quantity {
     margin-bottom: 8px;
-  }
-  
+}

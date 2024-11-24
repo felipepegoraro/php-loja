@@ -1,109 +1,16 @@
-import axios from 'axios';
-import CartProductCard from '../components/CartProductCard'
 import { useState, useEffect } from 'react';
 import { useUser } from '../context/userContext';
+import CartProductCard from '../components/CartProductCard';
+import CartService from '../services/CartService';
 
-
-
-import type { Cart, Cartfull } from '../types/cart';
+import type { Cartfull } from '../types/cart';
 
 const Carrinho = () => {
     const [cart, setCart] = useState<Cartfull[]>([]);
     const { user, isLoggedIn } = useUser();
     const [loading, setLoading] = useState(true);
 
-    console.log("carrinho: ", cart);
-
-    // Precisa urgente refatorar eu sei.
-    // criar uma classe carrinho etc 
-
-    const removeFromCart = async (userid: number, itemId: number) => {
-        if (!user || !user.id) {
-            console.error("Usuário inválido.");
-            return;
-        }
-
-        const req = {
-            idUsuario: userid,
-            idItem: itemId,
-        };
-
-        console.log(req);
-
-        try {
-            const response = await axios.post("http://localhost/php-loja-back/cart-remove.php",
-                req,
-                {
-                    withCredentials: true,
-                    timeout: 1000,
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-
-            if (response.data.success) {
-                console.log(`Item ${itemId} removido do carrinho com sucesso.`);
-            } else {
-                console.error("Erro ao remover item do carrinho:", response.data.message);
-            }
-        } catch (error) {
-            console.error("Erro na requisição para remover item do carrinho:", error);
-        }
-    };
-
-    const clearCart = async () => {
-        if (isLoggedIn) {
-            try {
-                const res = await axios.get("http://localhost/php-loja-back/cart-clear.php", {
-                    timeout: 1000,
-                    withCredentials: true
-                });
-
-                if (res.data.success) {
-                    console.log(res.data.message);
-                    setCart([]);
-                } else {
-                    console.log("erro: ", res.data.message);
-                }
-            } catch (error) {
-                console.log("erro ao limpar carrinho: ", error);
-            }
-        }
-    };
-
-    const checkout = async () => {
-        if (!isLoggedIn && !user){
-            console.log("erro: usuário inválido");
-            return;
-        }
-
-        const obj = { idUsuario: user!.id };
-
-        try {
-            const res = await axios.post("http://localhost/php-loja-back/checkout.php",
-                obj,
-                {
-                    withCredentials: true,
-                    timeout: 1000,
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                }
-            );
-
-            console.log("final: ", res.data);
-
-            if (res.data.success) {
-                console.log(res.data.message);
-                setCart([]);
-            } else {
-                console.log(res.data.message);
-            }
-        } catch (error) {
-            console.log("erro ao fazer checkout: ", error);
-        }
-    };
+    console.log("Carrinho:", cart);
 
     const fetchCartItems = async () => {
         if (!isLoggedIn || !user) {
@@ -111,43 +18,60 @@ const Carrinho = () => {
             return;
         }
 
-        try {
-            const res = await axios.get("http://localhost/php-loja-back/cart-get.php", {
-                timeout: 1000,
-                withCredentials: true
-            });
-            
-            console.log("Valores recebidos:", res.data);
-
-            if (!res.data.success){
-                setCart([]);
-                console.log("Erro: ", res.data.message);
-                return;
-            }
-
-            setCart(res.data.cart);
-
-        } catch (error) {
-            console.log("erro ao acessar carrinho", error);
-        }
+        setLoading(true);
+        const items = await CartService.fetchCartItems();
+        setCart(items);
         setLoading(false);
-    }
+    };
 
+    const removeFromCart = async (itemId: number) => {
+        if (!user?.id) {
+            console.error("Usuário inválido.");
+            return;
+        }
 
-    const cartRestoreItem = async (userId: number): Promise<void> => {
-        try {
-            const response = await axios.post("http://localhost/php-loja-back/cart-restore.php", { idUsuario: userId }, {
-                timeout: 1000,
-                withCredentials: true
-            });
+        const result = await CartService.removeFromCart(user.id, itemId);
+        if (result) {
+            console.log(`Item ${itemId} removido com sucesso.`);
+            await fetchCartItems();
+        }
+    };
 
-            if (response.data.success) {
-                console.log(response.data.message);
+    const clearCart = async () => {
+        if (isLoggedIn) {
+            const result = await CartService.clearCart();
+            if (result) {
+                console.log(result.message);
+                setCart([]);
             } else {
-                console.log("Erro: ", response.data.message);
+                console.log("Erro ao limpar carrinho.");
             }
-        } catch (error) {
-            console.error("Erro ao restaurar itens do carrinho: ", error);
+        }
+    };
+
+    const checkout = async () => {
+        if (!isLoggedIn || !user) {
+            console.log("Erro: usuário inválido.");
+            return;
+        }
+
+        const result = await CartService.checkout(user.id);
+        if (result) {
+            console.log(result.message);
+            setCart([]);
+        }
+    };
+
+    const restoreCartItems = async () => {
+        if (!user?.id) {
+            console.error("Usuário inválido.");
+            return;
+        }
+
+        const result = await CartService.restoreCartItem(user.id);
+        if (result) {
+            console.log(result.message);
+            await fetchCartItems();
         }
     };
 
@@ -158,10 +82,6 @@ const Carrinho = () => {
     return user ? (
         <main className="container">
             <h2>Carrinho</h2>
-            <p>TODO: usar ProductCart mas de outra forma e refatorar/reutilizar função getTotalCarrinho e fetchCartItems etc</p>
-            <p>TODO: funcao de limpar carrinho usando cart-delete.php</p>
-            <p>TODO: usar modal para mostrar tela de checkout</p>
-
             {loading ? (
                 <p>Carregando carrinho...</p>
             ) : (
@@ -169,35 +89,28 @@ const Carrinho = () => {
                     {cart.map((i: Cartfull) => (
                         <CartProductCard
                             key={i.idItem}
-                            cartItem={i} // Passando o item do carrinho para o CartProductCard
+                            cartItem={i}
+                            onRemove={() => removeFromCart(i.idItem)}
                         />
                     ))}
                 </div>
             )}
-            <button className="btn btn-primary"
-                onClick={async () => await checkout()}
-                disabled={loading || cart.length === 0}>
+
+            <button className="btn btn-primary" onClick={checkout} disabled={loading || cart.length === 0}>
                 Fazer Checkout
             </button>
 
-            <button className="btn btn-danger"
-                onClick={async () => await clearCart()}
-                disabled={loading || cart.length === 0}>
+            <button className="btn btn-danger" onClick={clearCart} disabled={loading || cart.length === 0}>
                 Limpar carrinho
             </button>
 
-            <button className="btn btn-secondary"
-                onClick={async () => {
-                    await cartRestoreItem(user.id);
-                    await fetchCartItems();
-                }}>
+            <button className="btn btn-secondary" onClick={restoreCartItems}>
                 Restaurar últimos itens apagados
             </button>
 
-            <p>total: calcular-total</p>
+            <p>Total: calcular-total</p>
         </main>
     ) : null;
 };
 
 export default Carrinho;
-
