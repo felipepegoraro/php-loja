@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useUser } from '../context/userContext';
 import CartProductCard from '../components/CartProductCard';
+import Utils from '../types/Utils';
 import CartService from '../services/CartService';
+import Modal from '../components/Modal'
+import "../styles/css/carrinho.css"
 
 import type { Cartfull } from '../types/cart';
 
@@ -9,7 +12,8 @@ const Carrinho = () => {
     const [cart, setCart] = useState<Cartfull[]>([]);
     const { user, isLoggedIn } = useUser();
     const [loading, setLoading] = useState(true);
-
+    const [total, setTotal] = useState(0);
+    const [showModal, setShowModal] = useState(false);
     console.log("Carrinho:", cart);
 
     const fetchCartItems = async () => {
@@ -79,13 +83,13 @@ const Carrinho = () => {
         try {
             const result = await CartService.cartUpdateQuantityItem(idItem, quantidade);
             if (result) {
-               
-                setCart(prevCart => 
-                    prevCart.map(item => 
+
+                setCart(prevCart =>
+                    prevCart.map(item =>
                         item.idItem === idItem ? { ...item, quantidade } : item
                     )
                 );
-               
+
             } else {
                 console.log('Erro ao salvar a quantidade');
             }
@@ -93,43 +97,120 @@ const Carrinho = () => {
             console.error('Erro ao salvar quantidade no backend:', error);
         }
     };
+
+    const calculateTotal = () => {
+        const total = cart.reduce((acc, item) => acc + item.precoItem * item.quantidade, 0);
+        setTotal(total);
+    };
+
+    const handleCheckoutClick = () => {
+        setShowModal(true); // Exibe o modal
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false); // Fecha o modal
+    };
+
+
     useEffect(() => {
         fetchCartItems();
     }, [user]);
+    useEffect(() => {
+        calculateTotal();
+    }, [cart]);
 
     return user ? (
-        <main className="container">
-            <h2>Carrinho</h2>
-            {loading ? (
-                <p>Carregando carrinho...</p>
-            ) : (
-                <div>
-                    {cart.map((i: Cartfull) => (
-                        <CartProductCard
-                            key={i.idItem}
-                            cartItem={i}
-                            onRemove={() => removeFromCart(i.idItem)}
-                            updateQuantity={updateQuantity}
-                            
-                        />
-                    ))}
+        <main className="cart-container">
+            <div className="content">
+                <h2 className="cart-title">Meu Carrinho</h2>
+
+                <div className="cart-content">
+                    {loading ? (
+                        <p className="loading-text">Carregando carrinho...</p>
+                    ) : (
+                        <>
+                            <div className="container">
+                                {cart.map((i: Cartfull) => (
+                                    <CartProductCard
+                                        key={i.idItem}
+                                        cartItem={i}
+                                        onRemove={() => removeFromCart(i.idItem)}
+                                        updateQuantity={updateQuantity}
+                                    />
+                                ))}
+                            </div>
+                            <div className="cart-summary">
+                                <p>
+                                    <strong>Total:</strong> {Utils.formatPrice(total)}
+                                </p>
+                                <div className="cart-actions">
+                                    <button
+                                        className="btn btn-danger"
+                                        onClick={clearCart}
+                                        disabled={loading || cart.length === 0}
+                                    >
+                                        Limpar Carrinho
+                                    </button>
+                                    <button
+                                        className="botaocheckout btn btn-primary"
+                                        onClick={handleCheckoutClick}
+                                        disabled={loading || cart.length === 0}
+                                    >
+                                        Fazer Checkout
+                                    </button>
+                                    <button className="btn btn-secondary" onClick={restoreCartItems}>
+                                        Restaurar Itens
+                                    </button>
+                                    <Modal
+                                        show={showModal}
+                                        onHide={handleCloseModal}
+                                        title="Resumo da Compra"
+                                        body={
+                                            <>
+                                                <div className="order-summary">
+                                                    {cart.map((item, index) => (
+                                                        <div key={index} className="order-item">
+                                                            <span className="item-name">{item.nomeItem}</span>
+                                                            <span className="item-price">{Utils.formatPrice(item.precoItem)}</span>
+                                                            <span className="item-quantity">Qtd: {item.quantidade}</span>
+                                                            <span className="item-total">
+                                                                {Utils.formatPrice(item.precoItem * item.quantidade)}
+                                                            </span>
+                                                        </div>
+                                                    ))}
+                                                    <div className="order-total">
+                                                        <strong>Total: {Utils.formatPrice(total)}</strong>
+                                                    </div>
+                                                </div>
+
+                                                <button
+                                                    className="btn btn-primary"
+                                                    onClick={() => {
+                                                        checkout();
+                                                        handleCloseModal();
+                                                    }}
+                                                >
+                                                    Confirmar
+                                                </button>
+                                                <button
+                                                    className="btn btn-secondary"
+                                                    onClick={handleCloseModal}
+                                                >
+                                                    Cancelar
+                                                </button>
+                                            </>
+                                        }
+                                    />
+
+                                </div>
+                            </div>
+                        </>
+                    )}
                 </div>
-            )}
 
-            <button className="btn btn-primary" onClick={checkout} disabled={loading || cart.length === 0}>
-                Fazer Checkout
-            </button>
+            </div>
 
-            <button className="btn btn-danger" onClick={clearCart} disabled={loading || cart.length === 0}>
-                Limpar carrinho
-            </button>
-
-            <button className="btn btn-secondary" onClick={restoreCartItems}>
-                Restaurar últimos itens apagados
-            </button>
-
-            <p>Total: calcular-total</p>
-        </main>
+        </main >
     ) : null;
 };
 

@@ -8,7 +8,7 @@
 
 /* Estilos para o container da imagem */
 .cart-item-image-container {
-  height: 250px; /* Define a altura do container */
+  height: 350px;
   width: 100%;
   overflow: hidden;
   border-radius: 8px;
@@ -39,7 +39,6 @@
   width: 100%;
 }
 
-/* Estilos para o corpo do cartão */
 .card-body {
   padding: 16px;
   display: flex;
@@ -65,16 +64,65 @@
 .cart-item-price p {
   font-size: 1.8rem;
   font-weight: bold;
-  color: var(--primary-color); /* Cor vermelha para destaque no preço */
+  color: var(--primary-color);
 }
 
-/* Ajustando o espaçamento e alinhamento */
 .cart-item-meta {
   margin-bottom: 16px;
 }
 
 .cart-item-quantity {
   margin-bottom: 8px;
+}
+
+.quantity-controls button {
+  font-size: 18px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.quantity-controls button:last-child {
+  background-color: #2ecc71;
+}
+
+.quantity-controls button:last-child:hover {
+  background-color: #27ae60;
+}
+
+.quantity-controls button:first-child {
+  background-color: #e74c3c;
+}
+
+.quantity-controls button:first-child:hover {
+  background-color: #c0392b;
+}
+
+.quantity-controls span {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Botão de remover */
+.cart-item-remove button {
+  font-size: 1.2rem;
+  color: #fff;
+  background-color: #e74c3c; /* Cor vermelha para o botão */
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  /* Alinha o botão de remover no topo */
+  margin-top: 12px;
+}
+
+.cart-item-remove button:hover {
+  background-color: #c0392b;
 }
 
 /*# sourceMappingURL=cartproductcard.css.map */

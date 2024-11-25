@@ -120,7 +120,7 @@ class CartService {
                     idItem: String(idItem), 
                     quantidade: String(quantidade)
                 }), {
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, // Assegura que o tipo de conteúdo está correto
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, 
                     timeout: 1000,
                     withCredentials: true,
                 }
