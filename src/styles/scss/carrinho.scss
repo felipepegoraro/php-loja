@@ -1,0 +1,170 @@
+/* Layout principal */
+.cart-container {
+    display: flex;
+    gap: 20px;
+    flex-direction: row;
+    justify-content: center;
+    background-color: #FFFf;
+
+}
+
+.content {
+
+
+    background: linear-gradient(to right, #0077ff, #00d4ff);
+    ;
+    padding: 30px;
+
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 2000px;
+    width: 100%;
+    text-align: center;
+
+}
+
+.cart-title {
+    font-size: 5rem;
+    margin-bottom: 2.5rem;
+    text-align: center;
+    color: #ffffff;
+}
+
+
+/* Área principal */
+.cart-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Itens do carrinho */
+.cart-items {
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Resumo do carrinho */
+.cart-summary {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.cart-summary p {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    color: #555;
+}
+
+/* Botões de ação */
+.cart-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.botaocheckout{
+    width: 500px;
+    height: 50px;
+}
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background-color: #a71d2a;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.loading-text {
+    font-size: 1.2rem;
+    color: #777;
+    text-align: center;
+}
+
+
+.order-summary {
+    font-size: 0.85rem; // Texto menor
+    line-height: 1.2; // Linhas compactas
+    color: #555;
+
+    .order-item {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        padding: 0.5rem 0;
+        gap: 20px;
+        border-bottom: 1px solid #eaeaea;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        span {
+            flex: 1;
+            text-align: left;
+
+            &:nth-child(2),
+            &:nth-child(4) {
+                text-align: right;
+            }
+        }
+
+        .item-name {
+            font-weight: 600;
+            margin-right: 0.5rem;
+            color: #333;
+        }
+
+        .item-total {
+            font-weight: 700;
+            color: #000;
+        }
+    }
+
+    .order-total {
+        margin-top: 1rem;
+        font-size: 1rem;
+        text-align: right;
+        color: #000;
+
+        strong {
+            font-size: 1.1rem;
+        }
+    }
+}
+
+
+

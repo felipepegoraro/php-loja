@@ -1,27 +1,34 @@
-import React, { useState } from 'react';
-import { Cartfull } from "../types/cart"; 
-import "../styles/css/cartproductcard.css"; 
-
+import React, { useEffect, useState } from 'react';
+import { Cartfull } from "../types/cart";
+import "../styles/css/cartproductcard.css";
 import Utils from '../types/Utils';
 
-export const CartProductCard = ({ cartItem, onRemove }: { 
+export const CartProductCard = ({ cartItem, onRemove, updateQuantity }: {
     cartItem: Cartfull,
-    onRemove: (id: number) => void 
+    onRemove: (id: number) => void
+    updateQuantity: (idItem: number, quantidade: number) => void
 }) => {
-    const { 
+    const {
         nomeItem, descricaoItem, precoItem, categoriaItem,
         subcategoriaItem, fotoItem, quantidade, idItem
     } = cartItem;
 
     const [newQuantity, setNewQuantity] = useState(quantidade);
 
-    const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setNewQuantity(Number(event.target.value));
+    const handleIncreaseQuantity = () => {
+        const updatedQuantity = newQuantity + 1;
+        setNewQuantity(updatedQuantity);
+        updateQuantity(idItem, updatedQuantity);
     };
 
-    const handleSaveQuantity = () => {
-        console.log(`Salvar quantidade: ${newQuantity}`);
+    const handleDecreaseQuantity = () => {
+        if (newQuantity > 1) {
+            const updatedQuantity = newQuantity - 1;
+            setNewQuantity(updatedQuantity);
+            updateQuantity(idItem, updatedQuantity)
+        }
     };
+
 
     return (
         <div className="card mb-3 cart-item-card">
@@ -43,7 +50,7 @@ export const CartProductCard = ({ cartItem, onRemove }: {
                         <div>
                             <h5 className="card-title">{nomeItem}</h5>
                             <p className="card-text">{descricaoItem}</p>
-                            
+
                             {/* Metadados do produto */}
                             <div className="cm cart-item-meta">
                                 <p><strong>Categoria:</strong> {categoriaItem}</p>
@@ -51,39 +58,47 @@ export const CartProductCard = ({ cartItem, onRemove }: {
                             </div>
 
                             {/* Quantidade e preço */}
+                            <div className="cart-item-price1">
+                                <p><strong>Preço Unitário:</strong> {Utils.formatPrice(precoItem)}</p>
+                            </div>
                             <div className="cart-item-quantity">
                                 <p><strong>Quantidade:</strong> {quantidade}</p>
                             </div>
                             <div className="cart-item-price">
-                                <p><strong>Preço:</strong> {Utils.formatPrice(precoItem * quantidade)}</p>
+                                <p><strong>SubTotal:</strong> {Utils.formatPrice(precoItem * quantidade)}</p>
                             </div>
                         </div>
                         <div>
-                            <button 
-                                onClick={() => onRemove(idItem)} 
-                                className="btn btn-danger"
-                            >
-                                Remover
-                            </button>
-
-                            <div>
-                                <p>Trocar quantidade</p>
-                                <input 
-                                    type="number" 
-                                    min="1" 
-                                    value={newQuantity} 
-                                    onChange={handleQuantityChange} 
-                                    style={{ width: "100px" }} 
-                                />
-                                <button 
-                                    onClick={handleSaveQuantity} 
-                                    className="btn btn-primary"
+                            <div className="quantity-controls">
+                                <button
+                                    onClick={handleDecreaseQuantity}
+                                    className="btn btn-secondary"
+                                    style={{ width: "40px", margin: "0 5px" }}
                                 >
-                                    Salvar
+                                    -
                                 </button>
-                            </div>
-                        </div>
+                                <span style={{ margin: "0 20px" }}>{newQuantity}</span>
+                                <button
+                                    onClick={handleIncreaseQuantity}
+                                    className="btn btn-secondary"
+                                    style={{ width: "40px", margin: "0 5px" }}
+                                >
+                                    +
+                                </button>
 
+
+                            </div>
+                            <div className='cart-item-remove'>
+                                <button
+                                    onClick={() => onRemove(idItem)}
+                                    className="btn btn-danger"
+                                >
+                                    Remover
+                                </button>
+
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>

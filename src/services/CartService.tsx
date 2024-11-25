@@ -112,6 +112,27 @@ class CartService {
             return null;
         }
     }
+
+    static async cartUpdateQuantityItem(idItem: number, quantidade: number) {
+        try {
+            const response = await axios.post("http://localhost/php-loja-back/cart-update-quantity.php", 
+                new URLSearchParams({
+                    idItem: String(idItem), 
+                    quantidade: String(quantidade)
+                }), {
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, 
+                    timeout: 1000,
+                    withCredentials: true,
+                }
+            );
+    
+            return response.data.success ? response.data : null;
+        } catch (error) {
+            console.error("Erro ao atualizar a quantidade do item:", error);
+            return null;
+        }
+    }
+
 }
 
 export default CartService;

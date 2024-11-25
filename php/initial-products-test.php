@@ -44,6 +44,7 @@ function insertCategories($conn, &$debug){
         $foto = curl_exec($ch);
         curl_close($ch);
 
+
         if ($foto === false) {
             $debug['steps'][] = "Erro ao baixar a foto para a categoria '$nomeCategoria'.";
             continue;
@@ -156,7 +157,8 @@ function insertAdmin($conn, &$debug){
     $debug['steps'][] = "Statement de usuário fechado.";
 }
 
-insertCategories($conn, $debug);
+
+// insertCategories($conn, $debug);
 insertSubcategories($conn, $debug);
 insertAdmin($conn, $debug);
 
