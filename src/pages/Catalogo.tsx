@@ -102,7 +102,7 @@ const Catalogo = () => {
     const renderProductCards = () => {
         const center = "d-flex align-items-center justify-content-center";
         return (
-        <div className={`container ${center}`}>
+        <div className={`container`}>
             {loading 
             ? renderLoading()
             : <div className={`row ${center}`} style={{ position: "relative" }}>

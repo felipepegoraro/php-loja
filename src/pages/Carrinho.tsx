@@ -75,6 +75,24 @@ const Carrinho = () => {
         }
     };
 
+    const updateQuantity = async (idItem: number, quantidade: number) => {
+        try {
+            const result = await CartService.cartUpdateQuantityItem(idItem, quantidade);
+            if (result) {
+               
+                setCart(prevCart => 
+                    prevCart.map(item => 
+                        item.idItem === idItem ? { ...item, quantidade } : item
+                    )
+                );
+               
+            } else {
+                console.log('Erro ao salvar a quantidade');
+            }
+        } catch (error) {
+            console.error('Erro ao salvar quantidade no backend:', error);
+        }
+    };
     useEffect(() => {
         fetchCartItems();
     }, [user]);
@@ -91,6 +109,8 @@ const Carrinho = () => {
                             key={i.idItem}
                             cartItem={i}
                             onRemove={() => removeFromCart(i.idItem)}
+                            updateQuantity={updateQuantity}
+                            
                         />
                     ))}
                 </div>

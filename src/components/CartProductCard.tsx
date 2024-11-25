@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Cartfull } from "../types/cart"; 
 import "../styles/css/cartproductcard.css"; 
-
+import CartService from '../services/CartService';
 import Utils from '../types/Utils';
 
-export const CartProductCard = ({ cartItem, onRemove }: { 
+export const CartProductCard = ({ cartItem, onRemove , updateQuantity }: { 
     cartItem: Cartfull,
     onRemove: (id: number) => void 
+    updateQuantity: (idItem: number, quantidade: number) => void
 }) => {
     const { 
         nomeItem, descricaoItem, precoItem, categoriaItem,
@@ -14,14 +15,22 @@ export const CartProductCard = ({ cartItem, onRemove }: {
     } = cartItem;
 
     const [newQuantity, setNewQuantity] = useState(quantidade);
-
-    const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setNewQuantity(Number(event.target.value));
+    
+    const handleIncreaseQuantity = () => {
+        const updatedQuantity = newQuantity + 1;
+        setNewQuantity(updatedQuantity);  // Atualiza o estado
+        updateQuantity(idItem, updatedQuantity);  // Envia para o backend
+    };
+    
+    const handleDecreaseQuantity = () => {
+        if (newQuantity > 1) {
+            const updatedQuantity = newQuantity - 1;
+            setNewQuantity(updatedQuantity);  // Atualiza o estado
+            updateQuantity(idItem, updatedQuantity) // Envia para o backend
+        }
     };
 
-    const handleSaveQuantity = () => {
-        console.log(`Salvar quantidade: ${newQuantity}`);
-    };
+
 
     return (
         <div className="card mb-3 cart-item-card">
@@ -66,24 +75,27 @@ export const CartProductCard = ({ cartItem, onRemove }: {
                                 Remover
                             </button>
 
-                            <div>
-                                <p>Trocar quantidade</p>
-                                <input 
-                                    type="number" 
-                                    min="1" 
-                                    value={newQuantity} 
-                                    onChange={handleQuantityChange} 
-                                    style={{ width: "100px" }} 
-                                />
+                            <div className="quantity-controls">
                                 <button 
-                                    onClick={handleSaveQuantity} 
-                                    className="btn btn-primary"
+                                    onClick={handleDecreaseQuantity} 
+                                    className="btn btn-secondary"
+                                    style={{ width: "30px" }}
                                 >
-                                    Salvar
+                                    -
                                 </button>
+                                <span style={{ margin: "0 10px" }}>{newQuantity}</span>
+                                <button 
+                                    onClick={handleIncreaseQuantity} 
+                                    className="btn btn-secondary"
+                                    style={{ width: "30px" }}
+                                >
+                                    +
+                                </button>
+                          
                             </div>
-                        </div>
 
+
+                        </div>
                     </div>
                 </div>
             </div>
