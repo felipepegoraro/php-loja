@@ -1,14 +1,18 @@
-import { useState } from 'react';
 import axios from 'axios';
+import { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import { useUser } from '../context/userContext';
-import "../styles/css/login-screen.css"
 
+import Modal from './Modal';
+import { useUser } from '../context/userContext';
+
+import "../styles/css/login-screen.css"
+import ResetPassword from './ResetPassword';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const { setUser } = useUser();
   const nav = useNavigate();
 
@@ -32,20 +36,13 @@ const LoginScreen = () => {
 
       if (result.success) {
         setErrorMessage('');
-
-        console.log(result.user);
-
         setUser({
-            id: result.user.id,
-            nome: result.user.nome,
-            email: result.user.email,
-            admin: result.user.admin,
+          id: result.user.id,
+          nome: result.user.nome,
+          email: result.user.email,
+          admin: result.user.admin,
         });
-        
-        
-
         nav(result.user?.admin ? "/admin/Homepage" : "/Catalogo");
-      
       } else {
         setErrorMessage(result.error || 'Erro ao fazer login');
       }
@@ -54,39 +51,58 @@ const LoginScreen = () => {
     }
   };
 
+  const openForgotPasswordModal = () => setShowForgotPassword(true);
+  const closeForgotPasswordModal = () => setShowForgotPassword(false);
+
   return (
-      <div className="login-box">
-        <h2>Faça login</h2>
-        <form onSubmit={handleLogin}>
-          <div className="input-group">
-            <label>Email</label>
-            <input
-              type="text"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="input-field"
-            />
-          </div>
-          <div className="input-group">
-            <label>Senha</label>
-            <input
-              type="password"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-              required
-              className="input-field"
-            />
-          </div>
-          <button type="submit" className="btn-submit">Entrar</button>
-        </form>
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
+    <div className="login-box">
+      <h2>Faça login</h2>
+      <form onSubmit={handleLogin}>
+        <div className="input-group">
+          <label>Email</label>
+          <input
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="input-field"
+          />
+        </div>
+        <div className="input-group">
+          <label>Senha</label>
+          <input
+            type="password"
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
+            required
+            className="input-field"
+          />
+        </div>
+        <button type="submit" className="btn-submit">Entrar</button>
+      </form>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
 
-        <Link to="/Register" className="btn-register">
-          Não tem uma conta? Cadastre-se
-        </Link>
-      </div>
+      <Link to="/Register" className="btn-register">
+        Não tem uma conta? Cadastre-se
+      </Link>
 
+      <a onClick={openForgotPasswordModal} className="btn-register">
+        Esqueci minha senha
+      </a>
+
+      <Modal
+        show={showForgotPassword}
+        onHide={closeForgotPasswordModal}
+        title="Recuperar senha"
+        body={
+            <>
+                <ResetPassword/>
+                <div className="text-center mt-4">
+                    <button className="btn btn-secondary" onClick={closeForgotPasswordModal}>Voltar ao login</button>
+                </div>
+            </>
+        }/>
+    </div>
   );
 };
 

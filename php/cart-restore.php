@@ -19,7 +19,7 @@ if (!isset($data['idUsuario'])) {
 
 $usuarioid = $data['idUsuario'];
 
-$query = "UPDATE tb_carrinho SET status = 'ativo' WHERE idUsuario = ?";
+$query = "UPDATE tb_carrinho SET status = 'ativo', quantidade = 1 WHERE idUsuario = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $usuarioid);
 

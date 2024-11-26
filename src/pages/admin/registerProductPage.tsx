@@ -110,8 +110,21 @@ const RegisterProductPage = () => {
         } catch (err) {
             setError('Erro ao cadastrar produto. Tente novamente.');
         }
-    };
 
+        setProduct({
+            id: 0,
+            idSubCategoria: 0,
+            nome: '',
+            descricao: '',
+            foto: null,
+            preco: 0,
+            categoria: '',
+            subcategoria: '',
+        })
+
+        const fileInput = document.getElementById('foto') as HTMLInputElement;
+        if (fileInput) fileInput.value = '';
+    };
 
     if (!user || !user!.admin){
         return (
