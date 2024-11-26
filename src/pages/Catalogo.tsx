@@ -101,38 +101,85 @@ const Catalogo = () => {
 
     const renderProductCards = () => {
         const center = "d-flex align-items-center justify-content-center";
+
+        if (loading) {
+            return (
+                <div className={`container ${center}`}>
+                    {renderLoading()}
+                </div>
+            );
+        }
+
+        if (!Array.isArray(products) || products.length === 0) {
+            return (
+                <div className={`container ${center}`}>
+                    <p className="text-center">Nenhum produto encontrado!</p>
+                </div>
+            );
+        }
+
         return (
-        <div className={`container`}>
-            {loading 
-            ? renderLoading()
-            : <div className={`row ${center}`} style={{ position: "relative" }}>
-                {Array.isArray(products) 
-                ? products.map((produto, i) => (
-                    <ProductCard
-                        key={i}
-                        produto={produto}
-                        onAddToCart={async () => {
-                            if (user) {
-                                await CartService.addToCart(user.id, produto, 1);
-                                const newToast = {
-                                    id: Date.now(),
-                                    title: `Produto [${produto.id}] adicionado`,
-                                    description: "Produto inserido no carrinho",
-                                    color: "green",
-                                    png: "✅"
-                                };
-                                setToasts(prevToasts => [...prevToasts, newToast]);
-                                await fetchCartItems();
-                            }
-                        }}
-                    />
-                ))
-                : <p>Nenhum produto encontrado!</p>
-                }
+            <div className={`container`}>
+                <div className={`row ${center}`} style={{ position: "relative" }}>
+                    {products.map((produto, i) => (
+                        <ProductCard
+                            key={i}
+                            produto={produto}
+                            onAddToCart={async () => {
+                                if (user) {
+                                    await CartService.addToCart(user.id, produto, 1);
+                                    const newToast = {
+                                        id: Date.now(),
+                                        title: `Produto [${produto.id}] adicionado`,
+                                        description: "Produto inserido no carrinho",
+                                        color: "green",
+                                        png: "✅",
+                                    };
+                                    setToasts((prevToasts) => [...prevToasts, newToast]);
+                                    await fetchCartItems();
+                                }
+                            }}
+                        />
+                    ))}
+                </div>
             </div>
-            }
-        </div>
-    )}
+        );
+    };
+
+    // const renderProductCards = () => {
+    //     const center = "d-flex align-items-center justify-content-center";
+    //     return (
+    //     <div className={`container ${loading ? center : ""}`}>
+    //         {loading 
+    //         ? renderLoading()
+    //         : <div className={`row ${center}`} style={{ position: "relative" }}>
+    //             {Array.isArray(products) 
+    //             ? products.map((produto, i) => (
+    //                 <ProductCard
+    //                     key={i}
+    //                     produto={produto}
+    //                     onAddToCart={async () => {
+    //                         if (user) {
+    //                             await CartService.addToCart(user.id, produto, 1);
+    //                             const newToast = {
+    //                                 id: Date.now(),
+    //                                 title: `Produto [${produto.id}] adicionado`,
+    //                                 description: "Produto inserido no carrinho",
+    //                                 color: "green",
+    //                                 png: "✅"
+    //                             };
+    //                             setToasts(prevToasts => [...prevToasts, newToast]);
+    //                             await fetchCartItems();
+    //                         }
+    //                     }}
+    //                 />
+    //             ))
+    //             : <p>Nenhum produto encontrado!</p>
+    //             }
+    //         </div>
+    //         }
+    //     </div>
+    // )}
 
     return (
         <main className="catalogo-container">

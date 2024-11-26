@@ -104,11 +104,11 @@ const Carrinho = () => {
     };
 
     const handleCheckoutClick = () => {
-        setShowModal(true); // Exibe o modal
+        setShowModal(true);
     };
 
     const handleCloseModal = () => {
-        setShowModal(false); // Fecha o modal
+        setShowModal(false);
     };
 
 
@@ -129,7 +129,7 @@ const Carrinho = () => {
                         <p className="loading-text">Carregando carrinho...</p>
                     ) : (
                         <>
-                            <div className="container">
+                            <div className="container cart-items-container">
                                 {cart.map((i: Cartfull) => (
                                     <CartProductCard
                                         key={i.idItem}
@@ -166,13 +166,13 @@ const Carrinho = () => {
                                         onHide={handleCloseModal}
                                         title="Resumo da Compra"
                                         body={
-                                            <>
+                                            <div className="order-modal-container">
                                                 <div className="order-summary">
                                                     {cart.map((item, index) => (
                                                         <div key={index} className="order-item">
-                                                            <span className="item-name">{item.nomeItem}</span>
-                                                            <span className="item-price">{Utils.formatPrice(item.precoItem)}</span>
-                                                            <span className="item-quantity">Qtd: {item.quantidade}</span>
+                                                            <span className="order-item-name">{item.nomeItem}</span>
+                                                            <span className="order-item-price">{Utils.formatPrice(item.precoItem)}</span>
+                                                            <span className="order-item-quantity">Qtd: {item.quantidade}</span>
                                                             <span className="item-total">
                                                                 {Utils.formatPrice(item.precoItem * item.quantidade)}
                                                             </span>
@@ -183,22 +183,22 @@ const Carrinho = () => {
                                                     </div>
                                                 </div>
 
-                                                <button
-                                                    className="btn btn-primary"
-                                                    onClick={() => {
-                                                        checkout();
-                                                        handleCloseModal();
-                                                    }}
-                                                >
-                                                    Confirmar
-                                                </button>
-                                                <button
-                                                    className="btn btn-secondary"
-                                                    onClick={handleCloseModal}
-                                                >
-                                                    Cancelar
-                                                </button>
-                                            </>
+                                                    <button style={{marginRight: '10px'}}
+                                                        className="btn btn-primary"
+                                                        onClick={() => {
+                                                            checkout();
+                                                            handleCloseModal();
+                                                        }}
+                                                    >
+                                                        Confirmar
+                                                    </button>
+                                                    <button
+                                                        className="btn btn-secondary"
+                                                        onClick={handleCloseModal}
+                                                    >
+                                                        Cancelar
+                                                    </button>
+                                            </div>
                                         }
                                     />
 

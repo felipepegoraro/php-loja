@@ -34,7 +34,7 @@ export const CartProductCard = ({ cartItem, onRemove, updateQuantity }: {
         <div className="card mb-3 cart-item-card">
             <div className="row g-0">
                 {/* Coluna da imagem */}
-                <div className="col-md-4 d-flex justify-content-center align-items-center cart-item-image-container">
+                <div className="col-md-4 d-flex cart-item-image-container">
                     {fotoItem ? (
                         <img src={`data:image/png;base64,${fotoItem}`} alt={nomeItem} className="img-fluid cart-item-image" />
                     ) : (
@@ -46,15 +46,15 @@ export const CartProductCard = ({ cartItem, onRemove, updateQuantity }: {
 
                 {/* Coluna de detalhes */}
                 <div className="col-md-8">
-                    <div className="card-body">
-                        <div>
+                    <div className="card-bodyx">
+                    
+                        <div className="card-item-description">
                             <h5 className="card-title">{nomeItem}</h5>
                             <p className="card-text">{descricaoItem}</p>
 
                             {/* Metadados do produto */}
                             <div className="cm cart-item-meta">
-                                <p><strong>Categoria:</strong> {categoriaItem}</p>
-                                <p><strong>Subcategoria:</strong> {subcategoriaItem}</p>
+                                {categoriaItem} &gt; {subcategoriaItem}
                             </div>
 
                             {/* Quantidade e preço */}
@@ -68,7 +68,8 @@ export const CartProductCard = ({ cartItem, onRemove, updateQuantity }: {
                                 <p><strong>SubTotal:</strong> {Utils.formatPrice(precoItem * quantidade)}</p>
                             </div>
                         </div>
-                        <div>
+
+                        <div className="card-buttom-controls">
                             <div className="quantity-controls">
                                 <button
                                     onClick={handleDecreaseQuantity}

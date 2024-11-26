@@ -34,6 +34,7 @@ class CartService {
         const req = {
             idUsuario: userId,
             idItem: itemId,
+            quantidade: 0
         };
 
         try {

@@ -9,18 +9,20 @@
 }
 
 .content {
-
-
     background: linear-gradient(to right, #0077ff, #00d4ff);
-    ;
     padding: 30px;
-
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     max-width: 2000px;
     width: 100%;
     text-align: center;
+}
 
+.cart-items-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 
 .cart-title {
@@ -34,8 +36,12 @@
 /* Área principal */
 .cart-content {
     display: flex;
-    flex-direction: column;
     gap: 2rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
 
 /* Itens do carrinho */
@@ -51,6 +57,7 @@
     border-radius: 8px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     text-align: center;
+    width: 50%;
 }
 
 .cart-summary p {
@@ -78,7 +85,7 @@
 
 .botaocheckout{
     width: 500px;
-    height: 50px;
+    /* height: 50px; */
 }
 .btn-primary {
     background-color: #007bff;
@@ -165,6 +172,3 @@
         }
     }
 }
-
-
-

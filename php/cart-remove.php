@@ -18,6 +18,7 @@ if (!isset($data['idUsuario'], $data['idItem'])) {
 
 $idUsuario = $data['idUsuario'];
 $idItem = $data['idItem'];
+$quantidade = $data['quantidade'];
 
 if ($_SESSION['user']['id'] !== $idUsuario) {
     echo json_encode(["success" => false, "message" => "Usuário não autorizado."]);
@@ -25,9 +26,9 @@ if ($_SESSION['user']['id'] !== $idUsuario) {
     exit;
 }
 
-$query = "UPDATE tb_carrinho SET status = 'removido' WHERE idUsuario = ? AND idItem = ?";
+$query = "UPDATE tb_carrinho SET status = 'removido', quantidade = ? WHERE idUsuario = ? AND idItem = ?";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("ii", $idUsuario, $idItem);
+$stmt->bind_param("iii", $quantidade, $idUsuario, $idItem);
 
 if ($stmt->execute() && $stmt->affected_rows > 0) {
     echo json_encode(["success" => true, "message" => "Item removido do carrinho."]);

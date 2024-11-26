@@ -32,9 +32,9 @@ const LoginButton = () => {
   if (user) {
     return (
       <div className="profile-container ms-3">
-         <a href="/Carrinho" className="cart-btn">
+         <a href="/Carrinho" className="cart-btn" title="Ir ao carrinho">
             <img
-              src="/assets/carrinho-de-compras.png" // Imagem do ícone do carrinho
+              src="/assets/carrinho-de-compras.png"
               alt="Carrinho"
               className="cart-icon"
             />
@@ -87,7 +87,7 @@ const Header = () => {
                 <a className="nav-link" href="/Suporte">Suporte</a>
               </li>
             </ul>
-            <div className="navbar-btn-container"> {/* Envolvendo o LoginButton */}
+            <div className="navbar-btn-container">
               <LoginButton />
             </div>
           </div>
