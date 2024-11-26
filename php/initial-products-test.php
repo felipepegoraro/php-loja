@@ -158,7 +158,7 @@ function insertAdmin($conn, &$debug){
 }
 
 
-// insertCategories($conn, $debug);
+insertCategories($conn, $debug);
 insertSubcategories($conn, $debug);
 insertAdmin($conn, $debug);
 
