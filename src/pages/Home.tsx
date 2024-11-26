@@ -176,7 +176,7 @@ const Home = () => {
         <main className="home-page-container">
             {showBanner()}
             {
-                Array.isArray(topItems) && Array.isArray(products)
+                Array.isArray(topItems) && Array.isArray(products) 
                 ? showMaisVendido(topItems.length >= 3 ? topItems : products.slice(0,3))
                 : null
             }
