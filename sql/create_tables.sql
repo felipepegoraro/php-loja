@@ -1,9 +1,12 @@
--- abrir o mysql
--- executar: source SEU_DIRETORIO/create_tables.sql
-
-
-
-USE php_loja;
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS tb_pedido;
+DROP TABLE IF EXISTS tb_itens_pedido;
+DROP TABLE IF EXISTS tb_itens;
+DROP TABLE IF EXISTS tb_subcategoria;
+DROP TABLE IF EXISTS tb_categoria;
+DROP TABLE IF EXISTS tb_usuario;
+DROP TABLE IF EXISTS tb_carrinho;
+SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE IF NOT EXISTS tb_usuario (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -18,22 +21,40 @@ CREATE TABLE IF NOT EXISTS tb_usuario (
     bairro VARCHAR(100),
     complemento VARCHAR(100),
     cidade VARCHAR(100),
-    estado CHAR(2)
+    estado CHAR(2),
+    admin BOOLEAN NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS tb_categoria (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL
+    nome VARCHAR(255) NOT NULL,
+    foto MEDIUMBLOB
+);
+
+CREATE TABLE IF NOT EXISTS tb_subcategoria (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idCategoria INT,
+    nome VARCHAR(255) NOT NULL,
+    FOREIGN KEY (idCategoria) REFERENCES tb_categoria(id)
 );
 
 CREATE TABLE IF NOT EXISTS tb_itens (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    idCategoria INT,
+    idSubCategoria INT,
     nome VARCHAR(255) NOT NULL,
     descricao TEXT,
-    foto BLOB,
+    foto MEDIUMBLOB,
     preco DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (idCategoria) REFERENCES tb_categoria(id)
+    FOREIGN KEY (idSubCategoria) REFERENCES tb_subcategoria(id)
+);
+
+CREATE TABLE IF NOT EXISTS tb_pedido (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idUsuario INT,
+    data DATE NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'pendente', -- status do pedido (pendente, pago, enviado, etc.)
+    total DECIMAL(10, 2),
+    FOREIGN KEY (idUsuario) REFERENCES tb_usuario(id)
 );
 
 CREATE TABLE IF NOT EXISTS tb_itens_pedido (
@@ -41,14 +62,20 @@ CREATE TABLE IF NOT EXISTS tb_itens_pedido (
     idUsuario INT,
     idItem INT,
     quantidade INT NOT NULL,
-    preco DECIMAL(10, 2) NOT NULL,
-    finalizado BOOLEAN NOT NULL DEFAULT FALSE,
+    preco DECIMAL(10,2) NOT NULL,
+    finalizado TINYINT(1) NOT NULL DEFAULT 0,
+    idPedido INT,
+    FOREIGN KEY (idPedido) REFERENCES tb_pedido(id),
     FOREIGN KEY (idUsuario) REFERENCES tb_usuario(id),
     FOREIGN KEY (idItem) REFERENCES tb_itens(id)
 );
 
--- ============= INSERÇÃO DE DADOS ============= 
-INSERT INTO tb_usuario (nome, email, data_nascimento, telefone, senha, cep, rua, numero, bairro, complemento, cidade, estado)
-VALUES 
-('João Silva', 'joao.silva@example.com', '1990-05-15', '11987654321', 'senha123', '12345-678', 'Rua A', '123', 'Centro', 'Apto 101', 'São Paulo', 'SP'),
-('Julia Oliveira', 'maria.oliveira@example.com', '1985-11-30', '11976543210', 'senha456', '98765-432', 'Rua B', '456', 'Jardim', 'Casa 202', 'Rio de Janeiro', 'RJ');
+CREATE TABLE IF NOT EXISTS tb_carrinho (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idUsuario INT,
+    idItem INT,
+    quantidade INT NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'ativo', -- 'ativo', 'removido'
+    FOREIGN KEY (idUsuario) REFERENCES tb_usuario(id),
+    FOREIGN KEY (idItem) REFERENCES tb_itens(id)
+);

@@ -1,0 +1,70 @@
+/* Estilo geral do formulário */
+.form {
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+ 
+}
+
+.register-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.register-title {
+    font-size: 2.8rem;
+    font-weight: bold;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control{
+    
+    width: 100% !important;
+    padding: 12px !important; 
+    font-size: 1rem !important;
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+    box-sizing: border-box !important;
+    transition: border-color 0.3s ease !important;
+}
+
+label {
+    margin-bottom: 8px;
+    color: var(--text-color);
+}
+
+.error-message {
+    color: red;
+    margin-top: 10px;
+    font-size: 1rem;
+}
+
+
+.btn-submit {
+    width: 100%;
+    background-color: #0077ff;
+    color: white;
+    padding: 14px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-submit:hover {
+    background-color: #005bb5;
+}
+
+
+.form-group input:focus, .form-group select:focus {
+    border-color: #0077ff !important;
+    box-shadow: 0 0 8px rgba(0, 119, 255, 0.3) !important;
+}

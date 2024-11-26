@@ -1,0 +1,2 @@
+- todas imagens preto e branco
+- 512x512

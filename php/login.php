@@ -1,6 +1,8 @@
 <?php
 $conn = include 'connect-db.php';
 
+session_start();
+
 $data = json_decode(file_get_contents("php://input"), true);
 $user = $data['email'];
 $pass = $data['senha'];
@@ -12,14 +14,30 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    if ($pass === $row['senha']){
-    // if (password_verify($pass, $row['senha'])) { // USAR QND COLOCAR HASH
-        echo json_encode(["success" => true]);
+    if (password_verify($pass, $row['senha'])) { 
+        $_SESSION['user'] = [
+            'id' => $row['id'],
+            'email' => $row['email'],
+            'nome' => $row['nome'],
+            'admin' => $row['admin']
+        ];
+
+        session_write_close();
+
+        echo json_encode([
+            "success" => true,
+            "user" => [
+                "id" => $row['id'],
+                "email" => $row['email'],
+                "nome" => $row['nome'],
+                "admin" => $row['admin']
+            ]
+        ]);
     } else {
         echo json_encode(["error" => "Senha incorreta"]);
     }
 } else {
-    echo json_encode(["error" => "Usuário invalido"]);
+    echo json_encode(["error" => "Usuario invalido"]);
 }
 
 $stmt->close();

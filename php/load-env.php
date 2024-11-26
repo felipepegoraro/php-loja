@@ -1,7 +1,6 @@
 <?php
 
 // criar o seu arquivo .php-loja-env:
-
 // DB_HOST=
 // DB_NAME=
 // DB_USER=

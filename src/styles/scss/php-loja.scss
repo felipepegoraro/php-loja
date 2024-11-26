@@ -1,4 +1,4 @@
-.php-loja {
+.php-loja { 
     display: grid;
     grid-template-areas:
         "header"
@@ -10,11 +10,12 @@
     header {
       grid-area: header;
       background-color: #f8f9fa;
-      padding: 20px;
+      margin: 28.1px;
       text-align: center;
     }
 
     main {
+      padding-top: 40px !important;
       grid-area: main;
       background-color: #e9ecef;
       padding: 20px;
@@ -23,7 +24,7 @@
     footer {
       grid-area: footer;
       background-color: #f8f9fa;
-      padding: 20px;
+      padding: 30px;
       text-align: center;
     }
 }

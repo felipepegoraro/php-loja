@@ -1,0 +1,127 @@
+/* Wrapper do cartão */
+.cart-item-card {
+ 
+    border-radius: 12px; /* Bordas mais arredondadas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
+    background-color: #fff; /* Cor de fundo branca */
+}
+
+/* Estilos para o container da imagem */
+.cart-item-image-container {
+    height: 350px;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Estilos para a imagem do produto */
+.cart-item-image {
+    object-fit: contain;
+    max-height: 100%;
+    max-width: 100%;
+    border-radius: 8px;
+    padding: 8px;
+
+}
+
+/* Estilos para quando não houver imagem */
+.no-image {
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    line-height: 150px;
+    font-weight: bold;
+    background-color: #eaeaea;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.card-body {
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.card-title {
+    font-size: 2.25rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+.cart-item-meta p,
+.cart-item-price p {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 8px;
+}
+
+/* Estilo do preço */
+.cart-item-price p {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.cart-item-meta {
+    margin-bottom: 16px;
+}
+
+.cart-item-quantity {
+    margin-bottom: 8px;
+}
+
+.quantity-controls button {
+    font-size: 18px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.quantity-controls button:last-child {
+    background-color: #2ecc71; 
+}
+
+.quantity-controls button:last-child:hover {
+    background-color: #27ae60; 
+}
+
+.quantity-controls button:first-child {
+    background-color: #e74c3c; 
+}
+
+.quantity-controls button:first-child:hover {
+    background-color: #c0392b;
+}
+
+.quantity-controls span {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #333;
+}
+
+/* Botão de remover */
+.cart-item-remove button {
+    font-size: 1.2rem;
+    color: #fff;
+    background-color: #e74c3c; /* Cor vermelha para o botão */
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+     /* Alinha o botão de remover no topo */
+    margin-top: 12px;
+}
+
+.cart-item-remove button:hover {
+    background-color: #c0392b;
+}
