@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .pc {
   min-height: 496px;
   max-width: 450px;
@@ -6,10 +7,32 @@
   border-radius: 8px;
   transition: transform 0.3s ease;
   background-color: #ffffff;
+  height: fit-content !important;
+}
+
+.card-text {
+  overflow: hidden; /* Esconde o texto que ultrapassa o contêiner */
+  text-overflow: ellipsis; /* Exibe reticências (...) quando o texto ultrapassa */
+  display: -webkit-box; /* Necessário para funcionar em navegadores baseados no Webkit */
+  -webkit-line-clamp: 1; /* Limita o número de linhas visíveis, altere o valor conforme necessário */
+  -webkit-box-orient: vertical; /* Define a direção do layout em caixas verticais */
 }
 
 .pc:hover {
   transform: scale(1.02);
+}
+
+.item-category {
+  font-size: 1rem;
+  color: #6c757d;
+  margin-bottom: 1rem;
+}
+
+.item-price {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #28a745;
+  margin-bottom: 1.5rem;
 }
 
 .card-img-top {

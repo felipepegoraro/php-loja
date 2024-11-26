@@ -81,7 +81,7 @@ const showCategoryList = (
     setPos: Dispatch<SetStateAction<{ start: number, end: number }>>,
     numof: number = 5
 ) => {
-    if (categories.length <= 0){
+    if (categories.length <= 0 || !Array.isArray(categories)){
         return <p>nenhuma categoria cadastrada</p>
     }
 
@@ -175,7 +175,11 @@ const Home = () => {
     return (
         <main className="home-page-container">
             {showBanner()}
-            {showMaisVendido(topItems.length >= 3 ? topItems : products.slice(0,3) )}
+            {
+                Array.isArray(topItems) && Array.isArray(products)
+                ? showMaisVendido(topItems.length >= 3 ? topItems : products.slice(0,3))
+                : null
+            }
             {showCategoryList(categories, categoryListPosition, setCategoryListPosition)}
             {showComentariosTemporariamenteSemConexaoComOBanco()}
         </main>

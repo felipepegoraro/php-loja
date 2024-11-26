@@ -7,6 +7,7 @@ import About from "./pages/About";
 import Suporte from "./pages/Suporte";
 import Account from './pages/Account'; 
 import Settings from './pages/Settings';
+import DetalhesItem from "./pages/DetalhesItem";
 
 import NotFound from "./pages/NotFound";
 
@@ -25,6 +26,8 @@ const AppRoutes = () => {
                 <Route path="/Catalogo" element={<Catalogo />} />
                 <Route path="/Register" element={<Register/>}/>
                 <Route path="/Carrinho" element={<Carrinho/>}/>
+
+                <Route path="/item/:itemId" element={<DetalhesItem />} />
 
                 <Route path="/About" element={<About/>}/>
                 <Route path="/Suporte" element={<Suporte/>}/>
