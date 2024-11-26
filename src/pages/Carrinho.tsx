@@ -170,9 +170,9 @@ const Carrinho = () => {
                                                 <div className="order-summary">
                                                     {cart.map((item, index) => (
                                                         <div key={index} className="order-item">
-                                                            <span className="item-name">{item.nomeItem}</span>
-                                                            <span className="item-price">{Utils.formatPrice(item.precoItem)}</span>
-                                                            <span className="item-quantity">Qtd: {item.quantidade}</span>
+                                                            <span className="order-item-name">{item.nomeItem}</span>
+                                                            <span className="order-item-price">{Utils.formatPrice(item.precoItem)}</span>
+                                                            <span className="order-item-quantity">Qtd: {item.quantidade}</span>
                                                             <span className="item-total">
                                                                 {Utils.formatPrice(item.precoItem * item.quantidade)}
                                                             </span>
