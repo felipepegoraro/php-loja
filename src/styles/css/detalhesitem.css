@@ -1,0 +1,94 @@
+@charset "UTF-8";
+.dt {
+  background-color: white;
+}
+
+.detalhes-item-container {
+  padding: 20px;
+  position: relative; /* Necessário para posicionar o botão de voltar */
+}
+
+.voltar {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10; /* Garante que o botão fique acima de outros elementos */
+}
+
+.detalhes-item-layout {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.item-image-container {
+  flex: 1;
+  max-width: 90%;
+  margin-right: 20px; /* Reduzindo a margem para aproximar os elementos */
+}
+
+.item-info-container {
+  flex: 2;
+  max-width: 100%;
+}
+
+.item-image {
+  width: 100%;
+  height: 450px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.item-name {
+  font-size: 4rem;
+  font-weight: bold;
+}
+
+.item-price {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #28a745;
+  margin-bottom: 1.5rem;
+}
+
+.item-description {
+  margin-top: 10px;
+}
+
+.item-rating {
+  margin-top: 20px;
+}
+
+.item-buttons {
+  margin-top: 20px;
+}
+
+.adicionar-carrinho {
+  width: 100%;
+  padding: 12px !important;
+  font-size: 1rem !important;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .detalhes-item-layout {
+    flex-direction: column;
+  }
+  .item-image-container {
+    max-width: 100%;
+    margin-right: 0;
+  }
+  .item-info-container {
+    max-width: 100%;
+    padding-left: 0;
+  }
+  .item-image {
+    height: 250px; /* Imagem um pouco menor em telas pequenas */
+  }
+  .adicionar-carrinho {
+    width: 100%; /* Botão ocupa toda a largura em telas pequenas */
+  }
+}
+
+/*# sourceMappingURL=detalhesitem.css.map */
