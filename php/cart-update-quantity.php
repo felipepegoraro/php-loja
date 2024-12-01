@@ -1,6 +1,8 @@
 <?php
+include_once 'Database.php';
 
-$conn = include 'connect-db.php';
+$db = Database::getInstance();
+$conn = $db->getConnection();
 
 session_start();
 

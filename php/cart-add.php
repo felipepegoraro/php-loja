@@ -1,9 +1,9 @@
 <?php
-# rota: /cart/add
-# tipo: post
-# desc: adiciona um item ao carrinho de compras do usuário
+include_once 'Database.php';
 
-$conn = include 'connect-db.php';
+$db = Database::getInstance();
+$conn = $db->getConnection();
+
 $data = json_decode(file_get_contents('php://input'), true);
 
 function response($success, $message) {
