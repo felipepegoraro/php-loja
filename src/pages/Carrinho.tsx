@@ -44,11 +44,11 @@ const Carrinho = () => {
     const clearCart = async () => {
         if (isLoggedIn) {
             const result = await CartService.clearCart();
-            if (result) {
-                console.log(result.message);
+            if (result?.data.success) {
+                console.log(result.data.message);
                 setCart([]);
             } else {
-                console.log("Erro ao limpar carrinho.");
+                console.log(result?.data.message);
             }
         }
     };

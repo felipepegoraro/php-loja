@@ -1,23 +1,21 @@
 <?php
-
+include_once 'ResponseHandler.php';
 include_once 'Database.php';
 
 $db = Database::getInstance();
 $conn = $db->getConnection();
 
+$response = ['steps' => [], 'errors' => []];
+
 session_start();
 
 if (!isset($_SESSION['user'])){
-    echo json_encode(["success"=>false, "message"=>"usuario nao logado"]);
-    $conn->close();
-    exit;
+    ResponseHandler::jsonResponse(false, "Usuário não logado.", $response);
 }
 
 $idUsuario = $_SESSION['user']['id'];
 
-$sql = "
-    SELECT 
-        c.id AS cart_id,
+$sql = "SELECT c.id AS cart_id,
         c.idUsuario,
         c.idItem,
         c.quantidade,
@@ -35,23 +33,10 @@ $sql = "
     WHERE c.idUsuario = ? AND c.status = 'ativo'
 ";
 
-$stmt = $conn->prepare($sql);
-
-if (!$stmt){
-    echo json_encode(["success"=>false, "message"=>"erro ao preparar sql"]);
-    $conn->close();
-    exit;
-}
-
-$stmt->bind_param("i", $idUsuario);
-$stmt->execute();
-$result = $stmt->get_result();
+$result = ResponseHandler::executeQuery($conn, $sql, ['i', $idUsuario], $response, 'Erro ao pegar itens');
 
 if ($result->num_rows <= 0) {
-    echo json_encode(["success" => false, "message" => "Carrinho vazio"]);
-    $stmt->close();
-    $conn->close();
-    exit;
+    ResponseHandler::jsonResponse(false, "Carrinho vazio", $response);
 }
 
 $cartItems = [];
@@ -72,8 +57,5 @@ while ($row = $result->fetch_assoc()) {
     ];
 }
 
-echo json_encode(["success" => true, "cart" => $cartItems, "message" => "OK"]);
-
-$stmt->close();
-$conn->close();
+ResponseHandler::jsonResponse(true, "Carrinho OK", $response, $cartItems);
 ?>

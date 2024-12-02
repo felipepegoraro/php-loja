@@ -6,11 +6,17 @@ class ResponseHandler {
      * @param bool $success Indica se a operação foi bem-sucedida.
      * @param string $message Mensagem para incluir na resposta.
      * @param array $response Dados adicionais para depuração.
+     * @param mixed $value Valor opcional para envio de dados.
      * @return never
      */
-    public static function jsonResponse(bool $success, string $message, array $response): never {
+    public static function jsonResponse(bool $success, string $message, array &$response, $value = null): never {
         echo json_encode(
-            ["success" => $success, "message" => $message, "debug" => $response],
+            [
+                "success" => $success,
+                "message" => $message,
+                "value" => $value,
+                "debug" => $response
+            ],
             JSON_UNESCAPED_UNICODE
         );
         exit;

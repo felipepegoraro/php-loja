@@ -1,6 +1,18 @@
 # Projeto PHP-LOJA
 ideias // todolist
 
+- PENSAR odne colocar um tipo dde session-handler para nao repetir isso:
+
+```php
+function checkUserSession(&$response) {
+    if (!isset($_SESSION['user']) || !$_SESSION['user']) {
+        $response["errors"][] = "[1] Sessão de usuário inválida.";
+        ResponseHandler::jsonResponse(false, 'Usuário inválido', $response);
+    }
+    return $_SESSION['user']['id'];
+}
+```
+
 - [X] definir um NOME
 - [X] login/logout 
 
@@ -20,7 +32,7 @@ ideias // todolist
     - [ ] nome/senha
     - [ ] foto
 
-- [ ] regex nos formularios
+- [X] regex nos formularios
 
 - NO CATALOGO:
     - [X] filtro por categoria e por subcategoria

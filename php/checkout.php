@@ -18,11 +18,10 @@ session_start();
 
 $response = ["steps" => [], "errors" => []];
 
-function checkUserSession($response) {
+function checkUserSession(&$response) {
     if (!$_SESSION['user']) {
         $response["errors"][] = "[1] Sessão de usuário inválida.";
-        echo json_encode(["success" => false, "message" => "Usuário inválido", "debug" => $response]);
-        exit;
+        ResponseHandler::jsonResponse(false, 'Usuário inválido', $response);
     }
     return $_SESSION['user']['id'];
 }
@@ -59,8 +58,7 @@ function calculateOrderTotal($conn, $items, &$response) {
             $totalPedido += $item['quantidade'] * $item['preco'];
         } else {
             $response["errors"][] = "[3] Preço não encontrado para o item ID: " . $item['idItem'];
-            echo json_encode(['success' => false, 'message' => 'Erro ao calcular o total. Preço não encontrado para um dos itens.', 'debug' => $response]);
-            exit;
+            ResponseHandler::jsonResponse(false, 'Erro ao calcular total', $response);
         }
     }
 
@@ -80,8 +78,7 @@ function createOrder($conn, $userId, $totalPedido, &$response) {
     
     if ($pedidoQuery->affected_rows === 0) {
         $response["errors"][] = "[4] Falha ao criar o pedido para o usuário: $userId.";
-        echo json_encode(['success' => false, 'message' => 'Erro ao criar pedido.', 'debug' => $response]);
-        exit;
+        ResponseHandler::jsonResponse(false, 'Erro ao criar pedido', $response);
     }
 
     $pedidoId = $pedidoQuery->insert_id;
@@ -95,8 +92,7 @@ function insertOrderItems($conn, $userId, $items, $pedidoId, &$response) {
     foreach ($items as $item) {
         if (is_null($item['preco'])) {
             $response["steps"][] = "[5] Preço nulo encontrado para o item ID: " . $item['idItem'];
-            echo json_encode(['success' => false, 'message' => 'Erro ao realizar pedido. Preço nulo encontrado para um item.', 'debug' => $response]);
-            exit;
+            ResponseHandler::jsonResponse(false, 'Erro ao realizar pedido (preco nulo)', $response);
         }
 
         $insertQuery = "
@@ -143,14 +139,12 @@ function placeOrder($conn, $userId, $items, $response) {
 
         $conn->commit();
         $response["steps"][] = "[7] Transação concluída com sucesso.";
-        echo json_encode(['success' => true, 'message' => 'Pedido realizado com sucesso.', 'debug' => $response]);
-        exit;
+        ResponseHandler::jsonResponse(true, 'Pedido realizado com sucesso.', $response);
 
     } catch(Exception $e) {
         $conn->rollback();
         $response["errors"][] = "[7] Erro ao realizar transação: " . $e->getMessage();
-        echo json_encode(['success' => false, 'message' => 'Erro ao realizar pedido.', 'debug' => $response]);
-        exit;
+        ResponseHandler::jsonResponse(false, 'Erro ao realizar pedido', $response);
     }
 }
 
