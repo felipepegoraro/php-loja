@@ -33,27 +33,24 @@ class ResponseHandler {
      * @return mysqli_result|null Resultado da query ou null em caso de erro.
      */
     public static function executeQuery(mysqli $conn, string $query, array $params, array &$response, string $errorMsg): ?mysqli_result {
-        // Prepara a query
         if ($stmt = $conn->prepare($query)) {
-            // Vincula os parâmetros
-            $types = array_shift($params);
-            $stmt->bind_param($types, ...$params);
+            if (!empty($params)) {
+                $types = array_shift($params);
+                $stmt->bind_param($types, ...$params);
+            }
+            // $types = array_shift($params);
+            // $stmt->bind_param($types, ...$params);
             
-            // Executa a query
             if ($stmt->execute()) {
-                // Se for uma SELECT, retorna o resultado
                 if (stripos($query, "SELECT") === 0) {
                     return $stmt->get_result();
                 }
-                // Caso contrário, apenas retorna NULL
                 return null;
             } else {
-                // Se houve erro na execução, adiciona o erro ao response
                 $response['error'] = $stmt->error;
                 self::jsonResponse(false, $errorMsg, $response);
             }
         } else {
-            // Se houve erro ao preparar a query, adiciona o erro ao response
             $response['error'] = $conn->error;
             self::jsonResponse(false, $errorMsg, $response);
         }

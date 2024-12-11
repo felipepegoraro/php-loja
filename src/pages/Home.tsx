@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "../styles/css/home.css"
 import type { Item, ItemCategoria } from '../types/item';
+import type { Comentario } from '../types/reply';
 import axios from "axios";
 import ProductCard from '../components/ProductCard';
 // import { useUser } from "../context/userContext";
@@ -43,15 +44,20 @@ const showMaisVendido = (topItems: Item[]) => {
     );
 }
 
-const showComentariosTemporariamenteSemConexaoComOBanco = () => {
+const showComentariosTemporariamenteSemConexaoComOBanco = (comments: Comentario[]) => {
+    if (comments.length <= 0){
+        return (
+            <section className="testimonials py-4">
+                <h2>nenhum comentário</h2>
+            </section>
+        )
+    }
+
     return (
         <section className="testimonials py-4">
             <div className="container text-center">
                 <h2 className="mb-4">O que nossos clientes dizem</h2>
-                <blockquote className="blockquote mb-4">
-                    <p className="text-start">- João Silva</p>
-                    <footer className="blockquote-footer">"Produtos incríveis e entrega super rápida. Recomendo muito!"</footer>
-                </blockquote>
+                <p>{"*".repeat(comments.length)}</p>
                 <blockquote className="blockquote mb-4">
                     <p className="text-start">- Maria Oliveira</p>
                     <footer className="blockquote-footer">"Ótima experiência de compra, preços justos e excelente atendimento."</footer>
@@ -140,6 +146,8 @@ const Home = () => {
     const [categories, setCategories] = useState<ItemCategoria[]>([]);
     const [categoryListPosition, setCategoryListPosition] = useState({ start: 0, end: 5 });
 
+    const [comments, setComments] = useState<Comentario[]>([]);
+
     useEffect(() => {
         const fetchTopItems = async () => {
             const salesMetrics = new SalesMetrics();
@@ -149,15 +157,18 @@ const Home = () => {
 
         const fetchData = async () => {
             try {
-                const [productsRes, categoriesRes] = await Promise.all([
-                    axios.get("http://localhost/php-loja-back/get-products.php", { timeout: 1000 }),
-                    axios.get("http://localhost/php-loja-back/get-categorias.php", { timeout: 1000 })
+                const [productsRes, categoriesRes, commentRes] = await Promise.all([
+                    axios.get("http://localhost/php-loja-back/get-products.php",   { timeout: 1000 }),
+                    axios.get("http://localhost/php-loja-back/get-categorias.php", { timeout: 1000 }),
+                    axios.get("http://localhost/php-loja-back/get-comments.php",   {timeout: 1000})
                 ]);
 
                 const fetchedProducts = productsRes.data;
                 const fetchedCategories = categoriesRes.data;
+                const fetchedComments = commentRes.data;
 
-                setProducts((prev) => JSON.stringify(prev) !== JSON.stringify(fetchedProducts) ? fetchedProducts : prev);
+                setComments(  (prev) => JSON.stringify(prev) !== JSON.stringify(fetchedComments)   ? fetchedComments   : prev);
+                setProducts(  (prev) => JSON.stringify(prev) !== JSON.stringify(fetchedProducts)   ? fetchedProducts   : prev);
                 setCategories((prev) => JSON.stringify(prev) !== JSON.stringify(fetchedCategories) ? fetchedCategories : prev);
             } catch (error) {
                 console.error("Erro ao buscar dados:", error);
@@ -181,7 +192,7 @@ const Home = () => {
                 : null
             }
             {showCategoryList(categories, categoryListPosition, setCategoryListPosition)}
-            {showComentariosTemporariamenteSemConexaoComOBanco()}
+            {showComentariosTemporariamenteSemConexaoComOBanco(comments)}
         </main>
     );
 }

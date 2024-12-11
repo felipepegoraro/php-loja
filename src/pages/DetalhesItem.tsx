@@ -9,6 +9,9 @@ import CartService from '../services/CartService';
 import ToastNotification, { ToastProps } from '../components/ToastNofitication';
 import Utils from "../types/Utils";
 
+import CommentContainer from '../components/CommentContainer';
+import CommentForm from '../components/CommentForm';
+
 const DetalhesItem = () => {
     const { itemId } = useParams<{ itemId: string }>(); // Captura o ID do item da URL
     const navigate = useNavigate();
@@ -96,6 +99,7 @@ const DetalhesItem = () => {
                                         };
                                         setToasts(prevToasts => [...prevToasts, newToast]);
                                         await fetchCartItems();
+                                        // aqui deve recarregar os comentarios!
                                     }
                                 }}
                             >
@@ -104,6 +108,9 @@ const DetalhesItem = () => {
                         </div>
                     </div>
                 </div>
+
+                <CommentForm idProduto={item.id}/>
+                <CommentContainer idProduto={item.id}/>
 
                 {toasts.map(toast => (
                     <ToastNotification
