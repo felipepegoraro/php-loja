@@ -1,85 +1,74 @@
 <?php
-# rota: /cart/add
-# tipo: post
-# desc: adiciona um item ao carrinho de compras do usuário
+# validateRequestData()   => Verifica dados da requisição
+# finalizeItem()          => Processa o item no carrinho
+#     -> checkQuery()     => Verifica se o item já está no carrinho
+#         -> updateItem() => Atualiza o item (quantidade ou status)
+#         -> insertItem() => Adiciona o item ao carrinho
+#     -> resposta final   => Retorna o status da operação
 
-$conn = include 'connect-db.php';
+include_once 'ResponseHandler.php';
+include_once 'Database.php';
+
+$db = Database::getInstance();
+$conn = $db->getConnection();
+
 $data = json_decode(file_get_contents('php://input'), true);
+$response = ["steps" => [], "errors" => []];
 
-function response($success, $message) {
-    echo json_encode(['success' => $success, 'message' => $message]);
-    exit;
-}
-
-function checkConnection($conn) {
-    if (!$conn) {
-        response(false, "Erro ao conectar banco");
+function validateRequestData($data, &$response) {
+    if (
+        !isset($data['idUsuario']) || !isset($data['idItem']) ||
+        !isset($data['quantidade']) || !isset($data['status'])
+    ) {
+        $response['errors'][] = 'Dados inválidos';
+        ResponseHandler::jsonResponse(false, 'Dados inválidos', $response);
     }
 }
 
-function validateRequestData($data) {
-    if (!isset($data['idUsuario']) || !isset($data['idItem']) || !isset($data['quantidade']) || !isset($data['status'])) {
-        response(false, "Requisição inválida");
-    }
+function updateItem($conn, $quantidade, $idUsuario, $idItem, &$response, $status = null) {
+    $query = $status 
+    ? "UPDATE tb_carrinho SET quantidade = quantidade + ?, status = ? WHERE idUsuario = ? AND idItem = ?"
+    : "UPDATE tb_carrinho SET quantidade = quantidade + ? WHERE idUsuario = ? AND idItem = ?";
+
+    $params = $status ? 
+        ["issi", $quantidade, $status, $idUsuario, $idItem] : 
+        ["iii", $quantidade, $idUsuario, $idItem];
+
+    ResponseHandler::executeQuery($conn, $query, $params, $response, 'Erro ao atualizar o carrinho.');
+
+    $response['steps'][] = 'Quantidade atualizada no carrinho';
 }
 
-function prepareStatement($conn, $query) {
-    $stmt = $conn->prepare($query);
-    if (!$stmt) {
-        response(false, "Erro ao preparar a consulta: " . $conn->error);
-    }
-    return $stmt;
+function insertItem($conn, $idUsuario, $idItem, $quantidade, $status, &$response) {
+    $query = "INSERT INTO tb_carrinho (idUsuario, idItem, quantidade, status) VALUES (?, ?, ?, ?)";
+    $params = ["iiis", $idUsuario, $idItem, $quantidade, $status];
+
+    ResponseHandler::executeQuery($conn, $query, $params, $response, 'erro adicionar produto ao carrinho.');
+
+    $response['steps'][] = 'Produto adicionado ao carrinho com sucesso';
 }
 
-function updateItem($conn, $quantidade, $idUsuario, $idItem, $status = null) {
-    $query = $status ? 
-        "UPDATE tb_carrinho SET quantidade = quantidade + ?, status = ? WHERE idUsuario = ? AND idItem = ?" :
-        "UPDATE tb_carrinho SET quantidade = quantidade + ? WHERE idUsuario = ? AND idItem = ?";
-    
-    $stmt = prepareStatement($conn, $query);
-    if ($status) {
-        $stmt->bind_param("issi", $quantidade, $status, $idUsuario, $idItem);
+function finalizeItem($conn, $data, &$response) {
+    $checkQuery = "SELECT id, status FROM tb_carrinho WHERE idUsuario = ? AND idItem = ?";
+    $params = ["ii", $data['idUsuario'], $data['idItem']];
+
+    $result = ResponseHandler::executeQuery($conn, $checkQuery, $params, $response, 'Erro ao verificar item no carrinho.');
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        
+        if ($row['status'] == 'removido') {
+            updateItem($conn, $data['quantidade'], $data['idUsuario'], $data['idItem'],$response,'ativo');
+        } else {
+            updateItem($conn, $data['quantidade'], $data['idUsuario'], $data['idItem'], $response);
+        }
     } else {
-        $stmt->bind_param("iii", $quantidade, $idUsuario, $idItem);
+        insertItem($conn, $data['idUsuario'], $data['idItem'], $data['quantidade'], $data['status'], $response);
     }
 
-    if ($stmt->execute()) {
-        response(true, 'Quantidade atualizada no carrinho [' . $idItem . ']');
-    } else {
-        response(false, 'Erro ao atualizar o carrinho.');
-    }
+    ResponseHandler::jsonResponse(true, 'Operação concluída com sucesso.', $response);
 }
 
-function insertItem($conn, $idUsuario, $idItem, $quantidade, $status) {
-    $stmt = prepareStatement($conn, "INSERT INTO tb_carrinho (idUsuario, idItem, quantidade, status) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("iiis", $idUsuario, $idItem, $quantidade, $status);
-
-    if ($stmt->execute()) {
-        response(true, 'Adicionado ao carrinho com sucesso [' . $idItem . ']');
-    } else {
-        response(false, 'Erro ao adicionar produto ao carrinho.');
-    }
-}
-
-checkConnection($conn);
-validateRequestData($data);
-
-$stmt_check = prepareStatement($conn, "SELECT id, status FROM tb_carrinho WHERE idUsuario = ? AND idItem = ?");
-$stmt_check->bind_param("ii", $data['idUsuario'], $data['idItem']);
-$stmt_check->execute();
-$result = $stmt_check->get_result();
-
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    if ($row['status'] == 'removido') {
-        updateItem($conn, $data['quantidade'], $data['idUsuario'], $data['idItem'], 'ativo');
-    } else {
-        updateItem($conn, $data['quantidade'], $data['idUsuario'], $data['idItem']);
-    }
-} else {
-    insertItem($conn, $data['idUsuario'], $data['idItem'], $data['quantidade'], $data['status']);
-}
-
-$stmt_check->close();
-$conn->close();
+validateRequestData($data, $response);
+finalizeItem($conn, $data, $response);
 ?>

@@ -1,19 +1,27 @@
 <?php 
-$conn = include 'connect-db.php';
+include_once 'ResponseHandler.php';
+include_once 'Database.php';
+$db = Database::getInstance();
+$conn = $db->getConnection();
 
 session_start();
 
-if (!isset($_SESSION['user'])) {
-    echo json_encode(["success" => false, "message" => "Usuário não autenticado."]);
-    $conn->close();
-    exit;
+$response = ["steps" => [], "errors" => []];
+
+// TODO: modularizar//reutilizar essa função pois será usada em varios arquivos
+function checkUserSession(&$response) {
+    if (!$_SESSION['user']) {
+        $response["errors"][] = "[1] Sessão de usuário inválida.";
+        ResponseHandler::jsonResponse(false, 'Usuário inválido', $response);
+    }
+    return $_SESSION['user']['id'];
 }
 
 $data = json_decode(file_get_contents('php://input'), true);
+
 if (!isset($data['idUsuario'], $data['idItem'])) {
-    echo json_encode(["success" => false, "message" => "Dados inválidos."]);
-    $conn->close();
-    exit;
+    $response["errors"][] = "[2] Dados enviados são inválidos.";
+    ResponseHandler::jsonResponse(false, "Dados inválidos", $response);
 }
 
 $idUsuario = $data['idUsuario'];
@@ -21,21 +29,14 @@ $idItem = $data['idItem'];
 $quantidade = $data['quantidade'];
 
 if ($_SESSION['user']['id'] !== $idUsuario) {
-    echo json_encode(["success" => false, "message" => "Usuário não autorizado."]);
-    $conn->close();
-    exit;
+    $response["errors"][] = "[3] Dados enviados são inválidos.";
+    ResponseHandler::jsonResponse(false, "Usuário não autoriazado", $response);
 }
 
 $query = "UPDATE tb_carrinho SET status = 'removido', quantidade = ? WHERE idUsuario = ? AND idItem = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("iii", $quantidade, $idUsuario, $idItem);
+$params = ["iii", $quantidade, $idUsuario, $idItem];
 
-if ($stmt->execute() && $stmt->affected_rows > 0) {
-    echo json_encode(["success" => true, "message" => "Item removido do carrinho."]);
-} else {
-    echo json_encode(["success" => false, "message" => "Erro ao remover item ou item não encontrado."]);
-}
+$result = ResponseHandler::executeQuery($conn, $query, $params, $response, "Erro ao remover item do carrinho.");
 
-$stmt->close();
-$conn->close();
+ResponseHandler::jsonResponse(true, "Item removido do carrinho.", $response);
 ?>

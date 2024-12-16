@@ -30,6 +30,7 @@ const LoginButton = () => {
   };
 
   if (user) {
+  console.log(user.foto)
     return (
       <div className="profile-container ms-3">
          <a href="/Carrinho" className="cart-btn" title="Ir ao carrinho">
@@ -49,8 +50,7 @@ const LoginButton = () => {
         </div>
         <div className="profile-button" onClick={toggleDropdown}>
           <img
-            src={'https://via.placeholder.com/50'}
-            alt="User"
+            src={`data:image/png;base64,${user.foto}` ?? 'https://via.placeholder.com/50'}
             className="profile-image"
           />
         </div>

@@ -19,7 +19,8 @@ if ($result->num_rows > 0) {
             'id' => $row['id'],
             'email' => $row['email'],
             'nome' => $row['nome'],
-            'admin' => $row['admin']
+            'admin' => $row['admin'],
+            'foto' => base64_encode($row['foto'])
         ];
 
         session_write_close();
@@ -30,9 +31,10 @@ if ($result->num_rows > 0) {
                 "id" => $row['id'],
                 "email" => $row['email'],
                 "nome" => $row['nome'],
-                "admin" => $row['admin']
+                "admin" => $row['admin'],
+                "foto" => base64_encode($row['foto'])
             ]
-        ]);
+        ], JSON_UNESCAPED_UNICODE);
     } else {
         echo json_encode(["error" => "Senha incorreta"]);
     }

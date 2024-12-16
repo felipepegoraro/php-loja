@@ -11,12 +11,15 @@ if ($codigoAcesso !== 'codigo_secreto_administrador') {
     exit;
 }
 
-$sql = "SELECT id, nome, email FROM tb_usuario";
+$sql = "SELECT id, nome, email, foto FROM tb_usuario";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     $dados = [];
     while ($row = $result->fetch_assoc()) {
+        if (!empty($row['foto'])) {
+            $row['foto'] = base64_encode($row['foto']);
+        }
         $dados[] = $row;
     }
     echo json_encode($dados);

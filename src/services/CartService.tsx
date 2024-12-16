@@ -23,8 +23,7 @@ class CartService {
                 withCredentials: true,
             });
 
-            const { data } = response;
-            console.log(data.success ? data.message : `Erro: ${data.message}`);
+            console.log(response.data.message);
         } catch (error) {
             console.error("Erro ao adicionar ao carrinho:", error);
         }
@@ -60,7 +59,7 @@ class CartService {
                 withCredentials: true,
             });
 
-            return res.data.success ? res.data : null;
+            return res;
         } catch (error) {
             console.log("Erro ao limpar carrinho:", error);
             return null;
@@ -93,7 +92,7 @@ class CartService {
                 withCredentials: true,
             });
 
-            return res.data.success ? res.data.cart : [];
+            return res.data.success ? res.data.value : [];
         } catch (error) {
             console.log("Erro ao acessar carrinho:", error);
             return [];
@@ -127,6 +126,7 @@ class CartService {
                 }
             );
     
+            console.log(response);
             return response.data.success ? response.data : null;
         } catch (error) {
             console.error("Erro ao atualizar a quantidade do item:", error);
