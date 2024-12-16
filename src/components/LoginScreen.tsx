@@ -41,6 +41,7 @@ const LoginScreen = () => {
           nome: result.user.nome,
           email: result.user.email,
           admin: result.user.admin,
+          foto: result.user.foto
         });
         nav(result.user?.admin ? "/admin/Homepage" : "/Catalogo");
       } else {

@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS tb_subcategoria;
 DROP TABLE IF EXISTS tb_categoria;
 DROP TABLE IF EXISTS tb_usuario;
 DROP TABLE IF EXISTS tb_carrinho;
+DROP TABLE IF EXISTS tb_comentarios;
 SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE IF NOT EXISTS tb_usuario (
@@ -22,7 +23,8 @@ CREATE TABLE IF NOT EXISTS tb_usuario (
     complemento VARCHAR(100),
     cidade VARCHAR(100),
     estado CHAR(2),
-    admin BOOLEAN NOT NULL
+    admin BOOLEAN NOT NULL,
+    foto MEDIUMBLOB DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS tb_categoria (
@@ -84,22 +86,6 @@ CREATE TABLE IF NOT EXISTS tb_comentarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     idUsuario INT NOT NULL,
     idProduto INT NOT NULL,
-    nota FLOAT(2, 1) NOT NULL CHECK (nota BETWEEN 0 AND 5),
-    titulo VARCHAR(100) NOT NULL,
-    comentario TEXT NOT NULL,
-    data_comentario DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    ultima_atualizacao DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    visivel BOOLEAN NOT NULL DEFAULT TRUE,
-    resposta TEXT NULL,
-    utilidade INT NOT NULL DEFAULT 0,
-    FOREIGN KEY (idUsuario) REFERENCES tb_usuario(id),
-    FOREIGN KEY (idProduto) REFERENCES tb_itens(id)
-);
-
-CREATE TABLE IF NOT EXISTS tb_comentarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    idUsuario INT NOT NULL,
-    idProduto INT NOT NULL,
     nota FLOAT(2,1) NOT NULL CHECK (nota BETWEEN 0 AND 5),
     titulo VARCHAR(64) NOT NULL,
     comentario TEXT NOT NULL,
@@ -109,8 +95,8 @@ CREATE TABLE IF NOT EXISTS tb_comentarios (
     FOREIGN KEY (idProduto) REFERENCES tb_itens(id)
 );
 
-INSERT INTO tb_comentarios (idUsuario, idProduto, nota, titulo, comentario)
-VALUES 
-(1, 1, 4.2, "comentario 1", "lorem ipsum"),
-(1, 1, 3.8, "comentario 2", "dolor sit amet"),
-(1, 2, 5.0, "comentario 3", "consectetur adipiscing elit");
+-- INSERT INTO tb_comentarios (idUsuario, idProduto, nota, titulo, comentario)
+-- VALUES 
+-- (1, 1, 4.2, "comentario 1", "lorem ipsum"),
+-- (1, 1, 3.8, "comentario 2", "dolor sit amet"),
+-- (1, 2, 5.0, "comentario 3", "consectetur adipiscing elit");

@@ -6,6 +6,7 @@ interface SimplUser {
     nome: string;
     email: string;
     admin: boolean;
+    foto: File | Buffer | null;
 }
 
 interface UserContextType {
