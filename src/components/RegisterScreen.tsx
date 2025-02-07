@@ -42,7 +42,7 @@ const RegisterScreen = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost/php-loja-back/register.php', formData, {
+            const response = await axios.post('http://107.20.8.253/php-loja-back/register.php', formData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },

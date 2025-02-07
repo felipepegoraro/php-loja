@@ -1,58 +1,57 @@
 <?php 
+# checkIfCartIsEmpty()        => Verifica se o carrinho está vazio
+# clearCart()                 => Esvazia o carrinho do usuário
+#     -> executa query DELETE => Remove todos os itens do carrinho
+#     -> resposta final       => Retorna sucesso ou erro
 
-$conn = include 'connect-db.php';
+include_once 'ResponseHandler.php';
+include_once 'Database.php';
+$db = Database::getInstance();
+$conn = $db->getConnection();
 
 session_start();
 
 if (!isset($_SESSION['user'])) {
-    echo json_encode(["success" => false, "message" => "Usuário não logado. Não há carrinho."]);
-    $conn->close();
-    exit;
+    ResponseHandler::jsonResponse(false, "Usuário não logado. Não há carrinho.", []);
 }
 
 $userid = $_SESSION['user']['id'];
 $username = $_SESSION['user']['nome'];
+$response = ['steps' => [], 'errors' => []];
 
-$queryCheck = "SELECT COUNT(*) FROM tb_carrinho WHERE idUsuario = ?";
-$stmtCheck = $conn->prepare($queryCheck);
-$stmtCheck->bind_param("i", $userid);
-$stmtCheck->execute();
-$stmtCheck->bind_result($itemcount);
-$stmtCheck->fetch();
-$stmtCheck->close();
+function checkIfCartIsEmpty($conn, $userid) {
+    $queryCheck = "SELECT COUNT(*) FROM tb_carrinho WHERE idUsuario = ?";
+    $stmtCheck = $conn->prepare($queryCheck);
+    $stmtCheck->bind_param("i", $userid);
+    $stmtCheck->execute();
+    $stmtCheck->bind_result($itemcount);
+    $stmtCheck->fetch();
+    $stmtCheck->close();
 
-if ($itemcount == 0) {
-    echo json_encode(["success" => false, "message" => "O carrinho já está vazio."]);
-    $conn->close();
-    exit;
+    return $itemcount == 0;
 }
 
-$query = "DELETE FROM tb_carrinho WHERE idUsuario = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("i", $userid);
+function clearCart($conn, $userid, $username, &$response) {
+    $query = "DELETE FROM tb_carrinho WHERE idUsuario = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $userid);
 
-$res = $stmt->execute();
+    $res = $stmt->execute();
 
-if ($res) {
-    if ($stmt->affected_rows > 0) {
-        echo json_encode([
-            "success" => true,
-            "message" => "Carrinho do usuário {$username} esvaziado com sucesso."
-        ]);
-    } else {
-        echo json_encode([
-            "success" => false,
-            "message" => "Erro ao esvaziar o carrinho. Nenhuma linha foi afetada."
-        ]);
+    if (!$res) {
+        ResponseHandler::jsonResponse(false, "Erro ao esvaziar carrinho", $response);
     }
-} else {
-    echo json_encode([
-        "success" => false,
-        "message" => "Erro ao esvaziar carrinho."
-    ]);
+
+    if ($stmt->affected_rows > 0) {
+        ResponseHandler::jsonResponse(true, "Carrinho esvaziado com sucesso", $response);
+    }
+
+    ResponseHandler::jsonResponse(false, "Erro ao esvaziar carrinho (já vazio!)", $response);
 }
 
-$stmt->close();
-$conn->close();
-?>
+if (checkIfCartIsEmpty($conn, $userid)) {
+    ResponseHandler::jsonResponse(false, "Carrinho já vazio", $response);
+}
 
+clearCart($conn, $userid, $username, $response);
+?>

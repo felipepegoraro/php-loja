@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useUser } from '../context/userContext';
 import CartProductCard from '../components/CartProductCard';
 import Utils from '../types/Utils';
@@ -14,19 +14,35 @@ const Carrinho = () => {
     const [loading, setLoading] = useState(true);
     const [total, setTotal] = useState(0);
     const [showModal, setShowModal] = useState(false);
-    console.log("Carrinho:", cart);
 
-    const fetchCartItems = async () => {
-        if (!isLoggedIn || !user) {
-            console.error("Usuário inválido.");
-            return;
+    const fetchCartItems = useCallback(async () => {
+         if (!isLoggedIn || !user) {
+             console.error("Usuário inválido.");
+             return;
+         }
+
+         setLoading(true);
+         try {
+             const items = await CartService.fetchCartItems();
+             if (items){
+                 console.log(items);
+                 console.log("cart items: ", items);
+                 setCart(items);
+             }
+             console.log("cart after:", cart);
+         } catch (error) {
+             console.error("Erro ao buscar itens do carrinho:", error);
+         } finally {
+             setLoading(false);
+         }
+     }, [isLoggedIn, user]);
+
+    const calculateTotal = useCallback(() => {
+        if (cart) {
+            const total = cart.reduce((acc, item) => acc + item.precoItem * item.quantidade, 0);
+            setTotal(total);
         }
-
-        setLoading(true);
-        const items = await CartService.fetchCartItems();
-        setCart(items);
-        setLoading(false);
-    };
+    }, [cart]);
 
     const removeFromCart = async (itemId: number) => {
         if (!user?.id) {
@@ -44,11 +60,11 @@ const Carrinho = () => {
     const clearCart = async () => {
         if (isLoggedIn) {
             const result = await CartService.clearCart();
-            if (result) {
-                console.log(result.message);
+            if (result?.data.success) {
+                console.log(result.data.message);
                 setCart([]);
             } else {
-                console.log("Erro ao limpar carrinho.");
+                console.log(result?.data.message);
             }
         }
     };
@@ -98,26 +114,19 @@ const Carrinho = () => {
         }
     };
 
-    const calculateTotal = () => {
-        const total = cart.reduce((acc, item) => acc + item.precoItem * item.quantidade, 0);
-        setTotal(total);
-    };
-
-    const handleCheckoutClick = () => {
-        setShowModal(true);
-    };
-
-    const handleCloseModal = () => {
-        setShowModal(false);
-    };
+    const handleCheckoutClick = () => setShowModal(true);
+    const handleCloseModal = () => setShowModal(false);
 
 
     useEffect(() => {
-        fetchCartItems();
-    }, [user]);
+        if (user && isLoggedIn) {
+            fetchCartItems();
+        }
+    }, [user, fetchCartItems]);
+
     useEffect(() => {
         calculateTotal();
-    }, [cart]);
+    }, [cart, calculateTotal]);
 
     return user ? (
         <main className="cart-container">
@@ -130,7 +139,7 @@ const Carrinho = () => {
                     ) : (
                         <>
                             <div className="container cart-items-container">
-                                {cart.map((i: Cartfull) => (
+                                {cart && cart.length > 0 && cart.map((i: Cartfull) => (
                                     <CartProductCard
                                         key={i.idItem}
                                         cartItem={i}
@@ -144,23 +153,25 @@ const Carrinho = () => {
                                     <strong>Total:</strong> {Utils.formatPrice(total)}
                                 </p>
                                 <div className="cart-actions">
-                                    <button
-                                        className="btn btn-danger"
-                                        onClick={clearCart}
-                                        disabled={loading || cart.length === 0}
-                                    >
-                                        Limpar Carrinho
-                                    </button>
-                                    <button
-                                        className="botaocheckout btn btn-primary"
-                                        onClick={handleCheckoutClick}
-                                        disabled={loading || cart.length === 0}
-                                    >
-                                        Fazer Checkout
-                                    </button>
-                                    <button className="btn btn-secondary" onClick={restoreCartItems}>
-                                        Restaurar Itens
-                                    </button>
+                                    {(cart && cart.length > 0) && (<>
+                                        <button
+                                            className="btn btn-danger"
+                                            onClick={clearCart}
+                                            disabled={loading || cart.length === 0}
+                                        >
+                                            Limpar Carrinho
+                                        </button>
+                                        <button
+                                            className="botaocheckout btn btn-primary"
+                                            onClick={handleCheckoutClick}
+                                            disabled={loading || cart.length === 0}
+                                        >
+                                            Fazer Checkout
+                                        </button>
+                                        <button className="btn btn-secondary" onClick={restoreCartItems}>
+                                            Restaurar Itens
+                                        </button></>)
+                                    }
                                     <Modal
                                         show={showModal}
                                         onHide={handleCloseModal}
@@ -168,7 +179,7 @@ const Carrinho = () => {
                                         body={
                                             <div className="order-modal-container">
                                                 <div className="order-summary">
-                                                    {cart.map((item, index) => (
+                                                    {cart && cart.map((item, index) => (
                                                         <div key={index} className="order-item">
                                                             <span className="order-item-name">{item.nomeItem}</span>
                                                             <span className="order-item-price">{Utils.formatPrice(item.precoItem)}</span>

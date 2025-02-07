@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react'
 import axios from 'axios';
 import "../styles/css/catalogo.css";
 import type { Item, ItemCategoria } from '../types/item';
@@ -21,18 +21,22 @@ const Catalogo = () => {
 
     const { user } = useUser();
 
-    const fetchCartItems = async () => {
+      const fetchCartItems = useCallback(async () => {
         if (user) {
             const fetchedCart = await CartService.fetchCartItems();
-            setCart(fetchedCart.filter((i: Cart) => String(i.idUsuario) === String(user.id)));
+            if (fetchedCart) {
+                setCart(fetchedCart.filter((i: Cart) => String(i.idUsuario) === String(user.id)));
+            } else {
+                console.log("Não fez fetch carrinho!");
+                setCart([]);
+            }
         }
-    };
+    }, [user]);
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const res = await axios.get("http://localhost/php-loja-back/get-products.php", {
-                    timeout: 1000,
+                const res = await axios.get("http://107.20.8.253/php-loja-back/get-products.php", {
                     params: { ordem, categoriaId: idcategoria, searchTerm },
                     withCredentials: true
                 });
@@ -45,7 +49,7 @@ const Catalogo = () => {
 
         const fetchCategories = async () => {
             try {
-                const res = await axios.get("http://localhost/php-loja-back/get-categorias.php", { timeout: 1000 });
+                const res = await axios.get("http://107.20.8.253/php-loja-back/get-categorias.php", { timeout: 1000 });
                 setCategories(res.data);
             } catch (error) {
                 console.log("Erro ao buscar categorias:", error);
@@ -55,10 +59,12 @@ const Catalogo = () => {
         fetchCategories();
         fetchProducts();
         fetchCartItems();
-    }, [user, idcategoria, ordem, searchTerm]);
+    }, [user, idcategoria, ordem, searchTerm, fetchCartItems]); 
+
+
 
     // const getTotalCarrinho = () => {
-    //     return cart.length > 0 ? cart.reduce((total, item) => total + item.quantidade, 0) : 0;
+    //     return cart && cart.length > 0 ? cart.reduce((total, item) => total + item.quantidade, 0) : 0;
     // };
 
     const renderLoading = () => (
@@ -121,26 +127,30 @@ const Catalogo = () => {
         return (
             <div className={`container`}>
                 <div className={`row ${center}`} style={{ position: "relative" }}>
-                    {products.map((produto, i) => (
-                        <ProductCard
-                            key={i}
-                            produto={produto}
-                            onAddToCart={async () => {
-                                if (user) {
-                                    await CartService.addToCart(user.id, produto, 1);
-                                    const newToast = {
-                                        id: Date.now(),
-                                        title: `Produto [${produto.id}] adicionado`,
-                                        description: "Produto inserido no carrinho",
-                                        color: "green",
-                                        png: "✅",
-                                    };
-                                    setToasts((prevToasts) => [...prevToasts, newToast]);
-                                    await fetchCartItems();
-                                }
-                            }}
-                        />
-                    ))}
+                    {Array.isArray(products) && products.length > 0 ? (
+                        products.map((produto, i) => (
+                            <ProductCard
+                                key={i}
+                                produto={produto}
+                                onAddToCart={async () => {
+                                    if (user) {
+                                        await CartService.addToCart(user.id, produto, 1);
+                                        const newToast = {
+                                            id: Date.now(),
+                                            title: `Produto [${produto.id}] adicionado`,
+                                            description: "Produto inserido no carrinho",
+                                            color: "green",
+                                            png: "✅",
+                                        };
+                                        setToasts((prevToasts) => [...prevToasts, newToast]);
+                                        await fetchCartItems();
+                                    }
+                                }}
+                            />
+                        ))
+                    ) : (
+                        <p className="text-center">Nenhum produto encontrado!</p>
+                    )}
                 </div>
             </div>
         );

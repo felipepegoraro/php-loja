@@ -21,7 +21,7 @@ import type {Order, OrderItem} from './order';
 import axios from 'axios';
 
 export default class SalesMetrics {
-    private URL: string = "http://localhost/php-loja-back/";
+    private URL: string = "http://107.20.8.253/php-loja-back/";
 
     private orders: Order[] = [];
 
@@ -150,6 +150,7 @@ export default class SalesMetrics {
             }
 
             if (response.data.special){
+                console.log(response.data);
                 console.log(response.data.message);
                 return;
             }

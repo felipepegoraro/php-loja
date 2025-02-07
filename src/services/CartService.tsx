@@ -18,13 +18,12 @@ class CartService {
         };
 
         try {
-            const response = await axios.post("http://localhost/php-loja-back/cart-add.php", payload, {
+            const response = await axios.post("http://107.20.8.253/php-loja-back/cart-add.php", payload, {
                 headers: { 'Content-Type': 'application/json' },
                 withCredentials: true,
             });
 
-            const { data } = response;
-            console.log(data.success ? data.message : `Erro: ${data.message}`);
+            console.log(response.data.message);
         } catch (error) {
             console.error("Erro ao adicionar ao carrinho:", error);
         }
@@ -38,9 +37,9 @@ class CartService {
         };
 
         try {
-            const response = await axios.post("http://localhost/php-loja-back/cart-remove.php", req, {
+            const response = await axios.post("http://107.20.8.253/php-loja-back/cart-remove.php", req, {
                 withCredentials: true,
-                timeout: 1000,
+                // timeout: 1000,
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -55,12 +54,12 @@ class CartService {
 
     static async clearCart() {
         try {
-            const res = await axios.get("http://localhost/php-loja-back/cart-clear.php", {
-                timeout: 1000,
+            const res = await axios.get("http://107.20.8.253/php-loja-back/cart-clear.php", {
+                // timeout: 1000,
                 withCredentials: true,
             });
 
-            return res.data.success ? res.data : null;
+            return res;
         } catch (error) {
             console.log("Erro ao limpar carrinho:", error);
             return null;
@@ -71,14 +70,15 @@ class CartService {
         const obj = { idUsuario: userId };
 
         try {
-            const res = await axios.post("http://localhost/php-loja-back/checkout.php", obj, {
+            const res = await axios.post("http://107.20.8.253/php-loja-back/checkout.php", obj, {
                 withCredentials: true,
-                timeout: 1000,
+                // timeout: 1000,
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
 
+            console.log(res.data);
             return res.data.success ? res.data : null;
         } catch (error) {
             console.log("Erro ao fazer checkout:", error);
@@ -88,12 +88,12 @@ class CartService {
 
     static async fetchCartItems() {
         try {
-            const res = await axios.get("http://localhost/php-loja-back/cart-get.php", {
-                timeout: 1000,
+            const res = await axios.get("http://107.20.8.253/php-loja-back/cart-get.php", {
+                // timeout: 10000,
                 withCredentials: true,
             });
 
-            return res.data.success ? res.data.cart : [];
+            return res.data.success ? res.data.value : [];
         } catch (error) {
             console.log("Erro ao acessar carrinho:", error);
             return [];
@@ -102,8 +102,8 @@ class CartService {
 
     static async restoreCartItem(userId: number) {
         try {
-            const response = await axios.post("http://localhost/php-loja-back/cart-restore.php", { idUsuario: userId }, {
-                timeout: 1000,
+            const response = await axios.post("http://107.20.8.253/php-loja-back/cart-restore.php", { idUsuario: userId }, {
+                // timeout: 1000,
                 withCredentials: true,
             });
 
@@ -116,17 +116,18 @@ class CartService {
 
     static async cartUpdateQuantityItem(idItem: number, quantidade: number) {
         try {
-            const response = await axios.post("http://localhost/php-loja-back/cart-update-quantity.php", 
+            const response = await axios.post("http://107.20.8.253/php-loja-back/cart-update-quantity.php", 
                 new URLSearchParams({
                     idItem: String(idItem), 
                     quantidade: String(quantidade)
                 }), {
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, 
-                    timeout: 1000,
+                    // timeout: 1000,
                     withCredentials: true,
                 }
             );
     
+            console.log(response);
             return response.data.success ? response.data : null;
         } catch (error) {
             console.error("Erro ao atualizar a quantidade do item:", error);

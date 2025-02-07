@@ -25,7 +25,7 @@ const LoginScreen = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost/php-loja-back/login.php', loginData, {
+      const response = await axios.post('http://107.20.8.253/php-loja-back/login.php', loginData, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -41,6 +41,7 @@ const LoginScreen = () => {
           nome: result.user.nome,
           email: result.user.email,
           admin: result.user.admin,
+          foto: result.user.foto
         });
         nav(result.user?.admin ? "/admin/Homepage" : "/Catalogo");
       } else {

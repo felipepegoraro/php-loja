@@ -1,50 +1,44 @@
-<?php
+<?php 
+include_once 'ResponseHandler.php';
+include_once 'Database.php';
 
-$conn = include 'connect-db.php';
+$db = Database::getInstance();
+$conn = $db->getConnection();
 
 session_start();
 
-if (!isset($_SESSION['user'])){
-    echo json_encode(["success"=>false, "message"=>"usuario nao logado"]);
-    $conn->close();
-    exit;
+$response = ["steps" => [], "errors" => []];
+
+// TODO: modularizar função de verificação de sessão de usuário
+function checkUserSession(&$response) {
+    if (!isset($_SESSION['user'])) {
+        $response["errors"][] = "[1] Usuário não autenticado.";
+        ResponseHandler::jsonResponse(false, "Usuário não logado", $response);
+    }
+    return $_SESSION['user']['id'];
 }
+
+checkUserSession($response);
 
 $idUsuario = $_SESSION['user']['id'];
 
-
 $idItem = isset($_POST['idItem']) ? (int)$_POST['idItem'] : null;
-$novaQuantidade = (int)$_POST['quantidade'];  
+$novaQuantidade = isset($_POST['quantidade']) ? (int)$_POST['quantidade'] : 0;
 
 if ($idItem <= 0 || $novaQuantidade <= 0) {
-    echo json_encode(["success" => false, "message" => "Dados inválidos: idItem ou quantidade menor ou igual a zero"]);
-    $conn->close();
-    exit;
+    $response["errors"][] = "[2] Dados inválidos: idItem ou quantidade menor ou igual a zero.";
+    ResponseHandler::jsonResponse(false, "Dados inválidos", $response);
 }
-// Atualizando a quantidade no carrinho
-$sql = "
+
+$query = "
     UPDATE tb_carrinho 
     SET quantidade = ? 
-    WHERE idItem = ? AND idUsuario = ? AND status = 'ativo'
-";
+    WHERE idItem = ? AND idUsuario = ? AND status = 'ativo'";
 
-$stmt = $conn->prepare($sql);
+$params = ["iii", $novaQuantidade, $idItem, $idUsuario];
 
-if (!$stmt) {
-    echo json_encode(["success" => false, "message" => "Erro ao preparar SQL"]);
-    $conn->close();
-    exit;
-}
+$result = ResponseHandler::executeQuery($conn, $query, $params, $response, "Erro ao atualizar a quantidade");
 
-$stmt->bind_param("iii", $novaQuantidade, $idItem, $idUsuario);
-
-if ($stmt->execute()) {
-    // Retornando sucesso
-    echo json_encode(["success" => true, "message" => "Quantidade atualizada com sucesso"]);
-} else {
-    echo json_encode(["success" => false, "message" => "Erro ao atualizar quantidade"]);
-}
-
-$stmt->close();
-$conn->close();
+ResponseHandler::jsonResponse(true, "Quantidade atualizada com sucesso.", $response);
 ?>
+

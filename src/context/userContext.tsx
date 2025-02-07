@@ -6,6 +6,7 @@ interface SimplUser {
     nome: string;
     email: string;
     admin: boolean;
+    foto: File | Buffer | null;
 }
 
 interface UserContextType {
@@ -31,7 +32,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     } else {
       const checkSession = async () => {
         try {
-          const response = await axios.get('http://localhost/php-loja-back/session.php', {
+          const response = await axios.get('http://107.20.8.253/php-loja-back/session.php', {
             withCredentials: true,
           });
 

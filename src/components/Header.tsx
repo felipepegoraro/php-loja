@@ -22,7 +22,7 @@ const LoginButton = () => {
     try {
       setUser(null);
       localStorage.removeItem('user'); 
-      await axios.get('http://localhost/php-loja-back/logout.php', { withCredentials: true });
+      await axios.get('http://107.20.8.253/php-loja-back/logout.php', { withCredentials: true });
       navigate('/Login');
     } catch (error) {
       console.error("Erro ao fazer logout:", error);
@@ -30,6 +30,7 @@ const LoginButton = () => {
   };
 
   if (user) {
+  console.log(user.foto)
     return (
       <div className="profile-container ms-3">
          <a href="/Carrinho" className="cart-btn" title="Ir ao carrinho">
@@ -49,8 +50,7 @@ const LoginButton = () => {
         </div>
         <div className="profile-button" onClick={toggleDropdown}>
           <img
-            src={'https://via.placeholder.com/50'}
-            alt="User"
+            src={`data:image/png;base64,${user.foto}` ?? 'https://via.placeholder.com/50'}
             className="profile-image"
           />
         </div>
