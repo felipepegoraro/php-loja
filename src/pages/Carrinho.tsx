@@ -25,7 +25,8 @@ const Carrinho = () => {
          try {
              const items = await CartService.fetchCartItems();
              if (items){
-                 console.log("cart items: ", items.cart);
+                 console.log(items);
+                 console.log("cart items: ", items);
                  setCart(items);
              }
              console.log("cart after:", cart);

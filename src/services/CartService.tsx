@@ -93,8 +93,7 @@ class CartService {
                 withCredentials: true,
             });
 
-            console.log(res.data);
-            return res.data.success ? res.data.cart : [];
+            return res.data.success ? res.data.value : [];
         } catch (error) {
             console.log("Erro ao acessar carrinho:", error);
             return [];
