@@ -8,7 +8,8 @@ const UserFetcher = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        axios.get('http://107.20.8.253/php-loja-back/users-get.php?codigoAcesso=codigo_secreto_administrador')
+        /*?codigoAcesso=codigo_secreto_administrador*/
+        axios.get('http://107.20.8.253/php-loja-back/users-get.php')
             .then(response => {
                 if (response.data.error) {
                     setError(response.data.error);
