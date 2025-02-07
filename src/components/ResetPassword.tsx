@@ -28,7 +28,7 @@ const ResetPassword = () => {
     //     };
     //
     //     try {
-    //         const response = await axios.post('http://107.20.8.253/php-loja-back/send-email.php', emailData, {
+    //         const response = await axios.post('https://php-loja.com/php-loja-back/send-email.php', emailData, {
     //             withCredentials: true,
     //             headers: {
     //                 'Content-Type': 'application/json',

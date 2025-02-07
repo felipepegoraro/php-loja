@@ -43,7 +43,7 @@ const AccountForm: React.FC = () => {
 
         try {
             const response = await axios.post(
-                'http://107.20.8.253/php-loja-back/user-update.php',
+                'https://php-loja.com/php-loja-back/user-update.php',
                 formDataToSend,
                 {
                     headers: { 'Content-Type': 'multipart/form-data' },

@@ -16,10 +16,10 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ onCategoriaChange, 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const cate = await axios.get("http://107.20.8.253/php-loja-back/get-categorias.php");
+        const cate = await axios.get("https://php-loja.com/php-loja-back/get-categorias.php");
         setCategorias(cate.data);
 
-        const sub = await axios.get("http://107.20.8.253/php-loja-back/get-subcategorias.php");
+        const sub = await axios.get("https://php-loja.com/php-loja-back/get-subcategorias.php");
         setSubcategorias(sub.data);
       } catch (e) {
         console.log("Erro ao buscar categorias.");

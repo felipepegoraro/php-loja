@@ -9,7 +9,7 @@ const UserFetcher = () => {
 
     useEffect(() => {
         /*?codigoAcesso=codigo_secreto_administrador*/
-        axios.get('http://107.20.8.253/php-loja-back/users-get.php')
+        axios.get('https://php-loja.com/php-loja-back/users-get.php')
             .then(response => {
                 if (response.data.error) {
                     setError(response.data.error);

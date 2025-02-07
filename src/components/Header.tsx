@@ -22,7 +22,7 @@ const LoginButton = () => {
     try {
       setUser(null);
       localStorage.removeItem('user'); 
-      await axios.get('http://107.20.8.253/php-loja-back/logout.php', { withCredentials: true });
+      await axios.get('https://php-loja.com/php-loja-back/logout.php', { withCredentials: true });
       navigate('/Login');
     } catch (error) {
       console.error("Erro ao fazer logout:", error);

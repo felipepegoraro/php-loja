@@ -36,7 +36,7 @@ const Catalogo = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const res = await axios.get("http://107.20.8.253/php-loja-back/get-products.php", {
+                const res = await axios.get("https://php-loja.com/php-loja-back/get-products.php", {
                     params: { ordem, categoriaId: idcategoria, searchTerm },
                     withCredentials: true
                 });
@@ -49,7 +49,7 @@ const Catalogo = () => {
 
         const fetchCategories = async () => {
             try {
-                const res = await axios.get("http://107.20.8.253/php-loja-back/get-categorias.php", { timeout: 1000 });
+                const res = await axios.get("https://php-loja.com/php-loja-back/get-categorias.php", { timeout: 1000 });
                 setCategories(res.data);
             } catch (error) {
                 console.log("Erro ao buscar categorias:", error);

@@ -32,7 +32,7 @@ const DetalhesItem = () => {
     useEffect(() => {
         const fetchItemDetails = async () => {
             try {
-                const res = await axios.get("http://107.20.8.253/php-loja-back/get-item.php", {
+                const res = await axios.get("https://php-loja.com/php-loja-back/get-item.php", {
                     params: { id: itemId },
                 });
                 setItem(res.data);

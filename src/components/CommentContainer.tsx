@@ -18,7 +18,7 @@ const CommentContainer = (props: Props) => {
     useEffect(() => {
         const fetchComments = async () => {
             try {
-                const response = await axios.get(`http://107.20.8.253/php-loja-back/get-comments.php?itemId=${props.idProduto}`);
+                const response = await axios.get(`https://php-loja.com/php-loja-back/get-comments.php?itemId=${props.idProduto}`);
                 if (response.data.success) {
                     setComments(response.data.value);
                 } else {

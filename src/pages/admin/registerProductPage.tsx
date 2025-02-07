@@ -24,7 +24,7 @@ const RegisterProductPage = () => {
     useEffect(()=>{
         const fetchCategories = async () => {
             try {
-                const {data} = await axios.get("http://107.20.8.253/php-loja-back/get-categorias.php");    
+                const {data} = await axios.get("https://php-loja.com/php-loja-back/get-categorias.php");    
                 setCategories(data);
             } catch(e){
                 console.log("erro ao buscar categorias: ", e);
@@ -33,7 +33,7 @@ const RegisterProductPage = () => {
         
         const fetchSubcategories = async () => {
             try {
-                const { data } = await axios.get('http://107.20.8.253/php-loja-back/get-subcategorias.php');
+                const { data } = await axios.get('https://php-loja.com/php-loja-back/get-subcategorias.php');
                 setSubcategories(data);
             } catch (err) {
                 console.error("erro ao buscar subcategorias", err);
@@ -99,7 +99,7 @@ const RegisterProductPage = () => {
         console.log(formData);
 
         try {
-            const response = await axios.post('http://107.20.8.253/php-loja-back/register-product.php', formData, {
+            const response = await axios.post('https://php-loja.com/php-loja-back/register-product.php', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
