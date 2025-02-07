@@ -157,11 +157,15 @@ const Home = () => {
 
         const fetchData = async () => {
             try {
+                console.log("01 iniciando requisições...");
+
                 const [productsRes, categoriesRes, commentRes] = await Promise.all([
-                    axios.get("http://localhost/php-loja-back/get-products.php",   { timeout: 1000 }),
-                    axios.get("http://localhost/php-loja-back/get-categorias.php", { timeout: 1000 }),
-                    axios.get("http://localhost/php-loja-back/get-comments.php",   {timeout: 1000})
+                    axios.get("http://107.20.8.253/php-loja-back/get-products.php",   { withCredentials: true }),
+                    axios.get("http://107.20.8.253/php-loja-back/get-categorias.php", { withCredentials: true }),
+                    axios.get("http://107.20.8.253/php-loja-back/get-comments.php",   { withCredentials: true })
                 ]);
+
+                console.log("02 respostas: ", productsRes, categoriesRes, commentRes);
 
                 const fetchedProducts = productsRes.data;
                 const fetchedCategories = categoriesRes.data;

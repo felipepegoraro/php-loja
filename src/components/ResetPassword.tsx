@@ -19,7 +19,6 @@ const ResetPassword = () => {
         setErrorMessage("");
     };
 
-    // nao funciona no localhost 
     // const handleEmailSubmit = async (e: React.FormEvent) => {
     //     e.preventDefault();
     //
@@ -29,7 +28,7 @@ const ResetPassword = () => {
     //     };
     //
     //     try {
-    //         const response = await axios.post('http://localhost/php-loja-back/send-email.php', emailData, {
+    //         const response = await axios.post('http://107.20.8.253/php-loja-back/send-email.php', emailData, {
     //             withCredentials: true,
     //             headers: {
     //                 'Content-Type': 'application/json',

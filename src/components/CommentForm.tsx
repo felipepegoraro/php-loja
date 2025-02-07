@@ -38,7 +38,7 @@ const CommentForm = (props: CommentFormProps) => {
         }
 
         try {
-            const response = await axios.post('http://localhost/php-loja-back/add-comments.php', {
+            const response = await axios.post('http://107.20.8.253/php-loja-back/add-comments.php', {
                 idUsuario: user!.id,
                 idProduto: props.idProduto,
                 nota: parseFloat(nota),
