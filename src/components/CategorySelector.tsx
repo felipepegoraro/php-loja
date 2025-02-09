@@ -13,13 +13,15 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ onCategoriaChange, 
   const [selectedCategoria, setSelectedCategoria] = useState<string>('');
   const [filteredSubcategorias, setFilteredSubcategorias] = useState<ItemSubcategoria[]>([]);
 
+  const endpoint = process.env.REACT_APP_ENDPOINT;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const cate = await axios.get("https://php-loja.com/php-loja-back/get-categorias.php");
+        const cate = await axios.get(`${endpoint}/get-categorias.php`);
         setCategorias(cate.data);
 
-        const sub = await axios.get("https://php-loja.com/php-loja-back/get-subcategorias.php");
+        const sub = await axios.get(`${endpoint}/get-subcategorias.php`);
         setSubcategorias(sub.data);
       } catch (e) {
         console.log("Erro ao buscar categorias.");

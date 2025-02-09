@@ -21,6 +21,8 @@ const AccountForm: React.FC = () => {
         foto: null,
     });
 
+    const endpoint = process.env.REACT_APP_ENDPOINT;
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -43,7 +45,7 @@ const AccountForm: React.FC = () => {
 
         try {
             const response = await axios.post(
-                'https://php-loja.com/php-loja-back/user-update.php',
+                `${endpoint}/user-update.php`,
                 formDataToSend,
                 {
                     headers: { 'Content-Type': 'multipart/form-data' },

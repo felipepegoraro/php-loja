@@ -7,9 +7,11 @@ const UserFetcher = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [error, setError] = useState<string | null>(null);
 
+    const endpoint = process.env.REACT_APP_ENDPOINT;
+
     useEffect(() => {
         /*?codigoAcesso=codigo_secreto_administrador*/
-        axios.get('https://php-loja.com/php-loja-back/users-get.php')
+        axios.get(`${endpoint}/users-get.php`)
             .then(response => {
                 if (response.data.error) {
                     setError(response.data.error);

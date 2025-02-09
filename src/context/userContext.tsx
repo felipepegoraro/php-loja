@@ -22,6 +22,7 @@ interface UserProviderProps { children: ReactNode; }
 export const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUserState] = useState<SimplUser | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const endpoint = process.env.REACT_APP_ENDPOINT;
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
@@ -32,7 +33,8 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     } else {
       const checkSession = async () => {
         try {
-          const response = await axios.get('https://php-loja.com/php-loja-back/session.php', {
+          console.log(`endpoint: ${endpoint}/session.php`);
+          const response = await axios.get(`${endpoint}/session.php`, {
             withCredentials: true,
           });
 

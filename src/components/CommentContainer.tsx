@@ -15,10 +15,12 @@ const CommentContainer = (props: Props) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
+    const endpoint = process.env.REACT_APP_ENDPOINT;
+
     useEffect(() => {
         const fetchComments = async () => {
             try {
-                const response = await axios.get(`https://php-loja.com/php-loja-back/get-comments.php?itemId=${props.idProduto}`);
+                const response = await axios.get(`${endpoint}/get-comments.php?itemId=${props.idProduto}`);
                 if (response.data.success) {
                     setComments(response.data.value);
                 } else {

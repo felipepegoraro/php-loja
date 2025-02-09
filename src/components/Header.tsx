@@ -6,28 +6,30 @@ import { useUser } from '../context/userContext';
 import axios from 'axios';
 
 const LoginButton = () => {
-  const { user, setUser } = useUser();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const navigate = useNavigate();
+    const { user, setUser } = useUser();
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const navigate = useNavigate();
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
+    const endpoint = process.env.REACT_APP_ENDPOINT;
 
-  useEffect(() => {
-    setIsDropdownOpen(false)
-  }, [user])
+    const toggleDropdown = () => {
+        setIsDropdownOpen(!isDropdownOpen);
+    };
 
-  const handleLogOff = async () => {
-    try {
-      setUser(null);
-      localStorage.removeItem('user'); 
-      await axios.get('https://php-loja.com/php-loja-back/logout.php', { withCredentials: true });
-      navigate('/Login');
-    } catch (error) {
-      console.error("Erro ao fazer logout:", error);
-    }
-  };
+    useEffect(() => {
+        setIsDropdownOpen(false)
+    }, [user])
+
+    const handleLogOff = async () => {
+        try {
+            setUser(null);
+            localStorage.removeItem('user'); 
+            await axios.get(`${endpoint}/logout.php`, { withCredentials: true });
+            navigate('/Login');
+        } catch (error) {
+            console.error("Erro ao fazer logout:", error);
+        }
+    };
 
   if (user) {
   console.log(user.foto)

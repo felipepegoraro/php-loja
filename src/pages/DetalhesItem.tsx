@@ -20,6 +20,7 @@ const DetalhesItem = () => {
     const [loading, setLoading] = useState(true);
     const [toasts, setToasts] = useState<ToastProps[]>([]);
 
+    const endpoint = process.env.REACT_APP_ENDPOINT;
     const { user } = useUser();
 
     const fetchCartItems = async () => {
@@ -32,7 +33,7 @@ const DetalhesItem = () => {
     useEffect(() => {
         const fetchItemDetails = async () => {
             try {
-                const res = await axios.get("https://php-loja.com/php-loja-back/get-item.php", {
+                const res = await axios.get(`${endpoint}/get-item.php`, {
                     params: { id: itemId },
                 });
                 setItem(res.data);

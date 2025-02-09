@@ -20,9 +20,10 @@ import type {Item} from './item';
 import type {Order, OrderItem} from './order';
 import axios from 'axios';
 
-export default class SalesMetrics {
-    private URL: string = "https://php-loja.com/php-loja-back/";
 
+export default class SalesMetrics {
+
+    private endpoint: string = process.env.REACT_APP_ENDPOINT as string;
     private orders: Order[] = [];
 
     private topcustomers: Array<{
@@ -38,7 +39,7 @@ export default class SalesMetrics {
 
     async fetchOrder(){
         try {
-            const response = await axios.get(`${this.URL}order-get.php`, {withCredentials: true});
+            const response = await axios.get(`${this.endpoint}/order-get.php`, {withCredentials: true});
             if (!response.data.success) {
                 console.error('Erro ao carregar pedidos:', response.data.message);
                 return;
@@ -63,7 +64,7 @@ export default class SalesMetrics {
 
     async fetchTopCustomers() {
         try {
-            const response = await axios.get(`${this.URL}top-customers.php`, {withCredentials: true});
+            const response = await axios.get(`${this.endpoint}/top-customers.php`, {withCredentials: true});
             if (response.data.success) {
                 this.topcustomers  = response.data.message;
             } else {
@@ -143,7 +144,7 @@ export default class SalesMetrics {
     // esse aqui ignora categoria e subcategoria pq teria q fazer 4 inner join e obviamente isso nao é bom ne
     async fetchTopItems(type: "quantidade" | "valor", maxItems: number) {
         try {
-            const response = await axios.get(`${this.URL}top-itens.php?type=${type}&limit=${maxItems}`, { withCredentials: true });
+            const response = await axios.get(`${this.endpoint}/top-itens.php?type=${type}&limit=${maxItems}`, { withCredentials: true });
             if (!response.data.success) {
                 console.error('Erro ao obter os produtos mais vendidos:', response.data.message);
                 return;

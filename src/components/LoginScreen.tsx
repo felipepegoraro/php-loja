@@ -16,6 +16,9 @@ const LoginScreen = () => {
   const { setUser } = useUser();
   const nav = useNavigate();
 
+  const endpoint = process.env.REACT_APP_ENDPOINT;
+  console.log("PAGINA LOGIN USANDO O ENDPOINT: ", endpoint);
+
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -25,7 +28,7 @@ const LoginScreen = () => {
     };
 
     try {
-      const response = await axios.post('https://php-loja.com/php-loja-back/login.php', loginData, {
+      const response = await axios.post(`${endpoint}/login.php`, loginData, {
         headers: {
           'Content-Type': 'application/json',
         },

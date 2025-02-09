@@ -147,6 +147,7 @@ const Home = () => {
     const [categoryListPosition, setCategoryListPosition] = useState({ start: 0, end: 5 });
 
     const [comments, setComments] = useState<Comentario[]>([]);
+    const endpoint = process.env.REACT_APP_ENDPOINT;
 
     useEffect(() => {
         const fetchTopItems = async () => {
@@ -157,12 +158,12 @@ const Home = () => {
 
         const fetchData = async () => {
             try {
-                console.log("01 iniciando requisições...");
+                console.log(`01 iniciando requisições...: ${endpoint}/get-{products,categories,comments}.php`);
 
                 const [productsRes, categoriesRes, commentRes] = await Promise.all([
-                    axios.get("https://php-loja.com/php-loja-back/get-products.php",   { withCredentials: true }),
-                    axios.get("https://php-loja.com/php-loja-back/get-categorias.php", { withCredentials: true }),
-                    axios.get("https://php-loja.com/php-loja-back/get-comments.php",   { withCredentials: true })
+                    axios.get(`${endpoint}/get-products.php`,   { withCredentials: true }),
+                    axios.get(`${endpoint}/get-categorias.php`, { withCredentials: true }),
+                    axios.get(`${endpoint}/get-comments.php`,   { withCredentials: true })
                 ]);
 
                 console.log("02 respostas: ", productsRes, categoriesRes, commentRes);

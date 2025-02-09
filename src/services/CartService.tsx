@@ -2,6 +2,8 @@ import axios from 'axios';
 import {Item} from '../types/item';
 
 class CartService {
+    static endpoint: string = process.env.REACT_APP_ENDPOINT as string;
+
     static async addToCart(
         userId: number,
         item: Item,
@@ -18,7 +20,7 @@ class CartService {
         };
 
         try {
-            const response = await axios.post("https://php-loja.com/php-loja-back/cart-add.php", payload, {
+            const response = await axios.post(`${this.endpoint}/cart-add.php`, payload, {
                 headers: { 'Content-Type': 'application/json' },
                 withCredentials: true,
             });
@@ -37,7 +39,7 @@ class CartService {
         };
 
         try {
-            const response = await axios.post("https://php-loja.com/php-loja-back/cart-remove.php", req, {
+            const response = await axios.post(`${this.endpoint}/cart-remove.php`, req, {
                 withCredentials: true,
                 // timeout: 1000,
                 headers: {
@@ -54,7 +56,7 @@ class CartService {
 
     static async clearCart() {
         try {
-            const res = await axios.get("https://php-loja.com/php-loja-back/cart-clear.php", {
+            const res = await axios.get(`${this.endpoint}/cart-clear.php`, {
                 // timeout: 1000,
                 withCredentials: true,
             });
@@ -70,7 +72,7 @@ class CartService {
         const obj = { idUsuario: userId };
 
         try {
-            const res = await axios.post("https://php-loja.com/php-loja-back/checkout.php", obj, {
+            const res = await axios.post(`${this.endpoint}/checkout.php`, obj, {
                 withCredentials: true,
                 // timeout: 1000,
                 headers: {
@@ -88,7 +90,7 @@ class CartService {
 
     static async fetchCartItems() {
         try {
-            const res = await axios.get("https://php-loja.com/php-loja-back/cart-get.php", {
+            const res = await axios.get(`${this.endpoint}/cart-get.php`, {
                 // timeout: 10000,
                 withCredentials: true,
             });
@@ -102,7 +104,7 @@ class CartService {
 
     static async restoreCartItem(userId: number) {
         try {
-            const response = await axios.post("https://php-loja.com/php-loja-back/cart-restore.php", { idUsuario: userId }, {
+            const response = await axios.post(`${this.endpoint}/cart-restore.php`, { idUsuario: userId }, {
                 // timeout: 1000,
                 withCredentials: true,
             });
@@ -116,7 +118,7 @@ class CartService {
 
     static async cartUpdateQuantityItem(idItem: number, quantidade: number) {
         try {
-            const response = await axios.post("https://php-loja.com/php-loja-back/cart-update-quantity.php", 
+            const response = await axios.post(`${this.endpoint}/cart-update-quantity.php`, 
                 new URLSearchParams({
                     idItem: String(idItem), 
                     quantidade: String(quantidade)

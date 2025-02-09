@@ -15,6 +15,8 @@ const CommentForm = (props: CommentFormProps) => {
         comentario: ''
     });
 
+    const endpoint = process.env.REACT_APP_ENDPOINT;
+
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
 
@@ -38,7 +40,7 @@ const CommentForm = (props: CommentFormProps) => {
         }
 
         try {
-            const response = await axios.post('https://php-loja.com/php-loja-back/add-comments.php', {
+            const response = await axios.post(`${endpoint}/add-comments.php`, {
                 idUsuario: user!.id,
                 idProduto: props.idProduto,
                 nota: parseFloat(nota),

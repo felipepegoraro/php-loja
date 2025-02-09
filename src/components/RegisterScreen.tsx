@@ -20,6 +20,8 @@ const RegisterScreen = () => {
         admin: 0
     });
 
+    const endpoint = process.env.REACT_APP_ENDPOINT;
+
     const [confirmarSenha, setConfirmarSenha] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
@@ -42,7 +44,7 @@ const RegisterScreen = () => {
         }
 
         try {
-            const response = await axios.post('https://php-loja.com/php-loja-back/register.php', formData, {
+            const response = await axios.post(`${endpoint}/register.php`, formData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
