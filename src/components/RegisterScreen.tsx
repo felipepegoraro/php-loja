@@ -56,14 +56,11 @@ const RegisterScreen = () => {
                 headers: { 'Content-Type': 'application/json' }
             });
 
-            console.log(response);
             const result = response.data;
-            console.log("cadastro result: ", response);
             if (result.success) {
                 setErrorMessage('');
                 navigate('/Login');
-                console.log("navigate...")
-                alert('Cadastro bem-sucedido!');
+                alert('Um email foi enviado. Para finalizar seu cadastro, confirme seu email!');
             } else {
                 setErrorMessage(result.error);
             }

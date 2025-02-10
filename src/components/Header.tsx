@@ -32,7 +32,6 @@ const LoginButton = () => {
     };
 
   if (user) {
-  console.log(user.foto)
     return (
       <div className="profile-container ms-3">
          <a href="/Carrinho" className="cart-btn" title="Ir ao carrinho">

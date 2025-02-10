@@ -36,19 +36,21 @@ function insertCategories($conn, &$debug){
     $flag = 0;
     foreach ($categorias as $categoria) {
         $nomeCategoria = $categoria[0];
-        $fotoPath = '127.0.0.1/php-loja-back/icons_category/' . $categoria[1];
+        $fotoPath = 'php-loja.com/private/icons_category/' . $categoria[1];
 
         // NECESSÁRIO INSTALAR PHP-CURL
-        $ch = curl_init($fotoPath);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $foto = curl_exec($ch);
-        curl_close($ch);
+	$ch = curl_init($fotoPath);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+	$foto = curl_exec($ch);
+	$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+	$error = curl_error($ch);
+	curl_close($ch);
 
-
-        if ($foto === false) {
-            $debug['steps'][] = "Erro ao baixar a foto para a categoria '$nomeCategoria'.";
-            continue;
-        }
+	if ($foto === false || $httpCode != 200) {
+	    $debug['steps'][] = "Erro ao baixar a foto para a categoria $categoria[1] (Código HTTP: $httpCode, erro $error)";
+	    return;
+	}
 
         $stmt_categoria->bind_param("ss", $nomeCategoria, $foto);
         if ($stmt_categoria->execute()) {
@@ -74,7 +76,7 @@ function insertSubcategories($conn, &$debug){
         [3, 'Notebooks'],               [3, 'Desktops'],                  [3, 'Impressoras'],           [3, 'Periféricos'],
         [4, 'Sofás'],                   [4, 'Mesas'],                     [4, 'Camas'],                 [4, 'Decoração'],
         [5, 'Masculino'],               [5, 'Feminino'],                  [5, 'Infantil'],              [5, 'Calçados'],
-        [6, 'Bicicletas'],              [6, 'Equipamentos de Ginástica'], [6, 'Moda Fitness'], 
+        [6, 'Bicicletas'],              [6, 'Equipamentos de Ginástica'], [6, 'Moda Fitness'],
         [7, 'Cosméticos'],              [7, 'Vitaminas e Suplementos'],
         [8, 'Brinquedos Educativos'],   [8, 'Bonecas e Ação'],            [8, 'Jogos e Puzzles'],
         [9, 'Material Escolar'],        [9, 'Material de Escritório'],
@@ -124,14 +126,16 @@ function insertAdmin($conn, &$debug){
         '00000000000',
         'senha123',
         '', '', '', '', '', '', '',
-        1
+        1,
+        true,
+        null
     ];
 
     $stmt_user = $conn->prepare("
         INSERT INTO tb_usuario (
-            nome, email, data_nascimento, telefone, senha, cep, rua, numero, bairro, complemento, cidade, estado, admin)
+            nome, email, data_nascimento, telefone, senha, cep, rua, numero, bairro, complemento, cidade, estado, admin, verificado, token)
         VALUES
-            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
     );
 
     if ($stmt_user === false) {
@@ -142,9 +146,11 @@ function insertAdmin($conn, &$debug){
 
     $hashedPassword = password_hash($user[4], PASSWORD_BCRYPT);
 
-    $stmt_user->bind_param("sssssssssssss", $user[0], $user[1], $user[2],
-        $user[3], $hashedPassword, $user[5], $user[6], $user[7], $user[8],
-        $user[9], $user[10], $user[11], $user[12]
+    $stmt_user->bind_param("sssssssssssssis",
+        $user[0], $user[1], $user[2], $user[3],
+        $hashedPassword, $user[5], $user[6], $user[7],
+        $user[8], $user[9], $user[10], $user[11],
+        $user[12], $user[13], $user[14]
     );
 
     if ($stmt_user->execute()) {

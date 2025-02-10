@@ -3,8 +3,8 @@ import AccountForm from '../components/AccountForm';
 const Account = () => {
     return (
         <main className="container">
+            <h1>Página em manutenção!</h1>
             <AccountForm/>
-            <p>minha conta!!!</p>
         </main>
     );
 }

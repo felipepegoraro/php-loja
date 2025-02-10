@@ -51,7 +51,7 @@ const Catalogo = () => {
 
         const fetchCategories = async () => {
             try {
-                const res = await axios.get(`${endpoint}/get-categorias.php`, { timeout: 1000 });
+                const res = await axios.get(`${endpoint}/get-categorias.php`);
                 if (res.data.success){
                     console.log("OK")
                     setCategories(res.data.value);

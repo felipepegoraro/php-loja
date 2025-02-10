@@ -35,7 +35,7 @@ const Carrinho = () => {
          } finally {
              setLoading(false);
          }
-     }, [isLoggedIn, user, cart]);
+     }, [isLoggedIn, user]);
 
     const calculateTotal = useCallback(() => {
         if (cart) {

@@ -2,7 +2,8 @@
 const Settings = () => {
     return (
         <main className="container">
-            <p>configurações!</p>
+            <h1>Página em manutenção!</h1>
+            <p>configurações...</p>
         </main>
     );
 }

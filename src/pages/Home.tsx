@@ -158,15 +158,12 @@ const Home = () => {
 
         const fetchData = async () => {
             try {
-                console.log(`01 iniciando requisições...: ${endpoint}/get-{products,categories,comments}.php`);
 
                 const [productsRes, categoriesRes, commentRes] = await Promise.all([
                     axios.get(`${endpoint}/get-products.php`,   { withCredentials: true }),
                     axios.get(`${endpoint}/get-categorias.php`, { withCredentials: true }),
                     axios.get(`${endpoint}/get-comments.php`,   { withCredentials: true })
                 ]);
-
-                console.log("02 respostas: ", productsRes, categoriesRes, commentRes);
 
                 const fetchedProducts = productsRes.data;
                 const fetchedCategories = categoriesRes.data.value;

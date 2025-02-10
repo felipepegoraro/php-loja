@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS tb_usuario (
     estado CHAR(2),
     admin BOOLEAN NOT NULL,
     foto MEDIUMBLOB DEFAULT NULL,
-    token VARCHAR(32) DEFAULT NULL,
+    token VARCHAR(65) DEFAULT NULL,
     verificado BOOLEAN DEFAULT FALSE
 );
 

@@ -36,7 +36,7 @@ const AtivarEmail = () => {
                 <h2 className="text-xl font-semibold mb-4">{status.ativado ? "Sucesso!" : "Ops!"}</h2>
                 <p className="text-gray-700 mb-4">{status.msg}</p>
                 {status.ativado ? (
-                    <Link to="/login" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">
+                    <Link to="/login" className="text-blue-500 px-4 py-2 rounded-md hover:bg-blue-600 transition">
                         Ir para Login
                     </Link>
                 ) : (
