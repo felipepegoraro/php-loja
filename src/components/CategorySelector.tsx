@@ -1,35 +1,22 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import type { ItemCategoria, ItemSubcategoria } from '../types/item';
 
 interface CategorySelectorProps {
-  onCategoriaChange: (categoriaId: string) => void;
-  onSubcategoriaChange: (subcategoriaId: string) => void;
+    categorias: ItemCategoria[];
+    subcategorias: ItemSubcategoria[];
+    onCategoriaChange: (categoriaId: string) => void;
+    onSubcategoriaChange: (subcategoriaId: string) => void;
 }
 
-const CategorySelector: React.FC<CategorySelectorProps> = ({ onCategoriaChange, onSubcategoriaChange }) => {
-  const [categorias, setCategorias] = useState<ItemCategoria[]>([]);
-  const [subcategorias, setSubcategorias] = useState<ItemSubcategoria[]>([]);
+const CategorySelector: React.FC<CategorySelectorProps> = ({
+    categorias,
+    subcategorias,
+    onCategoriaChange,
+    onSubcategoriaChange 
+}) => {
   const [selectedCategoria, setSelectedCategoria] = useState<string>('');
   const [filteredSubcategorias, setFilteredSubcategorias] = useState<ItemSubcategoria[]>([]);
-
-  const endpoint = process.env.REACT_APP_ENDPOINT;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const cate = await axios.get(`${endpoint}/get-categorias.php`);
-        setCategorias(cate.data);
-
-        const sub = await axios.get(`${endpoint}/get-subcategorias.php`);
-        setSubcategorias(sub.data);
-      } catch (e) {
-        console.log("Erro ao buscar categorias.");
-      }
-    };
-
-    fetchData();
-  }, []);
 
   useEffect(() => {
     if (selectedCategoria) {
@@ -78,7 +65,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ onCategoriaChange, 
           disabled={!selectedCategoria}
         >
           <option value="">Selecione uma Subcategoria</option>
-          {filteredSubcategorias.length > 0 ? (
+          {Array.isArray(subcategorias) && filteredSubcategorias.length > 0 ? (
             filteredSubcategorias.map((sub) => (
               <option key={sub.id} value={sub.id}>
                 {sub.nome}

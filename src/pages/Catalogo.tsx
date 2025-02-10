@@ -52,7 +52,12 @@ const Catalogo = () => {
         const fetchCategories = async () => {
             try {
                 const res = await axios.get(`${endpoint}/get-categorias.php`, { timeout: 1000 });
-                setCategories(res.data);
+                if (res.data.success){
+                    console.log("OK")
+                    setCategories(res.data.value);
+                } else {
+                    console.log("erro ao escolher categorias");
+                }
             } catch (error) {
                 console.log("Erro ao buscar categorias:", error);
             }
@@ -61,7 +66,7 @@ const Catalogo = () => {
         fetchCategories();
         fetchProducts();
         fetchCartItems();
-    }, [user, idcategoria, ordem, searchTerm, fetchCartItems]); 
+    }, [user, idcategoria, ordem, searchTerm, fetchCartItems, endpoint]); 
 
 
 

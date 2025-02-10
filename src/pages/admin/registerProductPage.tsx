@@ -9,6 +9,7 @@ const RegisterProductPage = () => {
     const [categories, setCategories] = useState<ItemCategoria[]>([]);
     const [subcategories, setSubcategories] = useState<ItemSubcategoria[]>([]);
     const [error, setError] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(true);
 
     const [product, setProduct] = useState<Item>({
         id: 0,
@@ -21,30 +22,58 @@ const RegisterProductPage = () => {
         subcategoria: '',
     });
 
-    const endpoint = process.env.REACT_APP_ENDPOINT;
+    useEffect(() => {
 
-    useEffect(()=>{
-        const fetchCategories = async () => {
-            try {
-                const {data} = await axios.get(`${endpoint}/get-categorias.php`); 
-                setCategories(data);
-            } catch(e){
-                console.log("erro ao buscar categorias: ", e);
-            }
-        };
-        
-        const fetchSubcategories = async () => {
-            try {
-                const { data } = await axios.get(`${endpoint}/get-subcategorias.php`);
-                setSubcategories(data);
-            } catch (err) {
-                console.error("erro ao buscar subcategorias", err);
-            }
-        };
+      }, [])
 
-        fetchCategories();
-        fetchSubcategories();
-    },[]);
+    let endpoint = process.env.REACT_APP_ENDPOINT;
+    // if (endpoint === "private") endpoint = "/" + endpoint
+
+      useEffect(() => {
+          setLoading(true);
+          const fetchCategories = async () => {
+              try {
+                  const res = await axios.get(`${endpoint}/get-categorias.php`, {
+                      withCredentials: true
+                  });
+                  console.log("Resposta Categorias:", res.data);
+                  if (res.data.success) {
+                      setCategories(res.data.value as ItemCategoria[]);
+                  } else {
+                      console.error("Erro ao carregar categorias:", res.data.error);
+                  }
+              } catch (e) {
+                  console.log("Erro ao buscar categorias: ", e);
+              }
+          };
+
+          const fetchSubcategories = async () => {
+              try {
+                  const res = await axios.get(`${endpoint}/get-subcategorias.php`, {
+                      withCredentials: true
+                  });
+                  console.log("Resposta Subcategorias:", res.data);
+                  if (res.data.success) {
+                      setSubcategories(res.data.value);
+                  } else {
+                      console.error("Erro ao carregar subcategorias:", res.data.error);
+                  }
+              } catch (err) {
+                  console.error("Erro ao buscar subcategorias", err);
+              }
+          };
+
+          const fetchData = async () => {
+              try {
+                  await Promise.all([fetchCategories(), fetchSubcategories()]);
+              } finally {
+                  setLoading(false);
+              }
+          };
+
+          fetchData();
+      }, [user, endpoint]);
+
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { id, value } = e.target;
@@ -136,6 +165,11 @@ const RegisterProductPage = () => {
         );
     }
 
+    if (loading){
+        return (
+            <div>loading...</div>
+        )
+    }
 
     return (
     <main className="container">
@@ -188,10 +222,14 @@ const RegisterProductPage = () => {
           />
         </div>
 
-        <CategorySelector 
-          onCategoriaChange={handleCategoriaChange} 
-          onSubcategoriaChange={handleSubcategoriaChange} 
-        />
+        {(categories.length > 0 && subcategories.length > 0) ?  
+            <CategorySelector 
+                categorias={categories}
+                subcategorias={subcategories}
+                onCategoriaChange={handleCategoriaChange} 
+                onSubcategoriaChange={handleSubcategoriaChange} 
+            /> : null
+        }
 
         <div className="form-group mt-3">
           <button type="submit" className="btn btn-primary">Cadastrar Produto</button>

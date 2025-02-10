@@ -31,7 +31,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ produto, onAddToCart }) => {
                             : null
                         }
                         <p className="card-text">{descricao}</p>
-                        <p>Preço: <p className="item-price">{Utils.formatPrice(preco)}</p></p>
+                        <p className="item-price">Preço: {Utils.formatPrice(preco)}</p>
                     </div>
                 </div>
                 <button className="botao btn btn-primary" onClick={onAddToCart}>

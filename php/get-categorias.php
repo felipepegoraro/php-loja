@@ -1,29 +1,27 @@
-<?php 
-$conn = include "connect-db.php";
-$query = "SELECT * from tb_categoria";
+<?php
+include_once 'ResponseHandler.php';
+include_once 'Database.php';
 
-$result = $conn->query($query);
+$db = Database::getInstance();
+$conn = $db->getConnection();
 
-if (!$result) {
-    die('Erro na consulta: ' . $conn->error);
-}
+$response = ["steps" => [], "errors" => []];
 
-$categorias = [];
+$sql = "SELECT * FROM tb_categoria";
+$result = ResponseHandler::executeQuery($conn, $sql, [], $response, 'Erro ao executar query');
 
-if ($result->num_rows > 0){
-    while ($row = $result->fetch_assoc()){
-        $categorias[] = [
+$categories = [];
+
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $categories[] = [
             "id" => $row['id'],
             "nome" => $row['nome'],
             "foto" => base64_encode($row['foto'])
         ];
     }
+    ResponseHandler::jsonResponse(true, "Categorias encontradas", $response, $categories);
 } else {
-    echo json_encode(["error" => "Nenhuma categoria encontrada"]);
-    $conn->close();
-    exit();
+    ResponseHandler::jsonResponse(false, "Nenhuma categoria encontrada", $response);
 }
-
-echo json_encode($categorias, JSON_UNESCAPED_UNICODE);
-$conn->close();
 ?>

@@ -169,7 +169,7 @@ const Home = () => {
                 console.log("02 respostas: ", productsRes, categoriesRes, commentRes);
 
                 const fetchedProducts = productsRes.data;
-                const fetchedCategories = categoriesRes.data;
+                const fetchedCategories = categoriesRes.data.value;
                 const fetchedComments = commentRes.data;
 
                 setComments(  (prev) => JSON.stringify(prev) !== JSON.stringify(fetchedComments)   ? fetchedComments   : prev);
@@ -184,7 +184,7 @@ const Home = () => {
 
         fetchData();
         fetchTopItems();
-    }, []);
+    }, [endpoint]);
 
     if (loading) return <img height="50px" src="gif-loading.gif" alt="loading gif" />;
 
