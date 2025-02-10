@@ -11,41 +11,41 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE IF NOT EXISTS tb_usuario (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
+    nome VARCHAR(64) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
     data_nascimento DATE,
-    telefone VARCHAR(20),
+    telefone VARCHAR(15),
     senha VARCHAR(255) NOT NULL,
-    cep VARCHAR(10),
-    rua VARCHAR(255),
-    numero VARCHAR(10),
-    bairro VARCHAR(100),
-    complemento VARCHAR(100),
-    cidade VARCHAR(100),
+    cep VARCHAR(9),
+    rua VARCHAR(64),
+    numero VARCHAR(6),
+    bairro VARCHAR(50),
+    complemento VARCHAR(50),
+    cidade VARCHAR(50),
     estado CHAR(2),
     admin BOOLEAN NOT NULL,
     foto MEDIUMBLOB DEFAULT NULL,
-    token VARCHAR(255) DEFAULT NULL,
+    token VARCHAR(32) DEFAULT NULL,
     verificado BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS tb_categoria (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL,
+    nome VARCHAR(64) NOT NULL,
     foto MEDIUMBLOB
 );
 
 CREATE TABLE IF NOT EXISTS tb_subcategoria (
     id INT AUTO_INCREMENT PRIMARY KEY,
     idCategoria INT,
-    nome VARCHAR(255) NOT NULL,
+    nome VARCHAR(64) NOT NULL,
     FOREIGN KEY (idCategoria) REFERENCES tb_categoria(id)
 );
 
 CREATE TABLE IF NOT EXISTS tb_itens (
     id INT AUTO_INCREMENT PRIMARY KEY,
     idSubCategoria INT,
-    nome VARCHAR(255) NOT NULL,
+    nome VARCHAR(128) NOT NULL,
     descricao TEXT,
     foto MEDIUMBLOB,
     preco DECIMAL(10, 2) NOT NULL,

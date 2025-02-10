@@ -26,6 +26,14 @@ const RegisterScreen = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
+    const handleCepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let value = e.target.value.replace(/\D/g, "");
+        if (value.length > 5) {
+            value = value.slice(0, 5) + "-" + value.slice(5, 8);
+        }
+        e.target.value = value;
+    };
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -45,15 +53,16 @@ const RegisterScreen = () => {
 
         try {
             const response = await axios.post(`${endpoint}/register.php`, formData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' }
             });
 
+            console.log(response);
             const result = response.data;
+            console.log("cadastro result: ", response);
             if (result.success) {
                 setErrorMessage('');
                 navigate('/Login');
+                console.log("navigate...")
                 alert('Cadastro bem-sucedido!');
             } else {
                 setErrorMessage(result.error);
@@ -147,11 +156,13 @@ const RegisterScreen = () => {
                             id="cep"
                             name="cep"
                             value={formData.cep}
-                            onChange={handleChange}
+                            onChange={(e) => {
+                                handleCepChange(e);
+                                handleChange(e);
+                            }}
                             required
-                            minLength={8}
-                            maxLength={8}
-                            pattern="\d{5}-?\d{3}"
+                            minLength={9}
+                            maxLength={9}
                         />
                     </div>
                     <div className="form-group col-md-4">
@@ -163,6 +174,8 @@ const RegisterScreen = () => {
                             name="rua"
                             value={formData.rua}
                             onChange={handleChange}
+                            minLength={3}
+                            maxLength={64}
                             required
                         />
                     </div>
@@ -175,6 +188,7 @@ const RegisterScreen = () => {
                             name="numero"
                             value={formData.numero}
                             onChange={handleChange}
+                            maxLength={5}
                             required
                         />
                     </div>

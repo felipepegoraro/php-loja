@@ -10,6 +10,8 @@ class ResponseHandler {
      * @return never
      */
     public static function jsonResponse(bool $success, string $message, array &$response, $value = null): never {
+        ob_clean(); // limpar buffer
+        header('Content-Type: application/json; charset=utf-8');
         echo json_encode(
             [
                 "success" => $success,

@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 const AtivarEmail = () => {
+    const [status, setStatus] = useState({ ativado: false, msg: "Verificando token..." });
     const location = useLocation();
 
     useEffect(() => {
@@ -10,7 +11,7 @@ const AtivarEmail = () => {
         const token = queryParams.get('token');
 
         if (!token) {
-            console.error('Token não fornecido na URL');
+            setStatus({ ativado: false, msg: "Token não fornecido na URL." });
             return;
         }
 
@@ -18,18 +19,35 @@ const AtivarEmail = () => {
 
         axios.get(`${endpoint}/confirmar-email.php?token=${token}`)
             .then(response => {
-                console.log(response.data);
+                setStatus({ 
+                    ativado: response.data.success,
+                    msg: response.data.message 
+                });
             })
             .catch(error => {
-                console.error('Erro ao ativar a conta:', error);
+                setStatus({ ativado: false, msg: "Erro ao conectar ao servidor." });
+                console.error("Erro ao ativar a conta:", error);
             });
     }, [location]);
 
     return (
-        <div>
-            <p>Ativando conta...</p>
+        <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-100">
+            <div className="text-center">
+                <h2 className="text-xl font-semibold mb-4">{status.ativado ? "Sucesso!" : "Ops!"}</h2>
+                <p className="text-gray-700 mb-4">{status.msg}</p>
+                {status.ativado ? (
+                    <Link to="/login" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">
+                        Ir para Login
+                    </Link>
+                ) : (
+                    <Link to="/" className="text-blue-500 hover:underline">
+                        Voltar para Home
+                    </Link>
+                )}
+            </div>
         </div>
     );
-}
+};
 
 export default AtivarEmail;
+
