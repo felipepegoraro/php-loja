@@ -1,7 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap");
 /* Footer Styles */
 .footer {
   background-color: #111 !important;
-  font-family: var(--font-montserrat);
+  font-family: "Montserrat", sans-serif;
 }
 
 .footer-logo {

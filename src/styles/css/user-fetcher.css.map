@@ -1,1 +1,1 @@
-{"version":3,"sourceRoot":"","sources":["../scss/user-fetcher.scss"],"names":[],"mappings":"AAAA;EACI;EACA;EACA;EACA;EACA;EACA;EACA","file":"user-fetcher.css"}
+{"version":3,"sourceRoot":"","sources":["../scss/_variables.scss","../scss/user-fetcher.scss"],"names":[],"mappings":"AAYQ;AAGA;AAGA;ACfR;EACI,kBDII;ECHJ;EACA;EACA;EACA;EACA;EACA;AAEA;AACA;AACA","file":"user-fetcher.css"}

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { useUser } from '../context/userContext';
+import '../styles/scss/commentform.scss' //'./CommentForm.module.scss'; // Importando o arquivo SCSS
 
 interface CommentFormProps {
     idProduto: number;
@@ -47,8 +48,6 @@ const CommentForm = (props: CommentFormProps) => {
                 titulo,
                 comentario
             });
-            
-            // console.log("==> ", response.data);
 
             if (response.data.success) {
                 setSuccess('Comentário enviado com sucesso!');
@@ -66,41 +65,47 @@ const CommentForm = (props: CommentFormProps) => {
             <h2>Enviar Comentário</h2>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {success && <p style={{ color: 'green' }}>{success}</p>}
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Nota:</label>
-                    <input
-                        type="number"
-                        step="0.1"
-                        name="nota"
-                        value={formData.nota}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Título:</label>
-                    <input
-                        type="text"
-                        name="titulo"
-                        value={formData.titulo}
-                        onChange={handleChange}
-                        required
-                    />
+            <form onSubmit={handleSubmit} className="comment-form">
+                <div className="commmmmmmmmentario">
+                    <div>
+                        <label>Nota:</label>
+                        <input
+                            className={'input-field'}
+                            type="number"
+                            step="0.1"
+                            name="nota"
+                            value={formData.nota}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label>Título:</label>
+                        <input
+                            className={'input-field'}
+                            type="text"
+                            name="titulo"
+                            value={formData.titulo}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
                 </div>
                 <div>
                     <label>Comentário:</label>
                     <textarea
+                        className={'textarea-field'}
                         name="comentario"
                         value={formData.comentario}
                         onChange={handleChange}
                         required
                     />
                 </div>
-                <button type="submit">Enviar</button>
+                    <button style={{width: '100px'}} className="btn-submit" type="submit">Enviar</button>
             </form>
         </div>
     );
 };
 
 export default CommentForm;
+

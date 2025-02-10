@@ -1,3 +1,5 @@
+@use "variables" as v;
+
 /* Wrapper do cartão */
 .cart-item-card {
     border-radius: 12px !important;
@@ -78,7 +80,7 @@
 .cart-item-price p {
     font-size: 1.8rem;
     font-weight: bold;
-    color: var(--primary-color);
+    color: v.$primary-color;
 }
 
 .cart-item-meta {
@@ -125,7 +127,7 @@
 .cart-item-remove button {
     font-size: 1.2rem;
     color: #fff;
-    background-color: #e74c3c; /* Cor vermelha para o botão */
+    background-color: v.$red;
     border: none;
     padding: 8px 16px;
     border-radius: 8px;

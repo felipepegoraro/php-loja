@@ -1,13 +1,41 @@
+@use "variables" as v;
+@use "media" as me;
+
 .home-page-container {
-  display: flex;
-  flex-direction: column;
-  gap: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    gap: 100px;
+
+    @include me.tablet {
+        width: 100% !important;
+        padding: 0 15px; /* Ajustar a margem em telas menores */
+    }
+
+    @include me.mobile {
+        gap: 50px; /* Menor espaçamento entre os elementos em telas móveis */
+    }
 }
 
 .home-page-container h1 {
   font-size: 3rem;
   font-weight: bold;
   text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  word-wrap: break-word;
+  overflow: hidden;
+  white-space: normal;
+  /* max-width: 100%; */
+  width: 100%;
+
+  @include me.tablet {
+    font-size: 2.5rem;
+  }
+
+  @include me.mobile {
+    font-size: 2rem;
+  }
 }
 
 .hero-section {
@@ -16,16 +44,43 @@
       url("../../../public/assets/hero-banner.png");
   color: white;
   padding: 100px 0;
+  overflow: hidden;
+  width: 100%;
+  border-radius: 10px;
+
+  @include me.tablet {
+    padding: 50px 0;
+  }
+
+  @include me.mobile {
+    padding: 20px 0;
+  }
 }
 
 .hero-section h1 {
   font-size: 3rem;
   margin-bottom: 20px;
+
+  @include me.tablet {
+    font-size: 2.5rem; /* Ajustar o tamanho da fonte em tablets */
+  }
+
+  @include me.mobile {
+    font-size: 2rem; /* Ajustar o tamanho da fonte em dispositivos móveis */
+  }
 }
 
 .hero-section p {
   font-size: 1.25rem;
   margin-bottom: 30px;
+
+  @include me.tablet {
+    font-size: 1rem; /* Ajustar o tamanho da fonte em tablets */
+  }
+
+  @include me.mobile {
+    font-size: 0.875rem; /* Ajustar o tamanho da fonte em dispositivos móveis */
+  }
 }
 
 .featured-products {
@@ -35,61 +90,41 @@
   display: flex !important;
   flex-direction: column !important;
   gap: 60px !important;
+
+  @include me.tablet {
+    gap: 40px; /* Ajustar o gap em tablets */
+  }
+
+  @include me.mobile {
+    gap: 20px; /* Ajustar o gap em dispositivos móveis */
+  }
 }
 
 .featured-products h2 {
   font-size: 35px;
   margin-bottom: 30px;
-  color: var(--text-color);
-}
+  color: v.$text-color;
 
-.product-card img {
-  border-radius: 4px;
-}
+  @include me.tablet {
+    font-size: 30px; 
+  }
 
-.product-card .card-body {
-  text-align: center;
-}
-
-.product-categories{
-  background: 
-      linear-gradient(rgba(0, 0, 0, 0.3),
-      rgba(0, 0, 0, 0.1)), linear-gradient(to right, #0077ff, #00d4ff);
-  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
-  border-radius: 20px;
-  color: var(--white);
-  margin: 0 30px;
-  padding: 0 50px;
-}
-
-.pg {
-  padding-top: 40px;
-  padding-bottom: 40px;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 15px !important;
-}
-
-.product-categories h2{
-  font-size: 35px;
-}
-
-.product-categories .category-card {
-  color: #ffffff;
-  text-align: center !important;
-  min-width: 200px;
-  max-height: 200px;
-}
-
-.product-categories img {
-  width: 100px;
-  height: 100px;
-  border-radius: 8px;
+  @include me.mobile {
+    font-size: 25px;
+  }
 }
 
 .testimonials h2{
   font-size: 35px;
   margin-bottom: 60px;
+
+  @include me.tablet {
+    font-size: 30px;
+  }
+
+  @include me.mobile {
+    font-size: 25px; 
+  }
 }
 
 .testimonials blockquote {
@@ -98,6 +133,14 @@
   margin: 20px 0;
   padding-left: 25px;
   position: relative;
+
+  @include me.tablet {
+    font-size: 1rem;
+  }
+
+  @include me.mobile {
+    font-size: 0.875rem;
+  }
 }
 
 .testimonials blockquote::before {
@@ -107,5 +150,61 @@
   top: 0;
   bottom: 0;
   width: 5px;
-  background: linear-gradient(to bottom, #0077ff, #00d4ff); 
+  background: linear-gradient(to bottom, v.$primary-color, #00d4ff);
 }
+
+
+// TODO: Arrumar pois ao next/prev muda de posição
+.product-categories {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: row;
+    border-radius: 10px;
+    width: 58%;
+    padding: 16px;
+    background: 
+        linear-gradient(rgba(0, 0, 0, 0.3),
+        rgba(0, 0, 0, 0.1)), linear-gradient(to right, v.$primary-color, #00d4ff);
+
+    color: v.$white !important;
+
+    @include me.tablet {
+        width: 100%;
+    }
+
+    .display-categories {
+        transition: transform 0.5s ease-in-out;
+        display: flex;
+        gap: 10px;
+        flex-direction: row;
+        flex-wrap: nowrap;
+
+        & > div {
+            flex: 1 !important;
+            margin: 10px !important;
+        }
+        
+        img {
+            width: 7rem;
+            flex-shrink: 0;
+            filter: invert(1);
+
+            @include me.tablet {
+                width:4rem;
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -8,13 +8,8 @@ $conn = $db->getConnection();
 $response = ['steps' => [], 'errors' => []];
 
 $itemId = $_GET['itemId'] ?? null;
-$sql = "SELECT * FROM tb_comentarios";
+$sql = "SELECT c.id, c.idUsuario, c.idProduto, c.nota, c.titulo, c.comentario, c.data_comentario, c.ultima_atualizacao, u.nome AS nome_usuario FROM tb_comentarios AS c INNER JOIN tb_usuario AS u ON c.idUsuario = u.id;";
 $params = [];
-
-if ($itemId !== null) {
-    $sql .= " WHERE idProduto = ?";
-    $params = ['i', $itemId];
-}
 
 $result = ResponseHandler::executeQuery($conn, $sql, $params, $response, 'Erro ao executar query');
 
@@ -30,7 +25,8 @@ if ($result && $result->num_rows > 0) {
             'titulo' => $row['titulo'],
             'comentario' => $row['comentario'],
             'data_comentario' => $row['data_comentario'],
-            'ultima_atualizacao' => $row['ultima_atualizacao']
+            'ultima_atualizacao' => $row['ultima_atualizacao'],
+            'nome_usuario' => $row['nome_usuario']
         ];
     }
 }

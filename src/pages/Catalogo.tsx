@@ -163,41 +163,6 @@ const Catalogo = () => {
         );
     };
 
-    // const renderProductCards = () => {
-    //     const center = "d-flex align-items-center justify-content-center";
-    //     return (
-    //     <div className={`container ${loading ? center : ""}`}>
-    //         {loading 
-    //         ? renderLoading()
-    //         : <div className={`row ${center}`} style={{ position: "relative" }}>
-    //             {Array.isArray(products) 
-    //             ? products.map((produto, i) => (
-    //                 <ProductCard
-    //                     key={i}
-    //                     produto={produto}
-    //                     onAddToCart={async () => {
-    //                         if (user) {
-    //                             await CartService.addToCart(user.id, produto, 1);
-    //                             const newToast = {
-    //                                 id: Date.now(),
-    //                                 title: `Produto [${produto.id}] adicionado`,
-    //                                 description: "Produto inserido no carrinho",
-    //                                 color: "green",
-    //                                 png: "✅"
-    //                             };
-    //                             setToasts(prevToasts => [...prevToasts, newToast]);
-    //                             await fetchCartItems();
-    //                         }
-    //                     }}
-    //                 />
-    //             ))
-    //             : <p>Nenhum produto encontrado!</p>
-    //             }
-    //         </div>
-    //         }
-    //     </div>
-    // )}
-
     return (
         <main className="catalogo-container">
             <h1>Catálogo de Produtos</h1>

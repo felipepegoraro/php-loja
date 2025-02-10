@@ -7,6 +7,7 @@ import ProductCard from '../components/ProductCard';
 // import { useUser } from "../context/userContext";
 import {Dispatch, SetStateAction} from 'react';
 import SalesMetrics from '../types/SalesMetrics';
+import useWindowDimensions from '../types/useWindowDimensions';
 
 // TODO =====================
 // TODO
@@ -69,7 +70,7 @@ const showComentariosTemporariamenteSemConexaoComOBanco = (comments: Comentario[
 
 const showBanner = () => {
     return (
-        <header className="hero-section">
+        <div className="hero-section">
             <div className="container text-center">
                 <h1>Bem-vindo à Loja PHP</h1>
                 <p>Encontre os melhores produtos com os melhores preços.</p>
@@ -77,43 +78,61 @@ const showBanner = () => {
                     Ver Catálogo
                 </a>
             </div>
-        </header>
+        </div>
     );
 }
+
 
 const showCategoryList = (
     categories: ItemCategoria[],
     pos: { start: number, end: number },
     setPos: Dispatch<SetStateAction<{ start: number, end: number }>>,
-    numof: number = 5
+    numof: number
 ) => {
     if (categories.length <= 0 || !Array.isArray(categories)){
         return <p>nenhuma categoria cadastrada</p>
     }
 
-    const clen = categories.length;
+    const clen = categories.length; 
+
+    const prevButton = () => (
+        <button
+            className="btn btn-primary mx-2"
+            onClick={() => {
+                setPos(pos.start > 0
+                    ? { start: Math.max(pos.start - numof, 0), end: pos.start + pos.end}
+                    : { start: clen - numof, end: clen }
+                );
+            }}
+        >
+            Prev
+        </button>
+    )
+
+    const nextButton = () => (
+        <button
+            className="btn btn-primary mx-2"
+            onClick={() => {
+                setPos(pos.end < clen
+                    ? { start: pos.start + numof, end: pos.end + numof }
+                    : { start: 0, end: numof }
+                );
+            }}
+        >
+            Next
+        </button>
+    )
 
     return (
-        <section className="product-categories d-flex flex-row align-items-center">
-            <button
-                className="btn btn-primary mx-2"
-                onClick={() => {
-                    setPos(pos.start > 0
-                        ? { start: Math.max(pos.start - numof, 0), end: pos.end - numof }
-                        : { start: clen - numof, end: clen }
-                    );
-                }}
-            >
-                Prev
-            </button>
-
-            <div className="container pg">
+        <section className="product-categories">
+            {prevButton()}
+            <div>
                 <h2 className="text-center">Categorias</h2>
-                 <div className="d-flex flex-row justify-content-center">
-                    {categories.slice(pos.start, pos.end).map((categoria: ItemCategoria, index: number) => (
-                        <div className="col category-card text-center" key={index}>
+                <div className="display-categories">
+                    {categories.slice(pos.start, pos.start+numof).map((categoria: ItemCategoria, index: number) => (
+                        <div className="text-center" key={index}>
                             <img
-                                className="img-fluid mb-3"
+                                className=""
                                 src={categoria.foto ? `data:image/png;base64,${categoria.foto}` : "https://via.placeholder.com/300x200"}
                                 alt={categoria.nome}
                             />
@@ -122,18 +141,7 @@ const showCategoryList = (
                     ))}
                 </div>
             </div>
-
-            <button
-                className="btn btn-primary mx-2"
-                onClick={() => {
-                    setPos(pos.end < clen
-                        ? { start: pos.start + numof, end: pos.end + numof }
-                        : { start: 0, end: numof }
-                    );
-                }}
-            >
-                Next
-            </button>
+            {nextButton()}
         </section>
     );
 };
@@ -147,6 +155,8 @@ const Home = () => {
     const [categoryListPosition, setCategoryListPosition] = useState({ start: 0, end: 5 });
 
     const [comments, setComments] = useState<Comentario[]>([]);
+
+    const { width } = useWindowDimensions();
     const endpoint = process.env.REACT_APP_ENDPOINT;
 
     useEffect(() => {
@@ -193,8 +203,8 @@ const Home = () => {
                 ? showMaisVendido(topItems.length >= 3 ? topItems : products.slice(0,3))
                 : null
             }
-            {showCategoryList(categories, categoryListPosition, setCategoryListPosition)}
-            {showComentariosTemporariamenteSemConexaoComOBanco(comments)}
+            {width > 576 ? showCategoryList(categories, categoryListPosition, setCategoryListPosition, width >= 768 ? 5 : 3) : null}
+            {/*showComentariosTemporariamenteSemConexaoComOBanco(comments)*/}
         </main>
     );
 }

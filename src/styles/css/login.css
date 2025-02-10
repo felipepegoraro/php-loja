@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap");
 .login-container {
   display: flex;
   gap: 20px;
@@ -7,7 +10,12 @@
   background: linear-gradient(to right, #0077ff, #00d4ff);
 }
 
-@media screen and (max-width: 990px) {
+@media (max-width: 576px) {
+  .login-container {
+    flex-direction: column;
+  }
+}
+@media (max-width: 768px) {
   .login-container {
     flex-direction: column;
   }

@@ -1,0 +1,20 @@
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin input-styles($border-color, $focus-border-color) {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+        border-color: $focus-border-color;
+        outline: none;
+    }
+}

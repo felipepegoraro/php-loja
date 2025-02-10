@@ -1,3 +1,5 @@
+@use "variables" as v;
+
 /* Layout principal */
 .cart-container {
     display: flex;
@@ -9,7 +11,7 @@
 }
 
 .content {
-    background: linear-gradient(to right, #0077ff, #00d4ff);
+    background: linear-gradient(to right, v.$primary-color, #00d4ff);
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

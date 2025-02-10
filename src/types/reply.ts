@@ -5,6 +5,6 @@ export type Comentario = {
     nota: number;
     titulo: string;
     comentario: string;
-    dataComentario: string;
-    ultimaAtualizacao: string;
+    data_comentario: string;
+    ultima_atualizacao: string;
 };

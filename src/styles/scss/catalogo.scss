@@ -1,7 +1,8 @@
+@use "media" as me;
+
 /* Container principal */
 .catalogo-container {
     padding: 2rem;
-
 }
   
 /* Título */
@@ -55,19 +56,18 @@
 }
 
 /* Responsividade */
-@media (max-width: 767px) {
+@include me.tablet {
     .filters-search-bar {
-      flex-direction: column;
-      align-items: flex-start;
+        flex-direction: column;
+        align-items: flex-start;
     }
 
     .search-input input {
-      width: 100%;
+        width: 100%;
     }
 
     .filters select {
-      width: 100%;
-      margin-bottom: 1rem;
+        width: 100%;
+        margin-bottom: 1rem;
     }
 }
-

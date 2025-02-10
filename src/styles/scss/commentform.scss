@@ -1,0 +1,25 @@
+@use 'mixins' as mx;
+@use 'variables' as v;
+
+.comment-form {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .commmmmmmmmentario {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+    }
+}
+
+.input-field {
+    @include mx.input-styles(#ccc, v.$primary-color);
+}
+
+.textarea-field {
+    @include mx.input-styles(#ccc, v.$primary-color);
+    width: 100%;
+    height: 100px;
+}

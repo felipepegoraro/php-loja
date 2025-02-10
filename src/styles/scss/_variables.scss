@@ -1,0 +1,20 @@
+// CORES
+$primary-color: #0077ff;
+$secondary-color: #22d63d;
+$background-color: #e5e5e5;
+$blue-gradient: linear-gradient(to right, #0077ff, #00d4ff);
+$text-color: #333;
+$gray: #ccc;
+$black: #000000;
+$white: #ffffff;
+$red: #e74c3c;
+
+// FONTE
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+$font-poppins: "Poppins", sans-serif;
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+$font-roboto: "Roboto", sans-serif;
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
+$font-montserrat: "Montserrat", sans-serif;

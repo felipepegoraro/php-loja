@@ -1,3 +1,6 @@
+@use "variables" as v;
+@use "media" as me;
+
 .login-container {
     display: flex;
     gap: 20px;
@@ -5,12 +8,17 @@
     justify-content: center;
     
     align-items: center;
-    background: linear-gradient(to right, #0077ff, #00d4ff);
-  }
+    background: linear-gradient(to right, v.$primary-color, #00d4ff);
+}
 
-  @media screen and (max-width: 990px){
+@include me.mobile {
     .login-container{
-      flex-direction: column;
+        flex-direction: column;
     }
-  
-  }
+}
+
+@include me.tablet {
+    .login-container{
+        flex-direction: column;
+    }
+}

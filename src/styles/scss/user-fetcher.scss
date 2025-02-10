@@ -1,9 +1,16 @@
+@use "variables" as v;
+@use "media" as me;
+
 .userFetcher-container{
-    background-color: var(--white);
+    background-color: v.$white;
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     max-width: 400px;
     width: 100%;
     text-align: center;
+
+    /* @include me.mobile { */
+    /*     width: 50%; */
+    /* } */
 }
