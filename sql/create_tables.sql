@@ -24,7 +24,9 @@ CREATE TABLE IF NOT EXISTS tb_usuario (
     cidade VARCHAR(100),
     estado CHAR(2),
     admin BOOLEAN NOT NULL,
-    foto MEDIUMBLOB DEFAULT NULL
+    foto MEDIUMBLOB DEFAULT NULL,
+    token VARCHAR(255) DEFAULT NULL,
+    verificado BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS tb_categoria (

@@ -8,6 +8,7 @@ import Suporte from "./pages/Suporte";
 import Account from './pages/Account'; 
 import Settings from './pages/Settings';
 import DetalhesItem from "./pages/DetalhesItem";
+import AtivarEmail from "./pages/AtivarEmail";
 
 import NotFound from "./pages/NotFound";
 
@@ -34,6 +35,8 @@ const AppRoutes = () => {
 
                 <Route path="/Settings" element={<Settings/>}/>
                 <Route path="/Account" element={<Account/>}/>
+
+                <Route path="/AtivarEmail" element={<AtivarEmail/>}/>
                 
                 <Route path="/admin/Homepage" element={<AdminHomePage/>}/>
                 <Route path="/admin/RegisterProduct" element={<RegisterProductPage/>}/>

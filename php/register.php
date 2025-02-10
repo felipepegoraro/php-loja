@@ -1,6 +1,8 @@
 <?php
 $conn = include 'connect-db.php';
-$data = json_decode(file_get_contents("php://input"), true);  
+include 'send-email.php';
+
+$data = json_decode(file_get_contents("php://input"), true);
 
 try {
     if ($data) {
@@ -20,49 +22,42 @@ try {
                 'error' => 'O e-mail já está cadastrado.'
             ]);
         } else {
+            $token = bin2hex(random_bytes(32)); // token único
 
-            $user = (object) [
-                'nome' => $data['nome'],
-                'email' => $data['email'],
-                'dataNascimento' => $data['dataNascimento'],
-                'telefone' => $data['telefone'],
-                'senha' => password_hash($data['senha'], PASSWORD_DEFAULT), // Hash da senha
-                'cep' => $data['cep'],
-                'rua' => $data['rua'],
-                'numero' => $data['numero'],
-                'bairro' => $data['bairro'],
-                'complemento' => $data['complemento'],
-                'cidade' => $data['cidade'],
-                'estado' => $data['estado'],
-                'admin' => false
-            ];
+            $stmt = $conn->prepare("INSERT INTO tb_usuario (nome, email, data_nascimento, telefone, senha, cep, rua, numero, bairro, complemento, cidade, estado, admin, verificado, token)
+                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, false, ?)");
 
-
-            $stmt = $conn->prepare("INSERT INTO tb_usuario (nome, email, data_nascimento, telefone, senha, cep, rua, numero, bairro, complemento, cidade, estado, admin) 
-                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            
             $stmt->bind_param(
-                'ssssssssssssi',
-                $user->nome,
-                $user->email,
-                $user->dataNascimento,
-                $user->telefone,
-                $user->senha,
-                $user->cep,
-                $user->rua,
-                $user->numero,
-                $user->bairro,
-                $user->complemento,
-                $user->cidade,
-                $user->estado,
-                $user->admin
+                'ssssssssssssss',
+                $data['nome'],
+                $data['email'],
+                $data['dataNascimento'],
+                $data['telefone'],
+                password_hash($data['senha'], PASSWORD_DEFAULT),
+                $data['cep'],
+                $data['rua'],
+                $data['numero'],
+                $data['bairro'],
+                $data['complemento'],
+                $data['cidade'],
+                $data['estado'],
+                $data['admin'],
+		$token,
             );
 
             if ($stmt->execute()) {
-                echo json_encode([
-                    'success' => true,
-                    'message' => 'Cadastro realizado com sucesso!',
-                ]);
+                // enviar email de confirmacao
+                if (sendVerificationEmail($data['email'], $token)) {
+                    echo json_encode([
+                        'success' => true,
+                        'message' => 'Cadastro iniciado! Verifique seu e-mail para ativar sua conta.',
+                    ]);
+                } else {
+                    echo json_encode([
+                        'success' => false,
+                        'error' => 'Erro ao enviar e-mail de confirmação.',
+                    ]);
+                }
             } else {
                 echo json_encode([
                     'success' => false,

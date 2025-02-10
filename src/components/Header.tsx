@@ -71,6 +71,8 @@ const LoginButton = () => {
 };
 
 const Header = () => {
+  const { user } = useUser();
+  if (user && user.admin){}
 
   return (
     <header>
@@ -79,6 +81,12 @@ const Header = () => {
           <a className="navbar-brand" href="/">Loja-PHP</a>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+              { user && user.admin ?( 
+                <li className="nav-item">
+                  <a className="nav-link" href="/admin/Homepage">Admin</a> {/*trocar de nome*/}
+                </li> ) : null
+              }
+               
               <li className="nav-item">
                 <a className="nav-link" href="/Catalogo">Catálogo</a>
               </li>
