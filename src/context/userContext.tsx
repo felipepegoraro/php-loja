@@ -55,7 +55,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 
       checkSession();
     }
-  }, []);
+  }, [endpoint]);
 
   const updateUser = (newUser: SimplUser | null) => {
     setUserState(newUser);

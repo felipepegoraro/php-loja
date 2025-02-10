@@ -23,7 +23,7 @@ const UserFetcher = () => {
                 setError('Erro ao buscar os dados.');
                 console.error(err);
             });
-    }, []);
+    }, [endpoint]);
 
     return (
         <div className="userFetcher-container">

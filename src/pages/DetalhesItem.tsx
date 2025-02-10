@@ -16,7 +16,7 @@ const DetalhesItem = () => {
     const { itemId } = useParams<{ itemId: string }>(); // Captura o ID do item da URL
     const navigate = useNavigate();
     const [item, setItem] = useState<Item | null>(null);
-    const [cart, setCart] = useState<Cart[]>([]);
+    const [, setCart] = useState<Cart[]>([]);
     const [loading, setLoading] = useState(true);
     const [toasts, setToasts] = useState<ToastProps[]>([]);
 
@@ -45,7 +45,7 @@ const DetalhesItem = () => {
         };
 
         if (itemId) fetchItemDetails();
-    }, [itemId]);
+    }, [itemId, endpoint]);
 
     if (loading) {
         return <p>Carregando detalhes do item...</p>;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Cartfull } from "../types/cart";
 import "../styles/css/cartproductcard.css";
 import Utils from '../types/Utils';

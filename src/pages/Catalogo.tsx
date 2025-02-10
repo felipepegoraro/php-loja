@@ -16,7 +16,7 @@ const Catalogo = () => {
     const [ordem, setOrdem] = useState<string | null>(null);
     const [idcategoria, setIdcategoria] = useState<number | null>(null);
     const [searchTerm, setSearchTerm] = useState<string>('');
-    const [cart, setCart] = useState<Cart[]>([]);
+    const [, setCart] = useState<Cart[]>([]);
     const [toasts, setToasts] = useState<ToastProps[]>([]);
 
     const endpoint = process.env.REACT_APP_ENDPOINT;

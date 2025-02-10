@@ -17,7 +17,7 @@
 // }
 
 import type {Item} from './item';
-import type {Order, OrderItem} from './order';
+import type {Order} from './order'; //OrderItem
 import axios from 'axios';
 
 

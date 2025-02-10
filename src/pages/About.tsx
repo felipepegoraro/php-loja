@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 const About = () => {
     return (
         <main className="container">  

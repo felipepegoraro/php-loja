@@ -90,9 +90,12 @@ const LoginScreen = () => {
         Não tem uma conta? Cadastre-se
       </Link>
 
-      <a onClick={openForgotPasswordModal} className="btn-register">
-        Esqueci minha senha
-      </a>
+      <button onClick={openForgotPasswordModal} className="btn-register" style={{
+          border: '0px',
+          background: 'transparent'
+      }}>
+            Esqueci minha senha
+      </button>
 
       <Modal
         show={showForgotPassword}

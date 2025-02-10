@@ -54,6 +54,7 @@ const LoginButton = () => {
           <img
             src={`data:image/png;base64,${user.foto}` ?? 'https://via.placeholder.com/50'}
             className="profile-image"
+            alt={`${user.nome}'s foto`}
           />
         </div>
       </div>

@@ -35,7 +35,7 @@ const CommentContainer = (props: Props) => {
         };
 
         if (props.idProduto) fetchComments();
-    }, [props.idProduto]);
+    }, [props.idProduto, endpoint]);
 
     if (loading) return <p>Carregando comentários...</p>;
     if (error) return <p>{error}</p>;

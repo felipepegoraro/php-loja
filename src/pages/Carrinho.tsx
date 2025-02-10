@@ -35,7 +35,7 @@ const Carrinho = () => {
          } finally {
              setLoading(false);
          }
-     }, [isLoggedIn, user]);
+     }, [isLoggedIn, user, cart]);
 
     const calculateTotal = useCallback(() => {
         if (cart) {
@@ -122,7 +122,7 @@ const Carrinho = () => {
         if (user && isLoggedIn) {
             fetchCartItems();
         }
-    }, [user, fetchCartItems]);
+    }, [user, fetchCartItems, isLoggedIn]);
 
     useEffect(() => {
         calculateTotal();
