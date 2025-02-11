@@ -42,7 +42,7 @@ const Catalogo = () => {
                     params: { ordem, categoriaId: idcategoria, searchTerm },
                     withCredentials: true
                 });
-                setProducts(res.data);
+                setProducts(res.data.value);
                 setLoading(false);
             } catch (error) {
                 console.log("Erro ao buscar produtos:", error);
@@ -53,13 +53,12 @@ const Catalogo = () => {
             try {
                 const res = await axios.get(`${endpoint}/get-categorias.php`);
                 if (res.data.success){
-                    console.log("OK")
                     setCategories(res.data.value);
                 } else {
                     console.log("erro ao escolher categorias");
                 }
             } catch (error) {
-                console.log("Erro ao buscar categorias:", error);
+                console.log("erro ao buscar categorias:", error);
             }
         };
 
@@ -67,7 +66,6 @@ const Catalogo = () => {
         fetchProducts();
         fetchCartItems();
     }, [user, idcategoria, ordem, searchTerm, fetchCartItems, endpoint]); 
-
 
 
     // const getTotalCarrinho = () => {
@@ -183,4 +181,3 @@ const Catalogo = () => {
 };
 
 export default Catalogo;
-

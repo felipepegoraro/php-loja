@@ -1,21 +1,13 @@
 <?php
-$conn = include 'connect-db.php';
+include_once 'ResponseHandler.php';
+include_once 'Database.php';
 
-$query = "
-    SELECT 
-        i.id,
-        i.nome,
-        i.descricao,
-        i.preco,
-        i.foto,
-        s.nome AS subcategoria_nome,
-        c.nome AS categoria_nome
-    FROM
-        tb_itens i
-    INNER JOIN tb_subcategoria s ON i.idSubCategoria = s.id
-    INNER JOIN tb_categoria c ON s.idCategoria = c.id
-";
+$db = Database::getInstance();
+$conn = $db->getConnection();
 
+$response = ["steps" => [], "errors" => []];
+
+$query = "SELECT i.id, i.nome, i.descricao, i.preco, i.foto, s.nome AS subcategoria_nome, c.nome AS categoria_nome FROM tb_itens i INNER JOIN tb_subcategoria s ON i.idSubCategoria = s.id INNER JOIN tb_categoria c ON s.idCategoria = c.id";
 
 $categoriaId = isset($_GET['categoriaId']) ? (int)$_GET['categoriaId'] : 0;
 $ordem = isset($_GET['ordem']) ? $_GET['ordem'] : null;
@@ -31,30 +23,31 @@ if ($ordem === 'ASC' || $ordem === 'DESC') {
     $query .= " ORDER BY i.preco " . $ordem;
 }
 
-
-
-$stmt = $conn->prepare($query);
+$params = [];
 
 if ($categoriaId > 0 && !empty($searchTerm)) {
     $searchTerm = $searchTerm . '%';
-    $stmt->bind_param('is', $categoriaId, $searchTerm);
+    $params = ['is', $categoriaId, $searchTerm];
+   
 } elseif ($categoriaId > 0) {
-    $stmt->bind_param('i', $categoriaId);
+    $params = ['i', $categoriaId];
+
 } elseif (!empty($searchTerm)) {
     $searchTerm = $searchTerm . '%';
-    $stmt->bind_param('s', $searchTerm); 
+    $params = ['i', $searchTerm];
 }
 
-$stmt->execute();
-$result = $stmt->get_result();
-
-if (!$result) {
-    die('Erro na consulta: ' . $conn->error);
-}
+$result = ResponseHandler::executeQuery(
+    $conn,
+    $query,
+    $params,
+    $response,
+    "Erro a executar a query de busca"
+);
 
 $products = [];
 
-if ($result->num_rows > 0){
+if ($result && $result->num_rows > 0){
     while ($row = $result->fetch_assoc()){
         if (!empty($row['foto'])) {
             $row['foto'] = base64_encode($row['foto']);
@@ -73,11 +66,13 @@ if ($result->num_rows > 0){
         ];
     }
 } else {
-    echo json_encode(["error" => "Nenhum produto encontrado"]);
-    $conn->close();
-    exit();
+    ResponseHandler::jsonResponse(
+        false,
+        "Nenhum produto encontrado",
+        $response,
+        $result
+    );
 }
 
-echo json_encode($products, JSON_UNESCAPED_UNICODE);
-$conn->close();
+ResponseHandler::jsonResponse(true, "Produtos encontrados!", $response, $products);
 ?>

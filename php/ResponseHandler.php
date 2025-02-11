@@ -40,10 +40,9 @@ class ResponseHandler {
                 $types = array_shift($params);
                 $stmt->bind_param($types, ...$params);
             }
-            // $types = array_shift($params);
-            // $stmt->bind_param($types, ...$params);
             
             if ($stmt->execute()) {
+                $response['steps'][] = "query executada com sucesso"; 
                 if (stripos($query, "SELECT") === 0) {
                     return $stmt->get_result();
                 }
