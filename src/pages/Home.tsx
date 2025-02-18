@@ -154,7 +154,7 @@ const Home = () => {
     const [categories, setCategories] = useState<ItemCategoria[]>([]);
     const [categoryListPosition, setCategoryListPosition] = useState({ start: 0, end: 5 });
 
-    const [comments, setComments] = useState<Comentario[]>([]);
+    const [, setComments] = useState<Comentario[]>([]);
 
     const { width } = useWindowDimensions();
     const endpoint = process.env.REACT_APP_ENDPOINT;
@@ -175,7 +175,7 @@ const Home = () => {
                     axios.get(`${endpoint}/get-comments.php`,   { withCredentials: true })
                 ]);
 
-                const fetchedProducts = productsRes.data;
+                const fetchedProducts = productsRes.data.value;
                 const fetchedCategories = categoriesRes.data.value;
                 const fetchedComments = commentRes.data;
 

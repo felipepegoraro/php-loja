@@ -48,7 +48,7 @@ const LoginScreen = () => {
         });
         nav(result.user?.admin ? "/admin/Homepage" : "/Catalogo");
       } else {
-        setErrorMessage(result.error || 'Erro ao fazer login');
+        setErrorMessage(`erro: ${result.message}`);
       }
     } catch (error) {
       setErrorMessage('Erro na comunicação com o servidor.');

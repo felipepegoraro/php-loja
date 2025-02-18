@@ -1,7 +1,7 @@
 #!/bin/bash
 
 USER="ubuntu"
-SERVER="php-loja.com"
+SERVER=$PHPLOJAIP
 PEM_FILE="$1"
 WEB_DIR="/var/www/html"
 ENVPROD="./.env.production"

@@ -1,5 +1,6 @@
 <?php
 $conn = include 'connect-db.php';
+include 'verifica-ip.php';
 
 session_start();
 
@@ -14,7 +15,6 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-
     if (!$row['verificado']) {
         echo json_encode(["error" => "Por favor, verifique seu e-mail antes de fazer login."]);
     } else {
@@ -40,11 +40,17 @@ if ($result->num_rows > 0) {
                 ]
             ], JSON_UNESCAPED_UNICODE);
         } else {
-            echo json_encode(["error" => "Senha incorreta"]);
+            echo json_encode([
+                "success" => false,
+                "message" => "Senha incorreta"
+            ]);
         }
     }
 } else {
-    echo json_encode(["error" => "Usuario invalido"]);
+    echo json_encode([
+        "success" => false,
+        "message" => "Usuario invalido"
+    ]);
 }
 
 $stmt->close();
