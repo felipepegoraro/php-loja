@@ -40,6 +40,12 @@ const CommentForm = (props: CommentFormProps) => {
             return;
         }
 
+        if (Number(nota) < 0 || Number(nota) > 5 || 
+            isNaN(parseFloat(nota))){
+            setError('Nota inválida');
+            return;
+        }
+
         try {
             const response = await axios.post(`${endpoint}/add-comments.php`, {
                 idUsuario: user!.id,
@@ -71,8 +77,7 @@ const CommentForm = (props: CommentFormProps) => {
                         <label>Nota:</label>
                         <input
                             className={'input-field'}
-                            type="number"
-                            step="0.1"
+                            type="text"
                             name="nota"
                             value={formData.nota}
                             onChange={handleChange}

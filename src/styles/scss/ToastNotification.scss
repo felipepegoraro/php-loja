@@ -1,9 +1,11 @@
+@use "media" as me;
+
 .notification-container {
   display: block;
   position: fixed !important;
   top: 75px !important;
   left: 90% !important;
-  transform: translateX(-50%);
+  transform: translateX(-40%);
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -12,27 +14,37 @@
   z-index: 9999;
 }
 
+@include me.tablet {
+    .notification-container { transform: translateX(-80%); }
+}
+
+@include me.mobile {
+    .notification-container { transform: translateX(-90%); }
+}
+
 .notification-container.visible {
   opacity: 1;
   visibility: visible;
 }
 
 .notification {
-  background-color: #fff;
-  border-radius: 10px;
-  width: 300px;
-  padding: 15px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+    background-color: #fff;
+    border-radius: 10px;
+    width: 300px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .notification-header {
-  display: flex;
-  align-items: center;
-  font-weight: bold;
-  padding-bottom: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    padding: 6px;
+    margin-bottom: 10px;
 }
 
 .notification-header .emoji {
@@ -41,6 +53,7 @@
 
 .notification-header .title {
   font-size: 1.2rem;
+  margin-bottom: -1px;
 }
 
 .description {
@@ -52,17 +65,12 @@
   height: 5px;
   background-color: #eee;
   border-radius: 5px;
-  margin-top: 10px;
   animation: progress 1s linear forwards;
 }
 
 @keyframes progress {
-  from {
-    width: 100%;
-  }
-  to {
-    width: 0%;
-  }
+    from { width: 100%; }
+    to { width: 0%; }
 }
 
 .notification-container .red { background-color: #f44336; }
@@ -70,4 +78,3 @@
 .notification-container .green { background-color: #4CAF50; }
 .notification-container .yellow { background-color: #FFEB3B; }
 .notification-container .purple { background-color: #9C27B0; }
-

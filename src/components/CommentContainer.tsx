@@ -1,64 +1,48 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import type {Comentario} from '../types/reply';
+import type {CommentExtended} from '../types/reply';
 import '../styles/css/commentcontainer.css'
 
 interface Props {
-    idProduto: number;
+    comments: CommentExtended[];
 }
-
-type CommentExtended = Comentario & {nome_usuario: string}
 
 // corrigir data
 
 const CommentContainer = (props: Props) => {
-    const [comments, setComments] = useState<CommentExtended[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
-
     const endpoint = process.env.REACT_APP_ENDPOINT;
-
-    useEffect(() => {
-        const fetchComments = async () => {
-            try {
-                const response = await axios.get(`${endpoint}/get-comments.php?itemId=${props.idProduto}`);
-                console.log(response);
-                if (response.data.success) {
-                    setComments(response.data.value);
-                } else {
-                    setError(response.data.message || 'Erro ao buscar comentários.');
-                }
-            } catch (err) {
-                setError('Erro ao buscar comentários.');
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        if (props.idProduto) fetchComments();
-    }, [props.idProduto, endpoint]);
-
-    if (loading) return <p>Carregando comentários...</p>;
-    if (error) return <p>{error}</p>;
 
     return (
         <div className="comment-container">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
             <div className="comment-header-title">
                 <h3>Comentários:</h3>
             </div>
 
             <div className="comment-all-comments">
-                {comments.length > 0 ? (
+                {props.comments.length > 0 ? (
                     <ul>
-                      {comments.map((comment) => (
+                      {props.comments.map((comment) => (
                         <div key={comment.id} className="comment-wrapper">
                           <li className="comment">
-                            <p className="comment-title">{comment.titulo}</p>
+                            <div className="comment-title-container">
+                                <p className="comment-title">{comment.titulo}</p>
+
+                                <div className="comment-stars">
+                                    {[...Array(5)].map((_, index) => (
+                                        <span key={index} 
+                                            className={`fa fa-star ${index < comment.nota ? "checked" : ""}`}>
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+
                             <p className="comment-body">{comment.comentario}</p>
                             <p className="comment-footer">Por {comment.nome_usuario} ({new Date(comment.data_comentario).toLocaleString()})</p>
+
                           </li>
-                          {comments.length > 1 ? <div className="comment-divisor"></div> : null}
+                          {props.comments.length > 1 ? <div className="comment-divisor"></div> : null}
                         </div>
                       ))}
                     </ul>

@@ -1,6 +1,7 @@
 <?php 
 include_once 'ResponseHandler.php';
 include_once 'Database.php';
+include_once 'verifica-ip.php';
 
 $db = Database::getInstance();
 $conn = $db->getConnection();
@@ -42,6 +43,24 @@ $result = ResponseHandler::executeQuery($conn, $sql, $params, $response, "Erro a
 // Verificando se a inserção foi bem-sucedida
 if ($result === null) {
     $response['steps'][] = '[5] Inserção bem-sucedida';
+
+    $sql = "
+    UPDATE tb_itens i
+    SET i.nota = (
+        SELECT AVG(c.nota)
+        FROM tb_comentarios c
+        WHERE c.idProduto = i.id
+    )
+    WHERE i.id = ?
+    ";
+
+    ResponseHandler::executeQuery(
+        $conn,
+        $sql,
+        ['d', $data['idProduto']],
+        $response, "Erro ao atualizar nota"
+    );
+
     ResponseHandler::jsonResponse(true, "Comentário inserido com sucesso", $response);
 } else {
     $response['errors'][] = '[3] Erro desconhecido durante a inserção';

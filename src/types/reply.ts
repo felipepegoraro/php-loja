@@ -8,3 +8,6 @@ export type Comentario = {
     data_comentario: string;
     ultima_atualizacao: string;
 };
+
+
+export type CommentExtended = Comentario & {nome_usuario: string}

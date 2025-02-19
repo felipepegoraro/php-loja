@@ -17,6 +17,7 @@ export type Item = {
     descricao: string;
     foto: File | Buffer | null;
     preco: number;
+    nota: number;
     categoria: string;
     subcategoria: string;
 };

@@ -3,7 +3,7 @@
   position: fixed !important;
   top: 75px !important;
   left: 90% !important;
-  transform: translateX(-50%);
+  transform: translateX(-40%);
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -12,6 +12,16 @@
   z-index: 9999;
 }
 
+@media (max-width: 768px) {
+  .notification-container {
+    transform: translateX(-80%);
+  }
+}
+@media (max-width: 576px) {
+  .notification-container {
+    transform: translateX(-90%);
+  }
+}
 .notification-container.visible {
   opacity: 1;
   visibility: visible;
@@ -29,10 +39,12 @@
 }
 
 .notification-header {
+  border-radius: 5px;
   display: flex;
   align-items: center;
   font-weight: bold;
-  padding-bottom: 10px;
+  padding: 6px;
+  margin-bottom: 10px;
 }
 
 .notification-header .emoji {
@@ -41,6 +53,7 @@
 
 .notification-header .title {
   font-size: 1.2rem;
+  margin-bottom: -1px;
 }
 
 .description {
@@ -52,7 +65,6 @@
   height: 5px;
   background-color: #eee;
   border-radius: 5px;
-  margin-top: 10px;
   animation: progress 1s linear forwards;
 }
 

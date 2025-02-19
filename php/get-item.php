@@ -18,6 +18,7 @@ $query = "
         i.descricao,
         i.preco,
         i.foto,
+        i.nota,
         s.nome AS subcategoria_nome,
         c.nome AS categoria_nome
     FROM
@@ -60,6 +61,7 @@ $response = [
     "descricao" => $item['descricao'],
     "preco" => $item['preco'],
     "foto" => $item['foto'],
+    "nota" => $item['nota'],
     "categoria" => $item['categoria_nome'],
     "subcategoria" => $item['subcategoria_nome']
 ];

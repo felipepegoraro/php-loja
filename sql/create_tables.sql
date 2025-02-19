@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS tb_itens (
     descricao TEXT,
     foto MEDIUMBLOB,
     preco DECIMAL(10, 2) NOT NULL,
+    nota DECIMAL(3,1) NOT NULL DEFAULT 0.0,
     FOREIGN KEY (idSubCategoria) REFERENCES tb_subcategoria(id)
 );
 

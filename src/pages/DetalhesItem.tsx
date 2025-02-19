@@ -8,6 +8,7 @@ import { useUser } from '../context/userContext';
 import CartService from '../services/CartService';
 import ToastNotification, { ToastProps } from '../components/ToastNofitication';
 import Utils from "../types/Utils";
+import {CommentExtended} from '../types/reply';
 
 import CommentContainer from '../components/CommentContainer';
 import CommentForm from '../components/CommentForm';
@@ -19,6 +20,7 @@ const DetalhesItem = () => {
     const [, setCart] = useState<Cart[]>([]);
     const [loading, setLoading] = useState(true);
     const [toasts, setToasts] = useState<ToastProps[]>([]);
+    const [comments, setComments] = useState<CommentExtended[]>([]);
 
     const endpoint = process.env.REACT_APP_ENDPOINT;
     const { user } = useUser();
@@ -29,6 +31,27 @@ const DetalhesItem = () => {
             setCart(fetchedCart.filter((i: Cart) => String(i.idUsuario) === String(user.id)));
         }
     };
+
+    useEffect(() => {
+        const fetchComments = async () => {
+            try {
+                const response = await axios.get(`${endpoint}/get-comments.php?itemId=${itemId}`);
+                console.log(response);
+                if (response.data.success) {
+                    setComments(response.data.value);
+                } else {
+                        console.log('Erro ao buscar comentários.');
+                }
+            } catch (err) {
+                console.log('Erro ao buscar comentários.');
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (itemId) fetchComments();
+    }, [itemId, endpoint]);
 
     useEffect(() => {
         const fetchItemDetails = async () => {
@@ -81,8 +104,12 @@ const DetalhesItem = () => {
 
                         <div className="item-rating">
                             <h3>Avaliações:</h3>
-                            <p>⭐⭐⭐⭐⭐ (5/5)</p>
-                            <p>Baseado em 100 avaliações de clientes.</p>
+                            {[...Array(5)].map((_, index) => (
+                                <span key={index} 
+                                    className={`fa fa-star ${index < item.nota ? "checked" : ""}`}>
+                                </span>
+                            ))}
+                            <p>Baseado em {comments.length} avaliações de clientes.</p>
                         </div>
 
                         <div className="item-buttons">
@@ -93,7 +120,7 @@ const DetalhesItem = () => {
                                         await CartService.addToCart(user.id, item, 1);
                                         const newToast = {
                                             id: Date.now(),
-                                            title: `Produto [${item.id}] adicionado`,
+                                            title: `Produto adicionado`,
                                             description: "Produto inserido no carrinho",
                                             color: "green",
                                             png: "✅"
@@ -111,7 +138,7 @@ const DetalhesItem = () => {
                 </div>
 
                 <CommentForm idProduto={item.id}/>
-                <CommentContainer idProduto={item.id}/>
+                <CommentContainer comments={comments}/>
 
                 {toasts.map(toast => (
                     <ToastNotification

@@ -1,0 +1,69 @@
+@use "variables" as v;
+@use "media" as me;
+
+.comment-container {
+    background: lighten(v.$background-color, 5%);
+    border-radius: 15px;
+
+    padding: 30px;
+
+
+    .comment-header-title {
+        margin-bottom: 30px;
+        font-size: 1.6rem;
+    }
+
+    @include me.mobile {
+        padding: 20px;
+        margin: -10px !important;
+    }
+
+    .comment-all-comments {
+        @include me.mobile {
+            ul {
+                list-style: none;
+                padding-left: 0px;
+                margin-left: 0px;
+            }
+        }
+
+        .comment-wrapper {
+            margin: 20px 0px;
+
+            .comment {
+                margin-bottom: 20px;
+
+                .comment-title-container {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    .comment-title {
+                          font-size: 1.3rem;
+                          margin-bottom: 2px;
+                    }
+
+                    .comment-stars .checked { color: orange; }
+                }
+
+                .comment-body {
+                    font-size: 1rem;
+                    margin-bottom: 12px;
+                }
+
+                .comment-footer {
+                    font-size: 0.875rem;
+                    margin-top: 16px;
+                }
+            }
+
+            .comment-divisor {
+                height: 2px;
+                width: 25%;
+                background-color: v.$background-color;
+                margin: 0px 0px 0px 35%;
+                border-radius: 20px;
+            }
+        }
+    }
+}

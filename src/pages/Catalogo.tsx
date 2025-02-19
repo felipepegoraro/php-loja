@@ -142,7 +142,7 @@ const Catalogo = () => {
                                         await CartService.addToCart(user.id, produto, 1);
                                         const newToast = {
                                             id: Date.now(),
-                                            title: `Produto [${produto.id}] adicionado`,
+                                            title: `Produto adicionado`,
                                             description: "Produto inserido no carrinho",
                                             color: "green",
                                             png: "✅",

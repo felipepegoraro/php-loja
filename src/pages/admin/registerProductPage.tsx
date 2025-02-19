@@ -18,16 +18,16 @@ const RegisterProductPage = () => {
         descricao: '',
         foto: null,
         preco: 0,
+        nota: 0.0,
         categoria: '',
         subcategoria: '',
     });
 
     useEffect(() => {
-
+            //????
       }, [])
 
     let endpoint = process.env.REACT_APP_ENDPOINT;
-    // if (endpoint === "private") endpoint = "/" + endpoint
 
       useEffect(() => {
           setLoading(true);
@@ -149,6 +149,7 @@ const RegisterProductPage = () => {
             descricao: '',
             foto: null,
             preco: 0,
+            nota: 0.0,
             categoria: '',
             subcategoria: '',
         })

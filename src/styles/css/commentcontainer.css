@@ -1,0 +1,60 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap");
+.comment-container {
+  background: rgb(241.75, 241.75, 241.75);
+  border-radius: 15px;
+  padding: 30px;
+}
+.comment-container .comment-header-title {
+  margin-bottom: 30px;
+  font-size: 1.6rem;
+}
+@media (max-width: 576px) {
+  .comment-container {
+    padding: 20px;
+    margin: -10px !important;
+  }
+}
+@media (max-width: 576px) {
+  .comment-container .comment-all-comments ul {
+    list-style: none;
+    padding-left: 0px;
+    margin-left: 0px;
+  }
+}
+.comment-container .comment-all-comments .comment-wrapper {
+  margin: 20px 0px;
+}
+.comment-container .comment-all-comments .comment-wrapper .comment {
+  margin-bottom: 20px;
+}
+.comment-container .comment-all-comments .comment-wrapper .comment .comment-title-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.comment-container .comment-all-comments .comment-wrapper .comment .comment-title-container .comment-title {
+  font-size: 1.3rem;
+  margin-bottom: 2px;
+}
+.comment-container .comment-all-comments .comment-wrapper .comment .comment-title-container .comment-stars .checked {
+  color: orange;
+}
+.comment-container .comment-all-comments .comment-wrapper .comment .comment-body {
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+.comment-container .comment-all-comments .comment-wrapper .comment .comment-footer {
+  font-size: 0.875rem;
+  margin-top: 16px;
+}
+.comment-container .comment-all-comments .comment-wrapper .comment-divisor {
+  height: 2px;
+  width: 25%;
+  background-color: #e5e5e5;
+  margin: 0px 0px 0px 35%;
+  border-radius: 20px;
+}
+
+/*# sourceMappingURL=commentcontainer.css.map */
