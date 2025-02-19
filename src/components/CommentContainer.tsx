@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import type {Comentario} from '../types/reply';
+import '../styles/css/commentcontainer.css'
 
 interface Props {
     idProduto: number;
@@ -8,10 +9,8 @@ interface Props {
 
 type CommentExtended = Comentario & {nome_usuario: string}
 
-// modificar para ficar igual é no home
-// estrelas no lugar da nota
-// nome no lugar do id
 // corrigir data
+
 const CommentContainer = (props: Props) => {
     const [comments, setComments] = useState<CommentExtended[]>([]);
     const [loading, setLoading] = useState(true);
@@ -45,21 +44,28 @@ const CommentContainer = (props: Props) => {
 
     return (
         <div className="comment-container">
-            <h3>Comentários:</h3>
-            {comments.length > 0 ? (
-                <ul>
-                    {comments.map((comment: CommentExtended) => (
-                        <li key={comment.id} className="comment">
-                            <strong>{comment.titulo}</strong>
-                            <p>{comment.comentario}</p>
-                            <small> Por {comment.nome_usuario} ({new Date(comment.data_comentario).toLocaleString()})
-                            </small>
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <p>Sem comentários para este item.</p>
-            )}
+            <div className="comment-header-title">
+                <h3>Comentários:</h3>
+            </div>
+
+            <div className="comment-all-comments">
+                {comments.length > 0 ? (
+                    <ul>
+                      {comments.map((comment) => (
+                        <div key={comment.id} className="comment-wrapper">
+                          <li className="comment">
+                            <p className="comment-title">{comment.titulo}</p>
+                            <p className="comment-body">{comment.comentario}</p>
+                            <p className="comment-footer">Por {comment.nome_usuario} ({new Date(comment.data_comentario).toLocaleString()})</p>
+                          </li>
+                          {comments.length > 1 ? <div className="comment-divisor"></div> : null}
+                        </div>
+                      ))}
+                    </ul>
+                ) : (
+                    <p>Sem comentários para este item.</p>
+                )}
+            </div>
         </div>
     );
 };

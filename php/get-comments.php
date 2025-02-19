@@ -8,8 +8,8 @@ $conn = $db->getConnection();
 $response = ['steps' => [], 'errors' => []];
 
 $itemId = $_GET['itemId'] ?? null;
-$sql = "SELECT c.id, c.idUsuario, c.idProduto, c.nota, c.titulo, c.comentario, c.data_comentario, c.ultima_atualizacao, u.nome AS nome_usuario FROM tb_comentarios AS c INNER JOIN tb_usuario AS u ON c.idUsuario = u.id;";
-$params = [];
+$sql = "SELECT c.id, c.idUsuario, c.idProduto, c.nota, c.titulo, c.comentario, c.data_comentario, c.ultima_atualizacao, u.nome AS nome_usuario FROM tb_comentarios AS c INNER JOIN tb_usuario AS u ON c.idUsuario = u.id WHERE c.idProduto = ?;";
+$params = ["i", $itemId];
 
 $result = ResponseHandler::executeQuery($conn, $sql, $params, $response, 'Erro ao executar query');
 
