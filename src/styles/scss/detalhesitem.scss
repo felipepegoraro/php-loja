@@ -1,98 +1,110 @@
 .checked { color: orange; }
 
-.dt{
+.dt {
     background-color: #ffff;
 }
 
 .detalhes-item-container {
     padding: 20px;
-    position: relative; /* Necessário para posicionar o botão de voltar */
-  }
-  
-  .voltar {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
+    .list-comment-buttons {
+        gap: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+    }
+}
+
+.voltar {
     position: absolute;
-    top: 20px;
+    top: 35px;
     right: 20px;
-    z-index: 10; /* Garante que o botão fique acima de outros elementos */
-  }
-  
-  .detalhes-item-layout {
+    z-index: 10;
+}
+
+.detalhes-item-layout {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-  }
-  
-  .item-image-container {
+    gap: 10px;
+}
+
+.item-image-container {
     flex: 1;
     max-width: 90%;
-    margin-right: 20px; /* Reduzindo a margem para aproximar os elementos */
-  }
-  
-  .item-info-container {
+}
+
+.item-info-container {
     flex: 2;
     max-width: 100%;
-  }
-  
-  .item-image {
+    height: fit-content;
+}
+
+.comment-container {}
+
+.form-comments { 
+    border-radius: 15px;
+    padding: 30px; 
+    border: 1px solid lighten(gray, 40%);
+}
+
+.item-image {
     width: 100%;
-    height: 450px;
+    min-height: 400px;
+    max-width: 100%;
     object-fit: contain;
     border-radius: 10px;
-  }
-  
-  .item-name {
+}
+
+.item-name {
     font-size: 4rem;
     font-weight: bold;
-  }
-  
-  .item-price {
+}
+
+.item-price {
     font-size: 2rem;
     font-weight: bold;
     color: #28a745;
-    margin-bottom: 1.5rem;
-  }
-  
-  .item-description {
-    margin-top: 10px;
-  }
-  
-  .item-rating {
-    margin-top: 20px;
-  }
-  
-  .item-buttons {
-    margin-top: 20px;
-  }
-  
-  .adicionar-carrinho {
+}
+
+.item-description {}
+.item-rating {}
+.item-buttons {}
+
+.adicionar-carrinho {
     width: 100%;
     padding: 12px !important;
     font-size: 1rem !important;
     cursor: pointer;
     margin-top: 20px;
-  }
-  
-  @media (max-width: 768px) {
+}
+
+@media (max-width: 768px) {
     .detalhes-item-layout {
-      flex-direction: column;
+        flex-direction: column;
     }
-  
+
     .item-image-container {
-      max-width: 100%;
-      margin-right: 0;
+        max-width: 100%;
+        margin-right: 0;
     }
-  
+
     .item-info-container {
-      max-width: 100%;
-      padding-left: 0;
+        max-width: 100%;
+        padding-left: 0;
     }
-  
+
     .item-image {
-      height: 250px; /* Imagem um pouco menor em telas pequenas */
+        height: 250px;
     }
-  
+
     .adicionar-carrinho {
-      width: 100%; /* Botão ocupa toda a largura em telas pequenas */
+        width: 100%;
     }
-  }
-  
+}
+

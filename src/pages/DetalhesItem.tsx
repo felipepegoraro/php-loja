@@ -1,29 +1,34 @@
-import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/css/detalhesitem.css";
-import type { Item } from "../types/item";
-import type { Cart } from '../types/cart';
+
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+
 import { useUser } from '../context/userContext';
 import CartService from '../services/CartService';
-import ToastNotification, { ToastProps } from '../components/ToastNofitication';
+
 import Utils from "../types/Utils";
+import type { Item } from "../types/item";
+import type { Cart } from '../types/cart';
 import {CommentExtended} from '../types/reply';
 
 import CommentContainer from '../components/CommentContainer';
 import CommentForm from '../components/CommentForm';
+import ToastNotification, { ToastProps } from '../components/ToastNofitication';
+
+const MIN_NUM_COMMENTS = 3;
 
 const DetalhesItem = () => {
-    const { itemId } = useParams<{ itemId: string }>(); // Captura o ID do item da URL
-    const navigate = useNavigate();
     const [item, setItem] = useState<Item | null>(null);
     const [, setCart] = useState<Cart[]>([]);
     const [loading, setLoading] = useState(true);
     const [toasts, setToasts] = useState<ToastProps[]>([]);
-    const [comments, setComments] = useState<CommentExtended[]>([]);
+    const [comments, setComments] = useState<[number, CommentExtended[]]>([MIN_NUM_COMMENTS,[]]);
 
-    const endpoint = process.env.REACT_APP_ENDPOINT;
     const { user } = useUser();
+    const navigate = useNavigate();
+    const { itemId } = useParams<{ itemId: string }>();
+    const endpoint = process.env.REACT_APP_ENDPOINT;
 
     const fetchCartItems = async () => {
         if (user) {
@@ -38,7 +43,7 @@ const DetalhesItem = () => {
                 const response = await axios.get(`${endpoint}/get-comments.php?itemId=${itemId}`);
                 console.log(response);
                 if (response.data.success) {
-                    setComments(response.data.value);
+                    setComments([comments[0], response.data.value]);
                 } else {
                         console.log('Erro ao buscar comentários.');
                 }
@@ -70,13 +75,8 @@ const DetalhesItem = () => {
         if (itemId) fetchItemDetails();
     }, [itemId, endpoint]);
 
-    if (loading) {
-        return <p>Carregando detalhes do item...</p>;
-    }
-
-    if (!item) {
-        return <p>Item não encontrado.</p>;
-    }
+    if (loading) return <p>Carregando detalhes do item...</p>;
+    if (!item) return <p>Item não encontrado.</p>;
 
     return (
         <div className="dt container">
@@ -109,7 +109,7 @@ const DetalhesItem = () => {
                                     className={`fa fa-star ${index < item.nota ? "checked" : ""}`}>
                                 </span>
                             ))}
-                            <p>Baseado em {comments.length} avaliações de clientes.</p>
+                            <p>Baseado em {comments[1].length} avaliações de clientes.</p>
                         </div>
 
                         <div className="item-buttons">
@@ -127,7 +127,6 @@ const DetalhesItem = () => {
                                         };
                                         setToasts(prevToasts => [...prevToasts, newToast]);
                                         await fetchCartItems();
-                                        // aqui deve recarregar os comentarios!
                                     }
                                 }}
                             >
@@ -138,7 +137,21 @@ const DetalhesItem = () => {
                 </div>
 
                 <CommentForm idProduto={item.id}/>
-                <CommentContainer comments={comments}/>
+                <CommentContainer comments={comments[1]} index={comments[0]}/>
+
+                {comments[1].length > MIN_NUM_COMMENTS ? (<div className="list-comment-buttons">
+                    <button 
+                        className="btn btn-primary"
+                        onClick={() => setComments(([index, comments]) => [index + MIN_NUM_COMMENTS, comments])}>
+                        Ver mais comentários
+                    </button>
+
+                    <button 
+                        className="btn btn-secondary"
+                        onClick={() => setComments(([, comments]) => [MIN_NUM_COMMENTS, comments])}>
+                        Minimizar comentários
+                    </button>
+                </div>) : null }
 
                 {toasts.map(toast => (
                     <ToastNotification
@@ -151,10 +164,7 @@ const DetalhesItem = () => {
                     />
                 ))}
             </div>
-
-
         </div>
-
     );
 };
 

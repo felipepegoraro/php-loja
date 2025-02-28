@@ -33,7 +33,7 @@ if (!isset($data['idUsuario'], $data['idProduto'], $data['nota'], $data['titulo'
 }
 
 // Preparando a query SQL
-$sql = "INSERT INTO tb_comentarios (idUsuario, idProduto, nota, titulo, comentario) VALUES (?, ?, ?, ?, ?)";
+$sql = "INSERT INTO tb_comentarios (idUsuario, idProduto, nota, titulo, comentario, data_comentario) VALUES (?, ?, ?, ?, ?, UTC_TIMESTAMP())";
 $params = ['iidss', $data['idUsuario'], $data['idProduto'], $data['nota'], $data['titulo'], $data['comentario']];
 $response['steps'][] = '[4] Query SQL preparada';
 

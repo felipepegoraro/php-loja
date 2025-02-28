@@ -1,20 +1,18 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
 import type {CommentExtended} from '../types/reply';
 import '../styles/css/commentcontainer.css'
+import Utils from '../types/Utils';
 
-interface Props {
+interface CommentProps {
+    index: number;
     comments: CommentExtended[];
 }
 
-// corrigir data
-
-const CommentContainer = (props: Props) => {
-    const endpoint = process.env.REACT_APP_ENDPOINT;
+const CommentContainer = (props: CommentProps) => {
+    const FONT_URL = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
 
     return (
         <div className="comment-container">
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+            <link rel="stylesheet" href={FONT_URL}/>
 
             <div className="comment-header-title">
                 <h3>Comentários:</h3>
@@ -23,7 +21,7 @@ const CommentContainer = (props: Props) => {
             <div className="comment-all-comments">
                 {props.comments.length > 0 ? (
                     <ul>
-                      {props.comments.map((comment) => (
+                      {props.comments.map((comment, i) => i < props.index ? (
                         <div key={comment.id} className="comment-wrapper">
                           <li className="comment">
                             <div className="comment-title-container">
@@ -39,12 +37,14 @@ const CommentContainer = (props: Props) => {
                             </div>
 
                             <p className="comment-body">{comment.comentario}</p>
-                            <p className="comment-footer">Por {comment.nome_usuario} ({new Date(comment.data_comentario).toLocaleString()})</p>
-
+                            <p className="comment-footer">
+                                Por {comment.nome_usuario} 
+                                ({Utils.convertData(comment.data_comentario)})
+                            </p>
                           </li>
                           {props.comments.length > 1 ? <div className="comment-divisor"></div> : null}
                         </div>
-                      ))}
+                      ): null)}
                     </ul>
                 ) : (
                     <p>Sem comentários para este item.</p>

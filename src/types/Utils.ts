@@ -5,4 +5,10 @@ export default class Utils {
             currency: 'BRL',
         }).format(price);
     };
+
+    public static convertData = (utcDate: string) => {
+        const IDIOMA = navigator.language;
+        const FUSOHORARIO = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        return new Date(utcDate + "Z").toLocaleString(IDIOMA, {timeZone: FUSOHORARIO});
+    }
 }

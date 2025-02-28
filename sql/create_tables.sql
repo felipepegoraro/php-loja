@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS tb_comentarios (
     nota FLOAT(2,1) NOT NULL CHECK (nota BETWEEN 0 AND 5),
     titulo VARCHAR(64) NOT NULL,
     comentario TEXT NOT NULL,
-    data_comentario DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    data_comentario DATETIME NOT NULL
     ultima_atualizacao DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (idUsuario) REFERENCES tb_usuario(id),
     FOREIGN KEY (idProduto) REFERENCES tb_itens(id)

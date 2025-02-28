@@ -67,7 +67,7 @@ const CommentForm = (props: CommentFormProps) => {
     };
 
     return (
-        <div>
+        <div className="form-comments">
             <h2>Enviar Comentário</h2>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {success && <p style={{ color: 'green' }}>{success}</p>}
