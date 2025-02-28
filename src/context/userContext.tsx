@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
-interface SimplUser {
+export interface SimplUser {
     id: number;
     nome: string;
     email: string;

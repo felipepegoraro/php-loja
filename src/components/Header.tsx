@@ -51,7 +51,7 @@ const LoginButton = () => {
         </div>
         <div className="profile-button" onClick={toggleDropdown}>
           <img
-            src={`data:image/png;base64,${user.foto}` ?? 'https://via.placeholder.com/50'}
+            src={`data:image/png;base64,${user.foto}`}
             className="profile-image"
             alt={`${user.nome}'s foto`}
           />

@@ -1,0 +1,23 @@
+.account-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.account-session {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 30px;
+  padding: 0px 30px;
+}
+@media (max-width: 576px) {
+  .account-session {
+    flex-direction: column;
+    padding: 0px;
+    gap: 30px;
+  }
+}
+
+/*# sourceMappingURL=account.css.map */

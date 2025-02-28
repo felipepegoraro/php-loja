@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useUser } from '../context/userContext';
+import { useUser, SimplUser } from '../context/userContext';
+import '../styles/css/accountform.css';
 
 interface FormDataState {
     id: number;
     nome: string;
-    email: string;
     senha: string;
     foto?: File | null;
 }
 
 const AccountForm: React.FC = () => {
-    const { user } = useUser();
+    const { user, setUser } = useUser();
 
     const [formData, setFormData] = useState<FormDataState>({
         id: user?.id ?? 0,
         nome: user?.nome || '',
-        email: '',
         senha: '',
         foto: null,
     });
@@ -30,6 +29,7 @@ const AccountForm: React.FC = () => {
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0] || null;
+        console.log('Arquivo selecionado:', file);
         setFormData({ ...formData, foto: file });
     };
 
@@ -39,23 +39,49 @@ const AccountForm: React.FC = () => {
         const formDataToSend = new FormData();
         formDataToSend.append('id', String(formData.id));
         if (formData.nome) formDataToSend.append('nome', formData.nome);
-        if (formData.email) formDataToSend.append('email', formData.email);
         if (formData.senha) formDataToSend.append('senha', formData.senha);
         if (formData.foto) formDataToSend.append('foto', formData.foto);
 
         try {
+            // atualiza o user no banco
             const response = await axios.post(
                 `${endpoint}/user-update.php`,
                 formDataToSend,
                 {
-                    headers: { 'Content-Type': 'multipart/form-data' },
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Accept': 'application/json'
+                    },
+                    withCredentials: true
                 }
             );
-            console.log(response.data);
+
+            if (response.data.success){
+                console.log(response.data);
+
+                // atualiza o user local (falta atualizar imagem! pegar do banco)
+                const updatedUser = {
+                    ...user,
+                    nome: (formData.nome.length > 0) ? formData.nome : user?.nome 
+                } as SimplUser;
+
+                setUser(updatedUser);
+                localStorage.setItem('user', JSON.stringify(updatedUser));
+                
+                // limpa inputs
+                setFormData({
+                    id: user?.id ?? 0,
+                    nome: '',
+                    senha: '',
+                    foto: null
+                });
+            } else {
+                console.log("erro: ", response);
+            }
         } catch (error) {
             console.error(error);
-        }
-    };
+        }   
+    }
 
     if (!user) {
         return <p>Usuário não autenticado</p>;
@@ -69,13 +95,6 @@ const AccountForm: React.FC = () => {
                 value={formData.nome}
                 onChange={handleChange}
                 placeholder="Nome"
-            />
-            <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Email"
             />
             <input
                 type="password"

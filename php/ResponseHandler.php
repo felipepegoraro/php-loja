@@ -21,7 +21,7 @@ class ResponseHandler {
             ],
             JSON_UNESCAPED_UNICODE
         );
-        exit;
+        exit();
     }
 
     /**
@@ -38,7 +38,20 @@ class ResponseHandler {
         if ($stmt = $conn->prepare($query)) {
             if (!empty($params)) {
                 $types = array_shift($params);
-                $stmt->bind_param($types, ...$params);
+
+                // suporte para binário
+                if (strpos($types, 'b') !== false) {
+                    $stmt->bind_param($types, ...$params);
+                    
+                    foreach ($params as $index => $param) {
+                        if ($types[$index] === 'b') {
+                            $stmt->send_long_data($index, $param);
+                            $response['steps'][] = "send_long_data aplicado para índice $index";
+                        }
+                    }
+                } else {
+                    $stmt->bind_param($types, ...$params);
+                }
             }
             
             if ($stmt->execute()) {

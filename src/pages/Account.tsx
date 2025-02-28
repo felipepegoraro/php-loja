@@ -1,10 +1,22 @@
 import AccountForm from '../components/AccountForm';
+import UserProfileDisplay from '../components/UserProfileDisplay';
+import '../styles/css/account.css';
 
 const Account = () => {
     return (
-        <main className="container">
-            <h1>Página em manutenção!</h1>
-            <AccountForm/>
+        <main className="container account-container">
+            <h1>Minha Conta</h1>
+
+            <div className="account-session">
+                <UserProfileDisplay/>
+                <AccountForm/>
+            </div>
+
+            {/*
+            <div className="account-session">
+                <div>lorem ipsum 1</div>
+            </div>
+            */}
         </main>
     );
 }

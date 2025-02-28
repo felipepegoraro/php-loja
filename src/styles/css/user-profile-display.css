@@ -1,0 +1,59 @@
+.user-profile-display {
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  flex: 1;
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2rem;
+  width: 100%;
+  height: 100%;
+}
+@media (max-width: 576px) {
+  .user-profile-display {
+    width: 100%;
+    padding: 10px;
+    justify-content: center;
+    gap: 0px;
+  }
+}
+.user-profile-display .user-profile-picture {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+@media (max-width: 576px) {
+  .user-profile-display .user-profile-picture {
+    width: 90px;
+    height: 90px;
+  }
+}
+.user-profile-display .user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+.user-profile-display .user-info .user-name {
+  font-size: 2.4rem !important;
+  font-weight: bold;
+}
+@media (max-width: 576px) {
+  .user-profile-display .user-info .user-name {
+    font-size: 1.6rem !important;
+  }
+}
+.user-profile-display .user-info .user-email {
+  font-size: 1.1rem !important;
+  color: gray;
+}
+@media (max-width: 576px) {
+  .user-profile-display .user-info .user-email {
+    font-size: 0.9rem !important;
+  }
+}
+
+/*# sourceMappingURL=user-profile-display.css.map */
