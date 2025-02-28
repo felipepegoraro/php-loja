@@ -131,14 +131,14 @@ const Carrinho = () => {
     return user ? (
         <main className="cart-container">
             <div className="content">
-                <h2 className="cart-title">Meu Carrinho</h2>
+                <h1 className="cart-title">Meu Carrinho</h1>
 
                 <div className="cart-content">
                     {loading ? (
                         <p className="loading-text">Carregando carrinho...</p>
                     ) : (
                         <>
-                            <div className="container cart-items-container">
+                            <div className="cart-items-container">
                                 {cart && cart.length > 0 && cart.map((i: Cartfull) => (
                                     <CartProductCard
                                         key={i.idItem}
@@ -148,6 +148,7 @@ const Carrinho = () => {
                                     />
                                 ))}
                             </div>
+                            
                             <div className="cart-summary">
                                 <p>
                                     <strong>Total:</strong> {Utils.formatPrice(total)}

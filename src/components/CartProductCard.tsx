@@ -31,81 +31,53 @@ export const CartProductCard = ({ cartItem, onRemove, updateQuantity }: {
 
 
     return (
-        <div className="card mb-3 cart-item-card">
-            <div className="row g-0">
-                {/* Coluna da imagem */}
-                <div className="col-md-4 d-flex cart-item-image-container">
-                    {fotoItem ? (
-                        <img src={`data:image/png;base64,${fotoItem}`} alt={nomeItem} className="img-fluid cart-item-image" />
-                    ) : (
-                        <div className="no-image">
-                            <span>Sem imagem</span>
-                        </div>
-                    )}
+        <div className="produto-carrinho-card">
+            <div className="produto-image">
+                {fotoItem ? (
+                    <img
+                        src={`data:image/png;base64,${fotoItem}`}
+                        alt={nomeItem}
+                    />
+                ) : (
+                    <span>Sem imagem</span>
+                )}
+            </div>
+
+
+            <div className="produto-metadados">
+                <h5>{nomeItem}</h5>
+                <p>{descricaoItem}</p>
+                <p> {categoriaItem} &gt; {subcategoriaItem} </p>
+                <p> <strong>Preço Unitário:</strong> {Utils.formatPrice(precoItem)} </p>
+                <p> <strong>Quantidade:</strong> {quantidade} </p>
+                <p> <strong>SubTotal:</strong> {Utils.formatPrice(precoItem * quantidade)} </p>
+            </div>
+
+            <div className="produto-botoes">
+                <div className="produto-inc-dec-botoes">
+                    <button
+                        className="btn btn-danger"
+                        onClick={handleDecreaseQuantity}
+                        style={{ width: "40px", margin: "0 5px" }}
+                    >
+                        -
+                    </button>
+                    <span>{newQuantity}</span>
+                    <button
+                        className="btn btn-success"
+                        onClick={handleIncreaseQuantity}
+                        style={{ width: "40px", margin: "0 5px" }}
+                    >
+                        +
+                    </button>
                 </div>
 
-                {/* Coluna de detalhes */}
-                <div className="col-md-8">
-                    <div className="card-bodyx">
-                    
-                        <div className="card-item-description">
-                            <h5 className="card-title">{nomeItem}</h5>
-                            <p className="card-text">{descricaoItem}</p>
-
-                            {/* Metadados do produto */}
-                            <div className="cm cart-item-meta">
-                                {categoriaItem} &gt; {subcategoriaItem}
-                            </div>
-
-                            {/* Quantidade e preço */}
-                            <div className="cart-item-price1">
-                                <p><strong>Preço Unitário:</strong> {Utils.formatPrice(precoItem)}</p>
-                            </div>
-                            <div className="cart-item-quantity">
-                                <p><strong>Quantidade:</strong> {quantidade}</p>
-                            </div>
-                            <div className="cart-item-price">
-                                <p><strong>SubTotal:</strong> {Utils.formatPrice(precoItem * quantidade)}</p>
-                            </div>
-                        </div>
-
-                        <div className="card-buttom-controls">
-                            <div className="quantity-controls">
-                                <button
-                                    onClick={handleDecreaseQuantity}
-                                    className="btn btn-secondary"
-                                    style={{ width: "40px", margin: "0 5px" }}
-                                >
-                                    -
-                                </button>
-                                <span style={{ margin: "0 20px" }}>{newQuantity}</span>
-                                <button
-                                    onClick={handleIncreaseQuantity}
-                                    className="btn btn-secondary"
-                                    style={{ width: "40px", margin: "0 5px" }}
-                                >
-                                    +
-                                </button>
-
-
-                            </div>
-                            <div className='cart-item-remove'>
-                                <button
-                                    onClick={() => onRemove(idItem)}
-                                    className="btn btn-danger"
-                                >
-                                    Remover
-                                </button>
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
+                <button className="btn btn-primary" onClick={() => onRemove(idItem)}>
+                    Remover
+                </button>
             </div>
         </div>
     );
-};
+}
 
 export default CartProductCard;
-
