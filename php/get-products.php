@@ -16,25 +16,30 @@ $searchTerm = isset($_GET['searchTerm']) ? $_GET['searchTerm'] : '';
 if ($categoriaId > 0) {
     $query .= " WHERE c.id = ?";
 }
+
 if (!empty($searchTerm)) {
     $query .= ($categoriaId > 0 ? " AND " : " WHERE ") . "i.nome LIKE ?";
 }
+
 if ($ordem === 'ASC' || $ordem === 'DESC') {
     $query .= " ORDER BY i.preco " . $ordem;
 }
 
 $params = [];
 
+if (!empty($searchTerm)){
+    $searchTerm = '%' . $searchTerm . '%';
+}
+
 if ($categoriaId > 0 && !empty($searchTerm)) {
-    $searchTerm = $searchTerm . '%';
     $params = ['is', $categoriaId, $searchTerm];
-   
+    $response["steps"][] = "ambos, categoria id e texto + wildcard setado";
 } elseif ($categoriaId > 0) {
     $params = ['i', $categoriaId];
-
+    $response["steps"][] = "apenas categoria id setado";
 } elseif (!empty($searchTerm)) {
-    $searchTerm = $searchTerm . '%';
-    $params = ['i', $searchTerm];
+    $params = ['s', $searchTerm];   
+    $response["steps"][] = "apenas texto + wildcard setado";
 }
 
 $result = ResponseHandler::executeQuery(
