@@ -2,13 +2,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap");
 .register-container {
-  display: flex;
-  gap: 20px;
-  min-height: 100vh;
-  flex-direction: row;
-  justify-content: center;
+  /* min-height: 100vh;  */
+  /* flex-direction: row; */
+  /* justify-content: center; */
   align-items: center;
   background: linear-gradient(to right, #0077ff, #00d4ff);
+}
+@media (max-width: 576px) {
+  .register-container {
+    height: fit-content;
+  }
 }
 
 /*# sourceMappingURL=register.css.map */

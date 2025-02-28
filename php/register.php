@@ -1,6 +1,6 @@
 <?php
-require 'connect-db.php';
-require 'send-email.php';
+// require 'connect-db.php';
+require 'EmailService.php';
 include_once 'ResponseHandler.php';
 include_once 'Database.php';
 
@@ -61,8 +61,8 @@ try {
         'Erro ao cadastrar o usuário.'
     );
     
-    if (!sendVerificationEmail($data['email'], $token)) {
-        ResponseHandler::jsonResponse(true, 'Erro ao enviar e-mail de confirmação.', $response, null);
+    if (!EmailService::sendVerificationEmail($data['email'], $token)) {
+        ResponseHandler::jsonResponse(false, 'Erro ao enviar e-mail de confirmação.', $response, null);
     }
 
     ResponseHandler::jsonResponse(true, 'Cadastro iniciado! Verifique seu e-mail para ativar sua conta.', $response, null);

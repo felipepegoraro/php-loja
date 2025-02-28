@@ -1,11 +1,14 @@
 @use "variables" as v;
+@use "media" as me;
 
-.register-container{
-    display: flex;
-    gap: 20px;
-    min-height: 100vh; 
-    flex-direction: row;
-    justify-content: center;
+.register-container {
+    /* min-height: 100vh;  */
+    /* flex-direction: row; */
+    /* justify-content: center; */
     align-items: center;
     background: linear-gradient(to right, v.$primary-color, #00d4ff);
+
+    @include me.mobile {
+        height: fit-content;
+    }
 }

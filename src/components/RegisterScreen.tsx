@@ -5,18 +5,12 @@ import '../styles/css/register-screen.css';
 
 const RegisterScreen = () => {
     const [formData, setFormData] = useState({
-        nome: '',
-        email: '',
-        dataNascimento: '',
-        telefone: '',
-        senha: '',
-        cep: '',
-        rua: '',
-        numero: '',
-        bairro: '',
-        complemento: '',
-        cidade: '',
-        estado: '',
+        nome: '',              email: '',
+        dataNascimento: '',    telefone: '',
+        senha: '',             cep: '',
+        rua: '',               numero: '',
+        bairro: '',            complemento: '',
+        cidade: '',            estado: '',
         admin: 0
     });
 
@@ -70,7 +64,7 @@ const RegisterScreen = () => {
     };
 
     return (
-        <div className="container">
+        <div className="">
             <form onSubmit={handleRegister} className="form">
                 <div className="register-header">
                     <h2 className="register-title">Crie sua conta</h2>

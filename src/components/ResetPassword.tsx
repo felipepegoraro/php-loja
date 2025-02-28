@@ -1,5 +1,5 @@
 import { useState } from 'react';
-// import axios from 'axios';
+import axios from 'axios';
 
 const ResetPassword = () => {
     const [step, setStep] = useState(1);
@@ -8,53 +8,39 @@ const ResetPassword = () => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const [verificationCodeSent, setVerificationCodeSent] = useState(false);
 
-    // // TODO
-    const handleEmailSubmit = (e: React.FormEvent) => {
+    const [verificationCodeSent, setVerificationCodeSent] = useState({
+        code: "00000",
+        sent: false 
+    });
+
+    const endpoint = process.env.REACT_APP_ENDPOINT;
+
+    const handleEmailSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // aqui: enviar email!
-        setVerificationCodeSent(true);
-        setStep(2);
-        setErrorMessage("");
+
+        try {
+            const response = await axios.post(`${endpoint}/send-reset-email.php`, 
+            {email}, 
+            { withCredentials: true });
+            if (response.data.success){
+                setVerificationCodeSent({ code: response.data.value, sent: true });
+                setStep(2);
+                setErrorMessage("");   
+            } else {
+                setErrorMessage(response.data.message);
+            }
+
+        } catch(e){
+            setErrorMessage("Erro ao enviar e-mail. Tente novamente.");
+            console.log(e);
+        }
     };
 
-    // const handleEmailSubmit = async (e: React.FormEvent) => {
-    //     e.preventDefault();
-    //
-    //     const emailData = {
-    //         email: email,
-    //         verification_code: '12345',
-    //     };
-    //
-    //     try {
-    //         const response = await axios.post('private/send-email.php', emailData, {
-    //             withCredentials: true,
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             }
-    //         });
-    //
-    //         const result = response.data;
-    //         console.log(result);
-    //
-    //         if (result.success) {
-    //             setVerificationCodeSent(true);
-    //             setStep(2);
-    //         } else {
-    //             setErrorMessage(result.message);
-    //         }
-    //     } catch (error) {
-    //         setErrorMessage('Erro na comunicação com o servidor.');
-    //     }
-    // };
-
-    // TODO
     const handleVerificationSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // aqui: gerar um codigo
-        // fingir um codigo de verificcao
-        if (verificationCode === '12345') {
+
+        if (verificationCode === verificationCodeSent.code) {
             setStep(3);
             setErrorMessage("");
         } else {
@@ -62,7 +48,6 @@ const ResetPassword = () => {
         }
     };
 
-    // TODO: 
     const handlePasswordSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (newPassword !== confirmPassword) {
@@ -70,7 +55,7 @@ const ResetPassword = () => {
             return;
         }
 
-        // aqui: requisicao num endpoint php para update nova senha
+        // TODO: requisicao num endpoint php para update nova senha
         alert('Senha alterada com sucesso!');
         setStep(1);
         setErrorMessage("");
@@ -100,15 +85,17 @@ const ResetPassword = () => {
                             </button>
                         </div>
                     </form>
-                    {verificationCodeSent && (
-                        <p className="mt-3">Um código de verificação foi enviado para o seu e-mail.</p>
-                    )}
+                    {/*verificationCodeSent.sent && (
+                        <p className="mt-3">
+                            Um código de verificação foi enviado para o seu e-mail.
+                        </p>
+                    )*/}
                 </>
                 )}
 
                 {step === 2 && (
                 <>
-                    <p>Insira o código de verificação enviado para seu e-mail.</p>
+                    <p>Insira o código de verificação enviado no seu e-mail.</p>
                     <form onSubmit={handleVerificationSubmit}>
                         <div className="mb-3">
                             <label htmlFor="verificationCode" className="form-label">Código de Verificação</label>
