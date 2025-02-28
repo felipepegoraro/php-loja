@@ -9,32 +9,28 @@ $response = ['steps' => [], 'errors' => []];
 
 session_start();
 
-if (isset($_POST['email'])) {
-    ResponseHandler::jsonResponse(false, "O e-mail não pode ser alterado.", $response);
-}
-
 $fields = [
     'nome'  => ['value' => $_POST['nome']  ?? null, 'type' => 's'],
     'senha' => ['value' => $_POST['senha'] ?? null, 'type' => 's'],
     'foto' =>  ['value' => $_FILES['foto'] ?? null, 'type' => 'b']
 ];
 
-if (!isset($_POST['id']) || empty($_POST['id'])) {
-    ResponseHandler::jsonResponse(false, "ID do usuário não fornecido.", $response);
+if (!isset($_POST['email']) || empty($_POST['email'])) {
+    ResponseHandler::jsonResponse(false, "Email do usuário não fornecido.", $response);
 }
 
-$userId = intval($_POST['id']);
+$userEmail = $_POST['email'];
 
-function updateUser(mysqli $conn, int $userId, string $field, mixed $value, string $type, array &$response): bool {
+function updateUser(mysqli $conn, string $userEmail, string $field, mixed $value, string $type, array &$response): bool {
     if ($field === 'senha') {
         $value = password_hash($value, PASSWORD_DEFAULT);
     }
 
-    $sql = "UPDATE tb_usuario SET $field = ? WHERE id = ?";
+    $sql = "UPDATE tb_usuario SET $field = ? WHERE email = ?";
     $result = ResponseHandler::executeQuery(
         $conn,
         $sql,
-        [$type . 'i', $value, $userId],
+        [$type . 's', $value, $userEmail],
         $response,
         "Erro ao atualizar o campo '$field' do usuário."
     );
@@ -49,7 +45,7 @@ foreach ($fields as $field => $fieldData) {
             $fieldData['value'] = file_get_contents($fields['foto']['value']['tmp_name']);
         }
 
-        $result = updateUser($conn, $userId, $field, $fieldData['value'], $fieldData['type'], $response);
+        $result = updateUser($conn, $userEmail, $field, $fieldData['value'], $fieldData['type'], $response);
 
         if ($result) $response['steps'][] = "Campo '$field' atualizado.";
         else $response['steps'][] = "Campo '$field' não atualizado.";

@@ -48,17 +48,43 @@ const ResetPassword = () => {
         }
     };
 
-    const handlePasswordSubmit = (e: React.FormEvent) => {
+    const handlePasswordSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (newPassword.length < 6) {
+            setErrorMessage("A senha deve ter pelo menos 6 caracteres.");
+            return;
+        }
+
         if (newPassword !== confirmPassword) {
             setErrorMessage('As senhas não coincidem.');
             return;
         }
 
-        // TODO: requisicao num endpoint php para update nova senha
-        alert('Senha alterada com sucesso!');
-        setStep(1);
-        setErrorMessage("");
+        try {
+            const response = await axios.post(
+                `${endpoint}/user-update.php`,
+                {email: email, senha: newPassword},
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Accept': 'application/json'
+                    },
+                    withCredentials: true
+                }
+            );
+
+            if (response.data.success){
+                alert('Senha alterada com sucesso!');
+                setStep(1);
+                setErrorMessage("");
+            } else {
+                setErrorMessage(response.data.message);
+            }
+
+        } catch(e){
+            console.log(e);
+        }
     };
 
     return (
@@ -123,7 +149,7 @@ const ResetPassword = () => {
                 {step === 3 && (
                 <>
                     <p>Insira sua nova senha.</p>
-                    <form onSubmit={handlePasswordSubmit}>
+                    <form onSubmit={async (e) => handlePasswordSubmit(e)}>
                         <div className="mb-3">
                             <label htmlFor="newPassword" className="form-label">Nova Senha</label>
                             <input

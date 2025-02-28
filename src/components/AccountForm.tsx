@@ -4,7 +4,7 @@ import { useUser, SimplUser } from '../context/userContext';
 import '../styles/css/accountform.css';
 
 interface FormDataState {
-    id: number;
+    email: string;
     nome: string;
     senha: string;
     foto?: File | null;
@@ -14,7 +14,7 @@ const AccountForm: React.FC = () => {
     const { user, setUser } = useUser();
 
     const [formData, setFormData] = useState<FormDataState>({
-        id: user?.id ?? 0,
+        email: user?.email ?? '',
         nome: user?.nome || '',
         senha: '',
         foto: null,
@@ -37,7 +37,7 @@ const AccountForm: React.FC = () => {
         e.preventDefault();
 
         const formDataToSend = new FormData();
-        formDataToSend.append('id', String(formData.id));
+        formDataToSend.append('email', String(formData.email));
         if (formData.nome) formDataToSend.append('nome', formData.nome);
         if (formData.senha) formDataToSend.append('senha', formData.senha);
         if (formData.foto) formDataToSend.append('foto', formData.foto);
@@ -70,7 +70,7 @@ const AccountForm: React.FC = () => {
                 
                 // limpa inputs
                 setFormData({
-                    id: user?.id ?? 0,
+                    email: user?.email ?? '',
                     nome: '',
                     senha: '',
                     foto: null
