@@ -2,29 +2,19 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/css/register-screen.css';
+import type {User} from '../types/user';
+import UserService from '../services/UserService';
 
 const RegisterScreen = () => {
-    const [formData, setFormData] = useState({
-        nome: '',              email: '',
-        dataNascimento: '',    telefone: '',
-        senha: '',             cep: '',
-        rua: '',               numero: '',
-        bairro: '',            complemento: '',
-        cidade: '',            estado: '',
-        admin: 0
-    });
-
-    const endpoint = process.env.REACT_APP_ENDPOINT;
-
+    const [formData, setFormData] = useState<User>(UserService.genericUser());
     const [confirmarSenha, setConfirmarSenha] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+
     const navigate = useNavigate();
 
     const handleCepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         let value = e.target.value.replace(/\D/g, "");
-        if (value.length > 5) {
-            value = value.slice(0, 5) + "-" + value.slice(5, 8);
-        }
+        if (value.length > 5) value = value.slice(0, 5) + "-" + value.slice(5, 8);
         e.target.value = value;
     };
 
@@ -44,22 +34,9 @@ const RegisterScreen = () => {
             setErrorMessage('As senhas não coincidem.');
             return;
         }
-
-        try {
-            const response = await axios.post(`${endpoint}/register.php`, formData, {
-                headers: { 'Content-Type': 'application/json' }
-            });
-
-            const result = response.data;
-            if (result.success) {
-                setErrorMessage('');
-                navigate('/Login');
-                alert('Um email foi enviado. Para finalizar seu cadastro, confirme seu email!');
-            } else {
-                setErrorMessage(result.error);
-            }
-        } catch (error) {
-            setErrorMessage('Erro na comunicação com o servidor: ' + error);
+        
+        if(await UserService.registerUser(formData, setErrorMessage)){
+            navigate('/Login');
         }
     };
 
@@ -84,13 +61,13 @@ const RegisterScreen = () => {
                         />
                     </div>
                     <div className="form-group col-md-6">
-                        <label htmlFor="dataNascimento">Data de Nascimento</label>
+                        <label htmlFor="data_nascimento">Data de Nascimento</label>
                         <input
                             type="date"
                             className="form-control"
-                            id="dataNascimento"
-                            name="dataNascimento"
-                            value={formData.dataNascimento}
+                            id="data_nascimento"
+                            name="data_nascimento"
+                            value={formData.data_nascimento}
                             onChange={handleChange}
                             required
                         />

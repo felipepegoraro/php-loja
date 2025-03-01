@@ -13,9 +13,7 @@ $response = [];
 $db = Database::getInstance();
 $conn = $db->getConnection();
 
-if (!$data) {
-    ResponseHandler::jsonResponse(false, 'Dados inválidos recebidos.', $response, null);
-}
+if (!$data) ResponseHandler::jsonResponse(false, 'Dados inválidos recebidos.', $response, null);
 
 $email = $data['email'];
 

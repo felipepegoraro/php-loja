@@ -4,6 +4,7 @@ type RequiredUserFields = {
     email: string;
     senha: string;
     admin: boolean;
+    foto?: File;
 };
 
 type ExtendedUserFields = {

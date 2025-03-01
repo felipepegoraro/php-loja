@@ -1,32 +1,50 @@
 <?php
-$conn = include 'connect-db.php';
+include 'Database.php';
+include 'ResponseHandler.php';
 
-$codigoAcesso = isset($_GET['codigoAcesso']) ? $_GET['codigoAcesso'] : null;
+$db = Database::getInstance();
+$conn = $db->getConnection();
 
-// cara dps tem q dar um jeito de salvar esse "codigo_secreto_administrador" em outro lugar 
-// e obviamente trocar de codigo
-if ($codigoAcesso !== 'codigo_secreto_administrador') {
-    echo json_encode(["error" => "Acesso negado"]);
-    $conn->close();
-    exit;
+$response = ["steps" => [], "errors" => []];
+
+$accessCode = $_GET['accessCode'] ?? null;
+$byEmail = isset($_GET['byEmail']) ? $_GET['byEmail'] : null;
+$byId = isset($_GET['byId']) ? $_GET['byId'] : null;
+
+// TODO
+if ($accessCode !== 'codigo_secreto_administrador')
+    ResponseHandler::jsonResponse(false, "Acesso Negado", $response, null);
+
+$params = [];
+$types = "";
+$sql = "SELECT id, nome, email, foto FROM tb_usuario WHERE 1=1";
+
+if ($byEmail !== null) {
+    $sql .= " AND email = ?";
+    $params[] = $byEmail;
+    $types .= "s";
 }
 
-$sql = "SELECT id, nome, email, foto FROM tb_usuario";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    $dados = [];
-    while ($row = $result->fetch_assoc()) {
-        if (!empty($row['foto'])) {
-            $row['foto'] = base64_encode($row['foto']);
-        }
-        $dados[] = $row;
-    }
-    echo json_encode($dados);
-} else {
-    echo json_encode(["error" => "Nenhum dado encontrado"]);
+if ($byId !== null) {
+    $sql .= " AND id = ?";
+    $params[] = $byId;
+    $types .= "i";
 }
 
-$conn->close();
+if ($types != "") array_unshift($params, $types);
+
+$result = ResponseHandler::executeQuery($conn, $sql, $params, $response, "Nenhum dado encontrado");
+
+if ($result->num_rows <= 0){
+    ResponseHandler::jsonResponse(true, "Nenhum Usuário encontrado", $response);
+}
+
+$dados = [];
+
+while ($row = $result->fetch_assoc()) {
+    if (!empty($row['foto'])) $row['foto'] = base64_encode($row['foto']);
+    $dados[] = $row;
+}
+
+ResponseHandler::jsonResponse(true, "Usuário(s) encontrado(s)", $response, $dados);
 ?>
-
