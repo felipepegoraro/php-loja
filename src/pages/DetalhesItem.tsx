@@ -40,7 +40,7 @@ const DetalhesItem = () => {
     useEffect(() => {
         const fetchComments = async () => {
             try {
-                const response = await axios.get(`${endpoint}/get-comments.php?itemId=${itemId}`);
+                const response = await axios.get(`${endpoint}/comments-get.php?itemId=${itemId}`);
                 console.log(response);
                 if (response.data.success) {
                     setComments([comments[0], response.data.value]);

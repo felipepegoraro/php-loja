@@ -64,9 +64,12 @@ export default class SalesMetrics {
 
     async fetchTopCustomers() {
         try {
-            const response = await axios.get(`${this.endpoint}/top-customers.php`, {withCredentials: true});
+            const response = await axios.get(`${this.endpoint}/top-customers.php`, {
+                withCredentials: true
+            });
+
             if (response.data.success) {
-                this.topcustomers  = response.data.message;
+                this.topcustomers  = response.data.value;
             } else {
                 console.error('Erro ao obter os maiores compradores:', response.data.message);
             }
@@ -144,19 +147,21 @@ export default class SalesMetrics {
     // esse aqui ignora categoria e subcategoria pq teria q fazer 4 inner join e obviamente isso nao é bom ne
     async fetchTopItems(type: "quantidade" | "valor", maxItems: number) {
         try {
-            const response = await axios.get(`${this.endpoint}/top-itens.php?type=${type}&limit=${maxItems}`, { withCredentials: true });
+            const response = await axios.get(`${this.endpoint}/top-itens.php`, {
+                params: {
+                    type: type,
+                    limit: maxItems
+                },
+                withCredentials: true
+            });
+
             if (!response.data.success) {
-                console.error('Erro ao obter os produtos mais vendidos:', response.data.message);
+                console.error(response.data.message);
                 return;
             }
 
-            if (response.data.special){
-                console.log(response.data);
-                console.log(response.data.message);
-                return;
-            }
-
-            this.topitems = response.data.data;
+            console.log(response.data.message);
+            this.topitems = response.data.value;
         } catch (error) {
             console.error('Erro ao fazer a requisição', error);
         }

@@ -109,8 +109,6 @@ class UserService {
 
 
     // static async deleteUser() {};
-    //
-    // private static async emailExists() {}
 };
 
 export default UserService;

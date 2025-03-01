@@ -34,7 +34,10 @@ class ResponseHandler {
      * @param string $errorMsg Mensagem de erro personalizada.
      * @return mysqli_result|null Resultado da query ou null em caso de erro.
      */
-    public static function executeQuery(mysqli $conn, string $query, array $params, array &$response, string $errorMsg): ?mysqli_result {
+    public static function executeQuery(
+        mysqli $conn, string $query, array $params,
+        array &$response, string $errorMsg
+    ): ?mysqli_result {
         if ($stmt = $conn->prepare($query)) {
             if (!empty($params)) {
                 $types = array_shift($params);
@@ -57,17 +60,24 @@ class ResponseHandler {
             if ($stmt->execute()) {
                 $response['steps'][] = "query executada com sucesso"; 
                 if (stripos($query, "SELECT") === 0) {
-                    return $stmt->get_result();
+                    $r = $stmt->get_result();
+                    $stmt->close();
+                    return $r;
                 }
+
+                // $stmt->close();
                 return null;
             } else {
                 $response['error'] = $stmt->error;
+                $stmt->close();
                 self::jsonResponse(false, $errorMsg, $response);
             }
         } else {
             $response['error'] = $conn->error;
             self::jsonResponse(false, $errorMsg, $response);
         }
+
+        return null;
     }
 }
 

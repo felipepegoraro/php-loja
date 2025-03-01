@@ -93,9 +93,6 @@ const Header = () => {
               <li className="nav-item">
                 <a className="nav-link" href="/About">Sobre nós</a>
               </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/Suporte">Suporte</a>
-              </li>
             </ul>
             <div className="navbar-btn-container">
               <LoginButton />

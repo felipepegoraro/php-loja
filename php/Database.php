@@ -34,11 +34,12 @@ class Database {
 
     // quando necessario (antes de erros por exemplo)
     public function closeConnection(): void {
-        if (isset($this->conn)) {
+        if ($this->conn) {
             $this->conn->close();
+            $this->conn = null;
             self::$instance = null;
-            echo "Conexão manualmente fechada.\n";
         }
     }
+
 }
 ?>

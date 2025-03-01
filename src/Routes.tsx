@@ -4,7 +4,7 @@ import Catalogo from "./pages/Catalogo";
 import Register from "./pages/Register";
 import Carrinho from "./pages/Carrinho";
 import About from "./pages/About";
-import Suporte from "./pages/Suporte";
+// import Suporte from "./pages/Suporte";
 import Account from './pages/Account'; 
 import Settings from './pages/Settings';
 import DetalhesItem from "./pages/DetalhesItem";
@@ -18,34 +18,31 @@ import OrderHistory from "./pages/admin/orderHistory";
 
 import { Route, Routes } from "react-router-dom";
 
+const allRoutes: Array<{ path: string, element: React.ReactNode }> = [
+    { path: "/",                       element: <Home /> },
+    { path: "/Login",                  element: <Login /> },
+    { path: "/Catalogo",               element: <Catalogo /> },
+    { path: "/Register",               element: <Register /> },
+    { path: "/Carrinho",               element: <Carrinho /> },
+    { path: "/item/:itemId",           element: <DetalhesItem /> },
+    { path: "/About",                  element: <About /> },
+    { path: "/Settings",               element: <Settings /> },
+    { path: "/Account",                element: <Account /> },
+    { path: "/AtivarEmail",            element: <AtivarEmail /> },
+    { path: "/admin/Homepage",         element: <AdminHomePage /> },
+    { path: "/admin/RegisterProduct",  element: <RegisterProductPage /> },
+    { path: "/admin/OrderHistory",     element: <OrderHistory /> },
+    { path: "*",                       element: <NotFound /> },
+];
 
 const AppRoutes = () => {
     return (
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/Login" element={<Login />} />
-                <Route path="/Catalogo" element={<Catalogo />} />
-                <Route path="/Register" element={<Register/>}/>
-                <Route path="/Carrinho" element={<Carrinho/>}/>
-
-                <Route path="/item/:itemId" element={<DetalhesItem />} />
-
-                <Route path="/About" element={<About/>}/>
-                <Route path="/Suporte" element={<Suporte/>}/>
-
-                <Route path="/Settings" element={<Settings/>}/>
-                <Route path="/Account" element={<Account/>}/>
-
-                <Route path="/AtivarEmail" element={<AtivarEmail/>}/>
-                
-                <Route path="/admin/Homepage" element={<AdminHomePage/>}/>
-                <Route path="/admin/RegisterProduct" element={<RegisterProductPage/>}/>
-                <Route path="/admin/OrderHistory" element={<OrderHistory/>}/>
-
-                <Route path="*" element={<NotFound />} />
-            </Routes>
-
-    )
-}
+        <Routes>
+            {allRoutes.map((route, index) => (
+                <Route key={index} path={route.path} element={route.element} />
+            ))}
+        </Routes>
+    );
+};
 
 export default AppRoutes

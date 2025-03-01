@@ -172,7 +172,7 @@ const Home = () => {
                 const [productsRes, categoriesRes, commentRes] = await Promise.all([
                     axios.get(`${endpoint}/get-products.php`,   { withCredentials: true }),
                     axios.get(`${endpoint}/get-categorias.php`, { withCredentials: true }),
-                    axios.get(`${endpoint}/get-comments.php`,   { withCredentials: true })
+                    axios.get(`${endpoint}/comments-get.php`,   { withCredentials: true })
                 ]);
 
                 const fetchedProducts = productsRes.data.value;

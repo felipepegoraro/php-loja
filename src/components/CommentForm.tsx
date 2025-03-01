@@ -47,7 +47,7 @@ const CommentForm = (props: CommentFormProps) => {
         }
 
         try {
-            const response = await axios.post(`${endpoint}/add-comments.php`, {
+            const response = await axios.post(`${endpoint}/comments-add.php`, {
                 idUsuario: user!.id,
                 idProduto: props.idProduto,
                 nota: parseFloat(nota),
