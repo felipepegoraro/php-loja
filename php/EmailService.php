@@ -25,7 +25,7 @@ class EmailService {
 
 
     private static function verifyEmail(string $email): bool {
-        $regex = "/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i";
+        $regex = "/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}(\.[a-z]{2,})?$/i";
         return (bool) preg_match($regex, $email);
     }
 

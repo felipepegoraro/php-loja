@@ -16,7 +16,7 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     if (!$row['verificado']) {
-        echo json_encode(["error" => "Por favor, verifique seu e-mail antes de fazer login."]);
+        echo json_encode(["message" => "Por favor, verifique seu e-mail antes de fazer login."]);
     } else {
         if (password_verify($pass, $row['senha'])) {
             $_SESSION['user'] = [
@@ -31,7 +31,7 @@ if ($result->num_rows > 0) {
 
             echo json_encode([
                 "success" => true,
-                "user" => [
+                "data" => [
                     "id" => $row['id'],
                     "email" => $row['email'],
                     "nome" => $row['nome'],

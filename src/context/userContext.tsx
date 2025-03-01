@@ -1,13 +1,6 @@
-import { ReactNode, createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
-
-export interface SimplUser {
-    id: number;
-    nome: string;
-    email: string;
-    admin: boolean;
-    foto: File | Buffer | null;
-}
+import { ReactNode, createContext, useState, useContext, useEffect } from 'react';
+import {SimplUser} from '../types/user';
 
 interface UserContextType {
     user: SimplUser | null;
@@ -33,7 +26,6 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     } else {
       const checkSession = async () => {
         try {
-          console.log(`endpoint: ${endpoint}/session.php`);
           const response = await axios.get(`${endpoint}/session.php`, {
             withCredentials: true,
           });

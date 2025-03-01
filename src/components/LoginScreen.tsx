@@ -26,6 +26,7 @@ const LoginScreen = () => {
       email,
       senha,
     };
+    console.log(loginData);
 
     try {
       const response = await axios.post(`${endpoint}/login.php`, loginData, {
@@ -40,15 +41,17 @@ const LoginScreen = () => {
       if (result.success) {
         setErrorMessage('');
         setUser({
-          id: result.user.id,
-          nome: result.user.nome,
-          email: result.user.email,
-          admin: result.user.admin,
-          foto: result.user.foto
+          id: result.data.id,
+          nome: result.data.nome,
+          email: result.data.email,
+          admin: result.data.admin,
+          foto: result.data.foto,
+          senha: loginData.senha
         });
-        nav(result.user?.admin ? "/admin/Homepage" : "/Catalogo");
+        nav(result.data?.admin ? "/admin/Homepage" : "/Catalogo");
       } else {
         setErrorMessage(`erro: ${result.message}`);
+        console.log(result);
       }
     } catch (error) {
       setErrorMessage('Erro na comunicação com o servidor.');

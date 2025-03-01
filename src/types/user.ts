@@ -1,13 +1,13 @@
-type RequiredUserFields = {
+export type SimplUser = {
     id: number;
     nome: string;
     email: string;
     senha: string;
-    admin: boolean;
-    foto?: File;
+    admin: 0 | 1;
+    foto?: File | null;
 };
 
-type ExtendedUserFields = {
+type ExtendedUser = {
     data_nascimento: string;
     telefone: string;
     cpf: string;
@@ -20,4 +20,4 @@ type ExtendedUserFields = {
     estado: string;
 };
 
-export type User = RequiredUserFields & Partial<ExtendedUserFields>;
+export type User = SimplUser & Partial<ExtendedUser>;

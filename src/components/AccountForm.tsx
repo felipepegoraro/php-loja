@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { useUser, SimplUser } from '../context/userContext';
+import UserService from '../services/UserService';
+import { useUser } from '../context/userContext';
+import {SimplUser} from '../types/user';
 import '../styles/css/accountform.css';
 
-interface FormDataState {
-    email: string;
-    nome: string;
-    senha: string;
-    foto?: File | null;
-}
+type FormDataState = Omit<SimplUser, 'id' | 'admin'> & { senha: string };
 
 const AccountForm: React.FC = () => {
     const { user, setUser } = useUser();
@@ -20,7 +16,14 @@ const AccountForm: React.FC = () => {
         foto: null,
     });
 
-    const endpoint = process.env.REACT_APP_ENDPOINT;
+    const inputClean = () => {
+        setFormData({
+            email: user?.email ?? '',
+            nome: '',
+            senha: '',
+            foto: null
+        });
+    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -42,45 +45,15 @@ const AccountForm: React.FC = () => {
         if (formData.senha) formDataToSend.append('senha', formData.senha);
         if (formData.foto) formDataToSend.append('foto', formData.foto);
 
-        try {
-            // atualiza o user no banco
-            const response = await axios.post(
-                `${endpoint}/user-update.php`,
-                formDataToSend,
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'Accept': 'application/json'
-                    },
-                    withCredentials: true
-                }
-            );
+        const updatedUser = await UserService.updateUser(formDataToSend);
+        console.log("OK");
 
-            if (response.data.success){
-                console.log(response.data);
-
-                // atualiza o user local (falta atualizar imagem! pegar do banco)
-                const updatedUser = {
-                    ...user,
-                    nome: (formData.nome.length > 0) ? formData.nome : user?.nome 
-                } as SimplUser;
-
-                setUser(updatedUser);
-                localStorage.setItem('user', JSON.stringify(updatedUser));
-                
-                // limpa inputs
-                setFormData({
-                    email: user?.email ?? '',
-                    nome: '',
-                    senha: '',
-                    foto: null
-                });
-            } else {
-                console.log("erro: ", response);
-            }
-        } catch (error) {
-            console.error(error);
-        }   
+        if (updatedUser != null){
+            setUser(updatedUser);
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+        }
+            
+        inputClean();
     }
 
     if (!user) {

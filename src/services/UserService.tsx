@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {Dispatch, SetStateAction} from 'react';
-import type {User} from '../types/user';
+import type {User, SimplUser} from '../types/user';
 
 class UserService {
     static ENDPOINT: string = process.env.REACT_APP_ENDPOINT as string;
@@ -10,7 +10,7 @@ class UserService {
             nome: '',    email: '',       data_nascimento: '',    telefone: '',
             senha: '',   cep: '',         rua: '',                numero: '',
             bairro: '',  complemento: '', cidade: '',             estado: '',
-            admin: false
+            admin: 0
         } as User; 
     }
 
@@ -82,7 +82,32 @@ class UserService {
     }
 
 
-    // static async updateUser() {};
+    static async updateUser(
+        newFormUser: FormData
+    ): Promise<SimplUser | null> {
+        try {
+            const response = await axios.post(
+                `${this.ENDPOINT}/user-update.php`,
+                newFormUser,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Accept': 'application/json'
+                    },
+                    withCredentials: true
+                }
+            );
+
+            return response.data.success 
+                ? response.data.value as SimplUser
+                : null;
+        } catch(e){
+            console.error(e);
+            return null;
+        }
+    }
+
+
     // static async deleteUser() {};
     //
     // private static async emailExists() {}
