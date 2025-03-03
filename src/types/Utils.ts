@@ -11,4 +11,9 @@ export default class Utils {
         const FUSOHORARIO = Intl.DateTimeFormat().resolvedOptions().timeZone;
         return new Date(utcDate + "Z").toLocaleString(IDIOMA, {timeZone: FUSOHORARIO});
     }
+
+    public static LOG = (output: string) => {
+        const endpoint = process.env.REACT_APP_ENDPOINT as string;
+        if (endpoint.includes("localhost")) console.log(output);
+    }
 }

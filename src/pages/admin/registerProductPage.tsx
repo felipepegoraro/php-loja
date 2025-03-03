@@ -3,6 +3,7 @@ import { useUser } from '../../context/userContext';
 import CategorySelector from '../../components/CategorySelector';
 import axios from 'axios';
 import type { Item, ItemCategoria, ItemSubcategoria } from '../../types/item';
+import Utils from '../../types/Utils';
 
 const RegisterProductPage = () => {
     const { user } = useUser();
@@ -23,10 +24,6 @@ const RegisterProductPage = () => {
         subcategoria: '',
     });
 
-    useEffect(() => {
-            //????
-      }, [])
-
     let endpoint = process.env.REACT_APP_ENDPOINT;
 
       useEffect(() => {
@@ -36,14 +33,13 @@ const RegisterProductPage = () => {
                   const res = await axios.get(`${endpoint}/get-categorias.php`, {
                       withCredentials: true
                   });
-                  console.log("Resposta Categorias:", res.data);
                   if (res.data.success) {
                       setCategories(res.data.value as ItemCategoria[]);
                   } else {
-                      console.error("Erro ao carregar categorias:", res.data.error);
+                      Utils.LOG(`Erro ao carregar categorias:  ${res.data.error}`);
                   }
               } catch (e) {
-                  console.log("Erro ao buscar categorias: ", e);
+                  Utils.LOG(`Erro ao buscar categorias: ${e}`);
               }
           };
 
@@ -52,14 +48,14 @@ const RegisterProductPage = () => {
                   const res = await axios.get(`${endpoint}/get-subcategorias.php`, {
                       withCredentials: true
                   });
-                  console.log("Resposta Subcategorias:", res.data);
+                  Utils.LOG(`Resposta Subcategorias: ${res.data}`);
                   if (res.data.success) {
                       setSubcategories(res.data.value);
                   } else {
-                      console.error("Erro ao carregar subcategorias:", res.data.error);
+                      Utils.LOG(`Erro ao carregar subcategorias: ${res.data.error}`);
                   }
               } catch (err) {
-                  console.error("Erro ao buscar subcategorias", err);
+                  Utils.LOG(`Erro ao buscar subcategorias: ${err}`);
               }
           };
 
@@ -127,17 +123,14 @@ const RegisterProductPage = () => {
 
         if (product.foto) formData.append('foto', product.foto as Blob);
 
-        console.log(formData);
-
         try {
-            const response = await axios.post(`${endpoint}/register-product.php`, formData, {
+            await axios.post(`${endpoint}/register-product.php`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
             withCredentials: true
           });
 
-          console.log(response);
         } catch (err) {
             setError('Erro ao cadastrar produto. Tente novamente.');
         }

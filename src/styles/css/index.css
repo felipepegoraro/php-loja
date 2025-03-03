@@ -14,15 +14,15 @@ body {
   font-feature-settings: "cv11", "salt", "ss01", "ss03", "cv01", "cv02", "cv03", "cv04", "cv05", "cv06", "cv09", "cv10";
   font-display: swap;
   text-rendering: geometricPrecision;
-  width: 100% !important;
+  width: 100vw !important;
 }
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 60px;
+  /* scroll-padding-top: 60px; */
   background-color: #e5e5e5;
   overflow-x: hidden;
-  width: 100% !important;
+  width: 100vw !important;
 }
 
 /*# sourceMappingURL=index.css.map */

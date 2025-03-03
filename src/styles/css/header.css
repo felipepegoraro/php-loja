@@ -1,8 +1,11 @@
-/* Header Styles */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap");
 .navbar {
+  display: flex;
+  align-items: space-between;
+  padding-left: 20px;
+  padding-right: 20px;
   background-color: #111 !important;
 }
 .navbar .navbar-brand {
@@ -29,11 +32,6 @@
 .navbar .cta-button:hover {
   background-color: rgba(242, 242, 242, 0.9333333333);
   color: #0077ff;
-}
-
-.navbar-toggler {
-  position: absolute;
-  left: 90%;
 }
 
 .navbar-btn-container {

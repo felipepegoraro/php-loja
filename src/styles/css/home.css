@@ -7,17 +7,18 @@
   flex-direction: column;
   align-items: center;
   justify-items: center;
-  gap: 100px;
+  gap: 60px;
+  padding-bottom: 50px !important;
 }
 @media (max-width: 768px) {
   .home-page-container {
     width: 100% !important;
-    padding: 0 15px; /* Ajustar a margem em telas menores */
+    padding: 0 15px;
   }
 }
 @media (max-width: 576px) {
   .home-page-container {
-    gap: 50px; /* Menor espaçamento entre os elementos em telas móveis */
+    gap: 50px;
   }
 }
 
@@ -95,17 +96,8 @@
 .fp {
   display: flex !important;
   flex-direction: column !important;
-  gap: 60px !important;
-}
-@media (max-width: 768px) {
-  .fp {
-    gap: 40px; /* Ajustar o gap em tablets */
-  }
-}
-@media (max-width: 576px) {
-  .fp {
-    gap: 20px; /* Ajustar o gap em dispositivos móveis */
-  }
+  /* @include me.tablet { gap: 40px; } */
+  /* @include me.mobile { gap: 20px !important; } */
 }
 
 .featured-products h2 {

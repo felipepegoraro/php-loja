@@ -52,19 +52,14 @@
         flex: 2;
         margin-left: 10px;
 
-        h1 {
-        /*     font-size: 26px; */
-            margin-bottom: 5px;
-        }
+        h1 { margin-bottom: 5px; }
 
         p {
             font-size: 14px;
             color: #555;
             margin: 2px 0;
 
-            strong {
-                font-weight: bold;
-            }
+            strong { font-weight: bold; }
         }
     }
 
@@ -84,7 +79,7 @@
                 height: 30px;
                 font-size: 16px;
                 border: none;
-                cureor: pointer;
+                cursor: pointer;
                 transition: background 0.2s;
 
                 &:hover {

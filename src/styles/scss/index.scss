@@ -18,13 +18,13 @@ body {
 		"cv05", "cv06", "cv09", "cv10";
     font-display: swap;
     text-rendering: geometricPrecision;
-    width: 100% !important;
+    width: 100vw !important;
 }
 
 html {
     scroll-behavior: smooth;
-    scroll-padding-top: 60px;
+    /* scroll-padding-top: 60px; */
     background-color: v.$background-color;
     overflow-x: hidden;
-    width: 100% !important;
+    width: 100vw !important;
 }

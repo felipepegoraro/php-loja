@@ -17,7 +17,6 @@ const LoginScreen = () => {
   const nav = useNavigate();
 
   const endpoint = process.env.REACT_APP_ENDPOINT;
-  console.log("PAGINA LOGIN USANDO O ENDPOINT: ", endpoint);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,7 +25,6 @@ const LoginScreen = () => {
       email,
       senha,
     };
-    console.log(loginData);
 
     try {
       const response = await axios.post(`${endpoint}/login.php`, loginData, {
@@ -51,7 +49,6 @@ const LoginScreen = () => {
         nav(result.data?.admin ? "/admin/Homepage" : "/Catalogo");
       } else {
         setErrorMessage(`erro: ${result.message}`);
-        console.log(result);
       }
     } catch (error) {
       setErrorMessage('Erro na comunicação com o servidor.');

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import Utils from '../types/Utils';
 
 const ResetPassword = () => {
     const [step, setStep] = useState(1);
@@ -31,9 +32,9 @@ const ResetPassword = () => {
                 setErrorMessage(response.data.message);
             }
 
-        } catch(e){
+        } catch(_){
             setErrorMessage("Erro ao enviar e-mail. Tente novamente.");
-            console.log(e);
+            Utils.LOG("Erro ao enviar e-mail. Tente novamente");
         }
     };
 
@@ -83,7 +84,7 @@ const ResetPassword = () => {
             }
 
         } catch(e){
-            console.log(e);
+            Utils.LOG("Erro: submit password");
         }
     };
 

@@ -194,7 +194,7 @@ const Carrinho = () => {
                                                         <strong>Total: {Utils.formatPrice(total)}</strong>
                                                     </div>
                                                 </div>
-
+                                                <div className="order-buttons-finalize">
                                                     <button style={{marginRight: '10px'}}
                                                         className="btn btn-primary"
                                                         onClick={() => {
@@ -210,6 +210,7 @@ const Carrinho = () => {
                                                     >
                                                         Cancelar
                                                     </button>
+                                                </div>
                                             </div>
                                         }
                                     />

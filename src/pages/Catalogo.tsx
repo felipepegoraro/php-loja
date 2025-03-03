@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react'
 import axios from 'axios';
 import "../styles/css/catalogo.css";
 import type { Item, ItemCategoria } from '../types/item';
+import Utils from '../types/Utils';
 import type { Cart } from '../types/cart';
 
 import ProductCard from '../components/ProductCard';
@@ -29,7 +30,7 @@ const Catalogo = () => {
             if (fetchedCart) {
                 setCart(fetchedCart.filter((i: Cart) => String(i.idUsuario) === String(user.id)));
             } else {
-                console.log("Não fez fetch carrinho!");
+                Utils.LOG("Não fez fetch carrinho!");
                 setCart([]);
             }
         }
@@ -45,7 +46,7 @@ const Catalogo = () => {
                 setProducts(res.data.value);
                 setLoading(false);
             } catch (error) {
-                console.log("Erro ao buscar produtos:", error);
+                Utils.LOG(`Erro ao buscar produtos: ${error}`);
             }
         };
 
@@ -55,10 +56,10 @@ const Catalogo = () => {
                 if (res.data.success){
                     setCategories(res.data.value);
                 } else {
-                    console.log("erro ao escolher categorias");
+                    Utils.LOG(`erro ao escolher categorias`);
                 }
             } catch (error) {
-                console.log("erro ao buscar categorias:", error);
+                Utils.LOG(`erro ao buscar categorias: ${error}`);
             }
         };
 
@@ -67,10 +68,6 @@ const Catalogo = () => {
         fetchCartItems();
     }, [user, idcategoria, ordem, searchTerm, fetchCartItems, endpoint]); 
 
-
-    // const getTotalCarrinho = () => {
-    //     return cart && cart.length > 0 ? cart.reduce((total, item) => total + item.quantidade, 0) : 0;
-    // };
 
     const renderLoading = () => (
         <img height="50px" src="gif-loading.gif" alt="loading gif" />

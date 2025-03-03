@@ -4,14 +4,14 @@
 
 /* Layout principal */
 .cart-container {
-    background-color: #FFFf;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* width: fit-content; */
+    background-color: #fff !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: start !important;
 
     @include me.mobile {
         padding: 0px !important;
+        height: 100% !important;
     }
 }
 
@@ -28,7 +28,7 @@
 
     @include me.mobile {
         width: 100%;
-        margin-top: -100px;
+        height: 100% !important;
         padding-top: 20px;
         border-radius: 0px;
     }
@@ -55,9 +55,11 @@
     text-align: center;
     color: #ffffff;
     display: inline-block;
+    margin-bottom: 20px;
 
     @include me.mobile {
-        font-size: 2rem;
+        /* font-size: 2rem; */
+        margin: 20px;
     }
 }
 
@@ -234,6 +236,10 @@
                 align-items: center;
                 gap: 5px;
                 font-size: 14px;
+
+                @include me.mobile {
+                    flex-direction: row;
+                }
             }
 
             .order-total {
@@ -244,10 +250,20 @@
             }
         }
 
-        button {
-            width: 100%;
-            max-width: 200px;
-            margin-top: 10px;
+        .order-buttons-finalize {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: row;
+
+            button {
+                width: 100%;
+                max-width: 200px;
+                margin-top: 10px;
+
+                @include me.mobile {
+                    width: 50% !important;
+                }
+            }
         }
     }
 }

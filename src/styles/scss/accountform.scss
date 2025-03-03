@@ -1,10 +1,10 @@
 @use 'media' as me;
 
 form {
-    max-width: 400px;
+    width: 100%;
     padding: 20px;
     background: #fff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
     border-radius: 8px;
     display: flex;
     flex-direction: column;
@@ -44,7 +44,7 @@ button:hover {
 
 @include me.mobile {
     form {
-        max-width: 90%;
+        /* max-width: 90%; */
         padding: 15px;
     }
 

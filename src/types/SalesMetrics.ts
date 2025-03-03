@@ -16,6 +16,7 @@
 //   orderId: number;
 // }
 
+import Utils from '../types/Utils';
 import type {Item} from './item';
 import type {Order} from './order'; //OrderItem
 import axios from 'axios';
@@ -41,18 +42,18 @@ export default class SalesMetrics {
         try {
             const response = await axios.get(`${this.endpoint}/order-get.php`, {withCredentials: true});
             if (!response.data.success) {
-                console.error('Erro ao carregar pedidos:', response.data.message);
+                Utils.LOG(`{Erro ao carregar pedidos: ${response.data.message}`);
                 return;
             }
 
             if (response.data.special) {
-                console.log(response.data.message);
+                Utils.LOG(response.data.message);
                 return;
             }
 
             this.orders = response.data.value;
         } catch (error) {
-            console.error('Erro ao fazer a requisição', error);
+            Utils.LOG(`Erro ao fazer a requisição: ${error}`);
         }
 
         return this;
@@ -71,10 +72,10 @@ export default class SalesMetrics {
             if (response.data.success) {
                 this.topcustomers  = response.data.value;
             } else {
-                console.error('Erro ao obter os maiores compradores:', response.data.message);
+                Utils.LOG(`Erro ao obter os maiores compradores:  ${response.data.message}`);
             }
         } catch (error) {
-            console.error('Erro ao fazer a requisição', error);
+            Utils.LOG(`Erro ao fazer a requisição: ${error}`);
         }
 
         return this;
@@ -156,14 +157,14 @@ export default class SalesMetrics {
             });
 
             if (!response.data.success) {
-                console.error(response.data.message);
+                Utils.LOG(response.data.message);
                 return;
             }
 
-            console.log(response.data.message);
+            Utils.LOG(response.data.message);
             this.topitems = response.data.value;
         } catch (error) {
-            console.error('Erro ao fazer a requisição', error);
+            Utils.LOG(`Erro ao fazer a requisição:  ${error}`);
         }
 
         return this;

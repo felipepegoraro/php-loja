@@ -32,7 +32,6 @@ const AccountForm: React.FC = () => {
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0] || null;
-        console.log('Arquivo selecionado:', file);
         setFormData({ ...formData, foto: file });
     };
 
@@ -46,7 +45,6 @@ const AccountForm: React.FC = () => {
         if (formData.foto) formDataToSend.append('foto', formData.foto);
 
         const updatedUser = await UserService.updateUser(formDataToSend);
-        console.log("OK");
 
         if (updatedUser != null){
             setUser(updatedUser);
