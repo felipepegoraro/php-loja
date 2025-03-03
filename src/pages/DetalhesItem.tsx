@@ -6,6 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import { useUser } from '../context/userContext';
 import CartService from '../services/CartService';
+import CommentService from '../services/CommentService';
 
 import Utils from "../types/Utils";
 import type { Item } from "../types/item";
@@ -39,20 +40,12 @@ const DetalhesItem = () => {
 
     useEffect(() => {
         const fetchComments = async () => {
-            try {
-                const response = await axios.get(`${endpoint}/comments-get.php?itemId=${itemId}`);
-                if (response.data.success) setComments([comments[0], response.data.value]);
-            } catch (err) {
-                console.log(`Erro ao buscar comentários: ${err}`);
-            } finally {
-                setLoading(false);
+            if (itemId) {
+                const fetchedComments = await CommentService.getComments(Number(itemId));
+                setComments([comments[0], fetchedComments]);
             }
         };
 
-        if (itemId) fetchComments();
-    }, [itemId, endpoint]);
-
-    useEffect(() => {
         const fetchItemDetails = async () => {
             try {
                 const res = await axios.get(`${endpoint}/get-item.php`, {
@@ -67,7 +60,11 @@ const DetalhesItem = () => {
             }
         };
 
-        if (itemId) fetchItemDetails();
+        if (itemId){
+            fetchItemDetails();
+            fetchComments();
+        }
+        console.log("OK");
     }, [itemId, endpoint]);
 
     if (loading) return <p>Carregando detalhes do item...</p>;

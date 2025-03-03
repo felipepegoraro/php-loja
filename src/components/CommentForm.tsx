@@ -1,7 +1,7 @@
-import axios from 'axios';
 import { useState } from 'react';
 import { useUser } from '../context/userContext';
-import '../styles/scss/commentform.scss' //'./CommentForm.module.scss'; // Importando o arquivo SCSS
+import '../styles/scss/commentform.scss'
+import CommentService from '../services/CommentService';
 
 interface CommentFormProps {
     idProduto: number;
@@ -16,10 +16,10 @@ const CommentForm = (props: CommentFormProps) => {
         comentario: ''
     });
 
-    const endpoint = process.env.REACT_APP_ENDPOINT;
-
-    const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<string | null>(null);
+    const [message, setMessage] = useState<{success:boolean, msg: string}>({
+        success: false,
+        msg: ''
+    });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -31,46 +31,40 @@ const CommentForm = (props: CommentFormProps) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError(null);
-        setSuccess(null);
+        setMessage({success: false, msg: ''});
 
         const {nota, titulo, comentario } = formData;
+
         if (!nota || !titulo || !comentario) {
-            setError('Todos os campos são obrigatórios.');
+            setMessage({success: false, msg: 'Todos os campos são obrigatórios.'});
             return;
         }
 
-        if (Number(nota) < 0 || Number(nota) > 5 || 
-            isNaN(parseFloat(nota))){
-            setError('Nota inválida');
+        if (isNaN(parseFloat(nota))){
+            setMessage({success: false, msg: 'Nota inválida'});
             return;
         }
 
-        try {
-            const response = await axios.post(`${endpoint}/comments-add.php`, {
-                idUsuario: user!.id,
-                idProduto: props.idProduto,
-                nota: parseFloat(nota),
-                titulo,
-                comentario
-            });
-
-            if (response.data.success) {
-                setSuccess('Comentário enviado com sucesso!');
-                setFormData({ nota: '', titulo: '', comentario: '' });
-            } else {
-                setError(response.data.message || 'Erro ao enviar comentário.');
-            }
-        } catch (err) {
-            setError('Erro ao conectar com o servidor.');
-        }
+        CommentService.addComments(
+            user!.id,
+            props.idProduto,
+            parseFloat(nota),
+            titulo,
+            comentario,
+            setMessage
+        );
     };
 
     return (
         <div className="form-comments">
             <h2>Enviar Comentário</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            {success && <p style={{ color: 'green' }}>{success}</p>}
+
+            {
+                message.success 
+                ? <p style={{ color: 'green' }}>{message.msg}</p>
+                : <p style={{ color: 'red' }}>{message.msg}</p>
+            }
+
             <form onSubmit={handleSubmit} className="comment-form">
                 <div className="commmmmmmmmentario">
                     <div>

@@ -93,7 +93,27 @@ class CommentService {
             }
         }
 
-        ResponseHandler::jsonResponse(true, "Comentários encontrados", $response, $comments);
+        ResponseHandler::jsonResponse(
+            true,
+            "Comentários encontrados",
+            $response,
+            $comments
+        );
+    }
+
+    public function reassignCommentToDeletedUser(int $commentId): void {
+        $response = [];
+        $deletedUserId = 0;
+        $sql = "UPDATE " . $this->tb . " SET idUsuario = ? WHERE id = ?";
+        $params = ['ii', $deletedUserId, $commentId];
+
+        ResponseHandler::executeQuery(
+            $this->conn,
+            $sql,
+            $params,
+            $response,
+            'Erro ao reatribuir comentário para usuário deletado'
+        );
     }
 }
 
