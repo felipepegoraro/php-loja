@@ -34,7 +34,7 @@ const ResetPassword = () => {
 
         } catch(_){
             setErrorMessage("Erro ao enviar e-mail. Tente novamente.");
-            Utils.LOG("Erro ao enviar e-mail. Tente novamente");
+            console.log("Erro ao enviar e-mail. Tente novamente");
         }
     };
 
@@ -84,7 +84,7 @@ const ResetPassword = () => {
             }
 
         } catch(e){
-            Utils.LOG("Erro: submit password");
+            console.log("Erro: submit password");
         }
     };
 

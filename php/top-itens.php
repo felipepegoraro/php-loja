@@ -29,8 +29,7 @@ $orderBy = $validOrderBy[$type];
 
 $limit = isset($_GET['limit']) && is_numeric($_GET['limit']) ? (int)$_GET['limit'] : 5;
 
-$query = "
-    SELECT 
+$query = "SELECT 
         i.id AS id,
         i.nome AS nome,
         i.descricao AS descricao,
@@ -46,8 +45,7 @@ $query = "
         i.id, i.nome, i.descricao, i.foto, i.preco, i.idSubCategoria
     ORDER BY 
         totalVendido DESC
-    LIMIT ?
-";
+    LIMIT ?";
 
 $params = ['i', $limit];
 $result = ResponseHandler::executeQuery($conn, $query, $params, $response, "Erro");

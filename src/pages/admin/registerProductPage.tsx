@@ -36,10 +36,10 @@ const RegisterProductPage = () => {
                   if (res.data.success) {
                       setCategories(res.data.value as ItemCategoria[]);
                   } else {
-                      Utils.LOG(`Erro ao carregar categorias:  ${res.data.error}`);
+                      console.log(`Erro ao carregar categorias:  ${res.data.error}`);
                   }
               } catch (e) {
-                  Utils.LOG(`Erro ao buscar categorias: ${e}`);
+                  console.log(`Erro ao buscar categorias: ${e}`);
               }
           };
 
@@ -48,14 +48,14 @@ const RegisterProductPage = () => {
                   const res = await axios.get(`${endpoint}/get-subcategorias.php`, {
                       withCredentials: true
                   });
-                  Utils.LOG(`Resposta Subcategorias: ${res.data}`);
+                  console.log(`Resposta Subcategorias: ${res.data}`);
                   if (res.data.success) {
                       setSubcategories(res.data.value);
                   } else {
-                      Utils.LOG(`Erro ao carregar subcategorias: ${res.data.error}`);
+                      console.log(`Erro ao carregar subcategorias: ${res.data.error}`);
                   }
               } catch (err) {
-                  Utils.LOG(`Erro ao buscar subcategorias: ${err}`);
+                  console.log(`Erro ao buscar subcategorias: ${err}`);
               }
           };
 

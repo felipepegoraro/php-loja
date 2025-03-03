@@ -13,14 +13,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['admin'] !== 1) {
     ResponseHandler::jsonResponse(false, $msg, $response);
 }
 
-$query = "
-    SELECT u.nome, SUM(o.total) AS total_gasto
-    FROM tb_usuario u
-    INNER JOIN tb_pedido o ON u.id = o.idUsuario
-    WHERE u.id != 0
-    GROUP BY u.id
-    ORDER BY total_gasto DESC
-    LIMIT 5
+$query = "SELECT u.nome, SUM(o.total) AS total_gasto FROM tb_usuario u INNER JOIN tb_pedido o ON u.id = o.idUsuario WHERE u.id != 0 GROUP BY u.id ORDER BY total_gasto DESC LIMIT 5
 ";
 
 $result = ResponseHandler::executeQuery($conn, $query, [], $response, "Erro na Query");

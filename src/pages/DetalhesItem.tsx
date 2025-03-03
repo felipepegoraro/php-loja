@@ -43,7 +43,7 @@ const DetalhesItem = () => {
                 const response = await axios.get(`${endpoint}/comments-get.php?itemId=${itemId}`);
                 if (response.data.success) setComments([comments[0], response.data.value]);
             } catch (err) {
-                Utils.LOG(`Erro ao buscar comentários: ${err}`);
+                console.log(`Erro ao buscar comentários: ${err}`);
             } finally {
                 setLoading(false);
             }
@@ -61,7 +61,7 @@ const DetalhesItem = () => {
 
                 setItem(res.data);
             } catch (error) {
-                Utils.LOG(`Erro ao buscar detalhes do item: ${error}`);
+                console.log(`Erro ao buscar detalhes do item: ${error}`);
             } finally {
                 setLoading(false);
             }

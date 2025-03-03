@@ -30,7 +30,7 @@ const Catalogo = () => {
             if (fetchedCart) {
                 setCart(fetchedCart.filter((i: Cart) => String(i.idUsuario) === String(user.id)));
             } else {
-                Utils.LOG("Não fez fetch carrinho!");
+                console.log("Não fez fetch carrinho!");
                 setCart([]);
             }
         }
@@ -46,7 +46,7 @@ const Catalogo = () => {
                 setProducts(res.data.value);
                 setLoading(false);
             } catch (error) {
-                Utils.LOG(`Erro ao buscar produtos: ${error}`);
+                console.log(`Erro ao buscar produtos: ${error}`);
             }
         };
 
@@ -56,10 +56,10 @@ const Catalogo = () => {
                 if (res.data.success){
                     setCategories(res.data.value);
                 } else {
-                    Utils.LOG(`erro ao escolher categorias`);
+                    console.log(`erro ao escolher categorias`);
                 }
             } catch (error) {
-                Utils.LOG(`erro ao buscar categorias: ${error}`);
+                console.log(`erro ao buscar categorias: ${error}`);
             }
         };
 

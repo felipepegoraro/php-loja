@@ -16,7 +16,6 @@
 //   orderId: number;
 // }
 
-import Utils from '../types/Utils';
 import type {Item} from './item';
 import type {Order} from './order'; //OrderItem
 import axios from 'axios';
@@ -42,18 +41,18 @@ export default class SalesMetrics {
         try {
             const response = await axios.get(`${this.endpoint}/order-get.php`, {withCredentials: true});
             if (!response.data.success) {
-                Utils.LOG(`{Erro ao carregar pedidos: ${response.data.message}`);
+                console.log(`{Erro ao carregar pedidos: ${response.data.message}`);
                 return;
             }
 
             if (response.data.special) {
-                Utils.LOG(response.data.message);
+                console.log(response.data.message);
                 return;
             }
 
             this.orders = response.data.value;
         } catch (error) {
-            Utils.LOG(`Erro ao fazer a requisição: ${error}`);
+            console.log(`Erro ao fazer a requisição: ${error}`);
         }
 
         return this;
@@ -72,10 +71,10 @@ export default class SalesMetrics {
             if (response.data.success) {
                 this.topcustomers  = response.data.value;
             } else {
-                Utils.LOG(`Erro ao obter os maiores compradores:  ${response.data.message}`);
+                console.log(`Erro ao obter os maiores compradores:  ${response.data.message}`);
             }
         } catch (error) {
-            Utils.LOG(`Erro ao fazer a requisição: ${error}`);
+            console.log(`Erro ao fazer a requisição: ${error}`);
         }
 
         return this;
@@ -97,23 +96,16 @@ export default class SalesMetrics {
 
     /* Calcular vendas em determinado mês/ano */
     calculateSalesByMonth(year: number, month: number) {
-        const startOfMonth = new Date(year, month - 1, 1);
-        const endOfMonth = new Date(year, month, 0);
-
         return this.orders.reduce((sum: number, item: Order) => {
-            const totalValue = parseFloat(item.total.toString());
-            const orderDate = new Date(item.data);
+            const [yearStr, monthStr] = item.data.split('-');
 
-            // Verifica se a data do pedido está dentro do mês especificado
-            if (orderDate >= startOfMonth && orderDate <= endOfMonth) {
-                return sum + (isNaN(totalValue) ? 0 : totalValue);
-            }
-
-            return sum;
+            return (parseInt(yearStr) === year && parseInt(monthStr) === month)
+                ? sum + parseFloat(item.total.toString())
+                : sum;
         }, 0);
     }
 
-    /* Calcular total de vendas no mês atual */
+       /* Calcular total de vendas no mês atual */
     calculateMonthSales() {
         return this.calculateSalesByMonth(new Date().getFullYear(), new Date().getMonth() + 1);
     }
@@ -134,15 +126,13 @@ export default class SalesMetrics {
         const currentMonthSales = this.calculateMonthSales();
 
         const previousMonth = currentMonth === 1 ? 12 : currentMonth - 1;
-        const previousMonthSales = this.calculateSalesByMonth(currentYear, previousMonth);
+        const year = currentMonth === 1 ? currentYear-1 : currentYear;
+        const previousMonthSales = this.calculateSalesByMonth(year, previousMonth);
 
-        if (previousMonthSales === 0) {
-            // Acho que é inifinito mesmo, 100% seria o dobro do mês passado
-            return currentMonthSales > 0 ? Infinity : 0;
-        }
+        console.log("previous: ", previousMonthSales);
+        console.log("current: ", currentMonthSales);
 
-        const growthRate = ((currentMonthSales - previousMonthSales) / previousMonthSales) * 100;
-        return growthRate;
+        return Math.round(((currentMonthSales - previousMonthSales) / previousMonthSales) * 100) + "%";
     }
 
     // esse aqui ignora categoria e subcategoria pq teria q fazer 4 inner join e obviamente isso nao é bom ne
@@ -157,14 +147,14 @@ export default class SalesMetrics {
             });
 
             if (!response.data.success) {
-                Utils.LOG(response.data.message);
+                console.log(response.data.message);
                 return;
             }
 
-            Utils.LOG(response.data.message);
+            console.log(response.data.message);
             this.topitems = response.data.value;
         } catch (error) {
-            Utils.LOG(`Erro ao fazer a requisição:  ${error}`);
+            console.log(`Erro ao fazer a requisição:  ${error}`);
         }
 
         return this;
