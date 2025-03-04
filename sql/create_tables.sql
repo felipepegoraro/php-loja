@@ -98,8 +98,14 @@ CREATE TABLE IF NOT EXISTS tb_comentarios (
     FOREIGN KEY (idProduto) REFERENCES tb_itens(id)
 );
 
--- INSERT INTO tb_comentarios (idUsuario, idProduto, nota, titulo, comentario)
--- VALUES 
--- (1, 1, 4.2, "comentario 1", "lorem ipsum"),
--- (1, 1, 3.8, "comentario 2", "dolor sit amet"),
--- (1, 2, 5.0, "comentario 3", "consectetur adipiscing elit");
+
+-- INSERIR USUÁRIO DELETADO
+SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';
+
+INSERT INTO tb_usuario (
+    id, nome, email, senha, admin, verificado
+) VALUES (
+    0, 'Usuário deletado', 'deleted@php-loja.com', '', 0, 0
+);
+
+SET SQL_MODE = '';

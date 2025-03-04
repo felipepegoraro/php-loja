@@ -5,11 +5,13 @@ include_once 'ResponseHandler.php';
 class CommentService {
     private mysqli $conn;
     private string $tb;
+    private int $deletedUserId;
 
     public function __construct() {
         $db = Database::getInstance();
         $this->conn = $db->getConnection();
         $this->tb = "tb_comentarios";
+        $this->deletedUserId = 0;
     }
 
     /**
@@ -101,11 +103,12 @@ class CommentService {
         );
     }
 
+    // 1. mover comentário para usuário genérico deletedUser(id=0)
     public function reassignCommentToDeletedUser(int $commentId): void {
         $response = [];
-        $deletedUserId = 0;
-        $sql = "UPDATE " . $this->tb . " SET idUsuario = ? WHERE id = ?";
-        $params = ['ii', $deletedUserId, $commentId];
+        $sql  = "UPDATE " . $this->tb . " SET idUsuario = ?, ";
+        $sql .= "ultima_atualizacao = CURRENT_TIMESTAMP WHERE id = ?";
+        $params = ['ii', $this->deletedUserId, $commentId];
 
         ResponseHandler::executeQuery(
             $this->conn,
@@ -113,6 +116,23 @@ class CommentService {
             $params,
             $response,
             'Erro ao reatribuir comentário para usuário deletado'
+        );
+    }
+
+
+    // 2. mover todos comentários de determinado usuário para deletedUser(id=0)
+    public function reassignAllCommentsFromUser(int $userId): void {
+        $response = [];
+        $sql  = "UPDATE " . $this->tb . " SET idUsuario = ?, ";
+        $sql .= "ultima_atualizacao = CURRENT_TIMESTAMP WHERE idUsuario = ?";
+        $params = ['ii', $this->deletedUserId, $userId];
+
+        ResponseHandler::executeQuery(
+            $this->conn,
+            $sql,
+            $params,
+            $response,
+            'Erro ao reatribuir comentários para usuário deletado'
         );
     }
 }
