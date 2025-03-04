@@ -54,8 +54,20 @@ class CommentService {
         }
     }
 
-    // static async removeComment(){}
-    // static async editComment(){}
+    static async deleteComment(commentId: number): Promise<boolean> {
+        try {
+            const res = await axios.post(`${this.ENDPOINT}/comments-delete.php`, {
+                delete: true,
+                commentId: commentId
+            });
+
+            if (!res.data.success) console.log(res.data.message);
+            return res.data.success;
+        } catch(e) {
+            console.log(e);
+            return false;
+        }
+    }
 }
 
 export default CommentService;

@@ -44,6 +44,22 @@
                     }
 
                     .comment-stars .checked { color: orange; }
+                    .comment-stars span:nth-child(5) {margin-right: 25px;}
+
+                    @include me.mobile {
+                        .comment-stars span:nth-child(5) {margin-right: 10px;}
+                    }
+
+                    .comment-title-leftside {
+                        display: flex;
+                        flex-direction: row;   
+                        justify-content: end;
+                        align-items: center;
+                        gap: 5px;
+
+
+                        .comment-actions-buttons {display: flex; flex-direction: row;}
+                    }
                 }
 
                 .comment-body {

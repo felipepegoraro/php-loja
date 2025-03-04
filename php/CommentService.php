@@ -70,13 +70,23 @@ class CommentService {
     }
 
     public function getComments(int $itemId): void {
-        $sql = "SELECT c.id, c.idUsuario, c.idProduto, c.nota, c.titulo, c.comentario, c.data_comentario, c.ultima_atualizacao, u.nome AS nome_usuario 
-            FROM " . $this->tb . " AS c INNER JOIN tb_usuario AS u 
-            ON c.idUsuario = u.id 
-            WHERE c.idProduto = ?";
+        $sql  = "SELECT c.id, c.idUsuario, c.idProduto, c.nota, c.titulo, c.comentario";
+        $sql .= ", c.data_comentario, c.ultima_atualizacao, u.nome AS nome_usuario ";
+        $sql .= "FROM " . $this->tb . " AS c INNER JOIN tb_usuario AS u ";
+        $sql .= "ON c.idUsuario = u.id ";
+        $sql .= "WHERE c.idProduto = ?";
+
         $response = [];
         $params = ["i", $itemId];
-        $result = ResponseHandler::executeQuery($this->conn, $sql, $params, $response, 'Erro ao executar query');
+        
+        $result = ResponseHandler::executeQuery(
+            $this->conn,
+            $sql,
+            $params,
+            $response,
+            'Erro ao executar query'
+        );
+
         $comments = [];
 
         if ($result && $result->num_rows > 0) {
@@ -102,6 +112,77 @@ class CommentService {
             $comments
         );
     }
+
+
+
+    public function userDeleteComment(int $commentId): void {
+        $response = [];
+
+        // Obtém o id do item associado ao comentário
+        $sql  = "SELECT i.id FROM tb_itens AS i ";
+        $sql .= "INNER JOIN tb_comentarios AS c ON (i.id = c.idProduto) ";
+        $sql .= "WHERE c.id = ?";
+
+        $result = ResponseHandler::executeQuery(
+            $this->conn,
+            $sql,
+            ['i', $commentId],
+            $response,
+            "Erro ao executar query"
+        );
+
+        if (!$result || $result->num_rows === 0) {
+            ResponseHandler::jsonResponse(
+                false,
+                "Comentário não encontrado",
+                $response
+            );
+            return;
+        }
+
+        $row = $result->fetch_assoc();
+        $itemId = $row['id'];
+
+        // deleta o comentário
+        $deleteResult = ResponseHandler::executeQuery(
+            $this->conn,
+            "DELETE FROM tb_comentarios WHERE id = ?",
+            ['i', $commentId],
+            $response,
+            "Erro ao excluir comentário"
+        );
+
+        // recalcula a nota do produto
+        $this->recalculateRatingsFromComments($itemId);
+
+        ResponseHandler::jsonResponse(
+            true,
+            "Sucesso ao remover comentário",
+            $response
+        );
+    }
+
+
+    // Recalcula a nota média do produto
+    private function recalculateRatingsFromComments(int $itemId): void {
+        $response = [];
+
+        $sqlRecalculate  = "UPDATE tb_itens SET nota = ";
+        $sqlRecalculate .= "(SELECT COALESCE(AVG(nota), 0) FROM tb_comentarios WHERE idProduto = ?) ";
+        $sqlRecalculate .= "WHERE id = ?";
+
+        $paramsRecalculate = ['ii', $itemId, $itemId]; 
+
+        $resultRecalculate = ResponseHandler::executeQuery(
+            $this->conn,
+            $sqlRecalculate,
+            $paramsRecalculate,
+            $response,
+            "Erro ao recalcular a nota"
+        );
+    }
+
+
 
     // 1. mover comentário para usuário genérico deletedUser(id=0)
     public function reassignCommentToDeletedUser(int $commentId): void {

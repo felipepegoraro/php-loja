@@ -129,7 +129,7 @@ const DetalhesItem = () => {
                 </div>
 
                 <CommentForm idProduto={item.id}/>
-                <CommentContainer comments={comments[1]} index={comments[0]}/>
+                <CommentContainer comments={comments[1]} index={comments[0]} userId={user?.id}/>
 
                 {comments[1].length > MIN_NUM_COMMENTS ? (<div className="list-comment-buttons">
                     <button 

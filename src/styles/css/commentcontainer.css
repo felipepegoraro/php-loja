@@ -41,6 +41,25 @@
 .comment-container .comment-all-comments .comment-wrapper .comment .comment-title-container .comment-stars .checked {
   color: orange;
 }
+.comment-container .comment-all-comments .comment-wrapper .comment .comment-title-container .comment-stars span:nth-child(5) {
+  margin-right: 25px;
+}
+@media (max-width: 576px) {
+  .comment-container .comment-all-comments .comment-wrapper .comment .comment-title-container .comment-stars span:nth-child(5) {
+    margin-right: 10px;
+  }
+}
+.comment-container .comment-all-comments .comment-wrapper .comment .comment-title-container .comment-title-leftside {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+  gap: 5px;
+}
+.comment-container .comment-all-comments .comment-wrapper .comment .comment-title-container .comment-title-leftside .comment-actions-buttons {
+  display: flex;
+  flex-direction: row;
+}
 .comment-container .comment-all-comments .comment-wrapper .comment .comment-body {
   font-size: 1rem;
   margin-bottom: 12px;
