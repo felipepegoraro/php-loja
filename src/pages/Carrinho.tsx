@@ -22,19 +22,16 @@ const Carrinho = () => {
          }
 
          setLoading(true);
+
          try {
              const items = await CartService.fetchCartItems();
-             if (items){
-                 console.log(items);
-                 console.log("cart items: ", items);
-                 setCart(items);
-             }
-             console.log("cart after:", cart);
+             if (items) setCart(items);
          } catch (error) {
              console.error("Erro ao buscar itens do carrinho:", error);
          } finally {
              setLoading(false);
          }
+
      }, [isLoggedIn, user]);
 
     const calculateTotal = useCallback(() => {
@@ -76,10 +73,7 @@ const Carrinho = () => {
         }
 
         const result = await CartService.checkout(user.id);
-        if (result) {
-            console.log(result.message);
-            setCart([]);
-        }
+        if (result) setCart([]);
     };
 
     const restoreCartItems = async () => {

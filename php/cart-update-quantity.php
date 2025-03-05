@@ -1,15 +1,11 @@
 <?php 
 include_once 'ResponseHandler.php';
-include_once 'Database.php';
-
-$db = Database::getInstance();
-$conn = $db->getConnection();
+include_once 'CartService.php';
 
 session_start();
 
-$response = ["steps" => [], "errors" => []];
+$cartService = new CartService();
 
-// TODO: modularizar função de verificação de sessão de usuário
 function checkUserSession(&$response) {
     if (!isset($_SESSION['user'])) {
         $response["errors"][] = "[1] Usuário não autenticado.";
@@ -18,27 +14,19 @@ function checkUserSession(&$response) {
     return $_SESSION['user']['id'];
 }
 
-checkUserSession($response);
-
-$idUsuario = $_SESSION['user']['id'];
+$idUsuario = checkUserSession($cartService->getResponse());
 
 $idItem = isset($_POST['idItem']) ? (int)$_POST['idItem'] : null;
 $novaQuantidade = isset($_POST['quantidade']) ? (int)$_POST['quantidade'] : 0;
 
 if ($idItem <= 0 || $novaQuantidade <= 0) {
-    $response["errors"][] = "[2] Dados inválidos: idItem ou quantidade menor ou igual a zero.";
-    ResponseHandler::jsonResponse(false, "Dados inválidos", $response);
+    ResponseHandler::jsonResponse(false, "Dados inválidos", $cartService->getResponse());
 }
 
-$query = "
-    UPDATE tb_carrinho 
-    SET quantidade = ? 
-    WHERE idItem = ? AND idUsuario = ? AND status = 'ativo'";
-
-$params = ["iii", $novaQuantidade, $idItem, $idUsuario];
-
-$result = ResponseHandler::executeQuery($conn, $query, $params, $response, "Erro ao atualizar a quantidade");
-
-ResponseHandler::jsonResponse(true, "Quantidade atualizada com sucesso.", $response);
+$cartService->finalizeItem([
+    "idUsuario" => $idUsuario,
+    "idItem" => $idItem,
+    "quantidade" => $novaQuantidade,
+    "status" => "ativo"
+]);
 ?>
-

@@ -33,7 +33,13 @@ $sql = "SELECT c.id AS cart_id,
     WHERE c.idUsuario = ? AND c.status = 'ativo'
 ";
 
-$result = ResponseHandler::executeQuery($conn, $sql, ['i', $idUsuario], $response, 'Erro ao pegar itens');
+$result = ResponseHandler::executeQuery(
+    $conn,
+    $sql,
+    ['i', $idUsuario],
+    $response,
+    'Erro ao pegar itens'
+);
 
 if ($result->num_rows <= 0) {
     ResponseHandler::jsonResponse(false, "Carrinho vazio", $response);

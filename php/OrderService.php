@@ -1,13 +1,13 @@
 <?php
 # endpoint: /checkout:
-# orderCheckout() -> checkUserSession()        => Verifica se o usuário está logado
-#     -> getCartItems()                        => Recupera os itens no carrinho do usuário
-#         -> calculateOrderTotal()             => Calcula o total do pedido
-#             -> createOrder()                 => Cria um novo pedido no banco
-#                 -> insertOrderItems()        => Insere os itens no pedido
-#                 -> removeCartItems()         => Remove os itens do carrinho
-#                     -> commit()              => Finaliza a transação se não houver erro
-#     -> resposta final (sucesso ou erro)      => Retorna o status da operação
+# orderCheckout() -> checkUserSession()     => Verifica se o usuário está logado
+#     -> getCartItems()                     => Recupera os itens no carrinho do usuário
+#         -> calculateOrderTotal()          => Calcula o total do pedido
+#             -> createOrder()              => Cria um novo pedido no banco
+#                 -> insertOrderItems()     => Insere os itens no pedido
+#                 -> removeCartItems()      => Remove os itens do carrinho
+#                     -> commit()           => Finaliza a transação se não houver erro
+#     -> resposta final (sucesso ou erro)   => Retorna o status da operação
  
 include_once 'config-cors.php';
 include_once 'ResponseHandler.php';
@@ -17,6 +17,7 @@ include_once 'CartService.php';
 class OrderService {
     private ?mysqli $conn = null;
     private CartService $cartService;
+    private array $response = [];
 
     /**
      * inicialia a conexão e o CartService
@@ -51,13 +52,12 @@ class OrderService {
      * se não for um administrador, retorna uma resposta de erro.
      */
     private function checkAdmin(): void {
-        $response = [];
 
         if (!isset($_SESSION['user']) || $_SESSION['user']['admin'] !== 1) {
             ResponseHandler::jsonResponse(
                 false,
                 'Usuário inválido ou sem permissões',
-                $response
+                $this->response
             );
         }
     }
@@ -73,10 +73,9 @@ class OrderService {
      * @return float O valor total do pedido.
      */
     private function calculateOrderTotal(array $items): float {
-        $response = [];
         $totalPedido = 0.0;
 
-        if (empty($items)) ResponseHandler::jsonResponse(false, 'Nenhum item no pedido.', $response);
+        if (empty($items)) ResponseHandler::jsonResponse(false, 'Nenhum item no pedido.', $this->response);
 
         foreach ($items as &$item){
             $sumQuery = "SELECT preco FROM tb_itens WHERE id = ?";
@@ -86,7 +85,7 @@ class OrderService {
                 $this->conn, 
                 $sumQuery,
                 $params,
-                $response,
+                $this->response,
                 "Erro ao calcular o total."
             );
 
@@ -95,12 +94,12 @@ class OrderService {
                 $item['preco'] = $sumRow['preco'];
                 $totalPedido += $item['quantidade'] * $item['preco'];
             } else {
-                $response["errors"][] = "[3] Preço não encontrado para o item ID: " . $item['idItem'];
-                ResponseHandler::jsonResponse(false, 'Erro ao calcular total', $response);
+                $this->response["errors"][] = "[3] Preço não encontrado para o item ID: " . $item['idItem'];
+                ResponseHandler::jsonResponse(false, 'Erro ao calcular total', $this->response);
             }
         }
 
-        $response["steps"][] = "Total do pedido calculado: $totalPedido.";
+        $this->response["steps"][] = "Total do pedido calculado: $totalPedido.";
         return $totalPedido;
     }
 
@@ -115,20 +114,19 @@ class OrderService {
      * @return int ID do pedido recém-criado.
      */
     private function createOrder(int $userId, float $totalPedido): int {
-        $response = [];
 
         $pedidoQuery = "INSERT INTO tb_pedido (idUsuario, data, status, total) VALUES (?, CURDATE(), 'pendente', ?)";
         $params = ["id", $userId, $totalPedido];
 
-        $result = ResponseHandler::executeQuery($this->conn, $pedidoQuery, $params, $response, "Erro ao criar pedido");
+        $result = ResponseHandler::executeQuery($this->conn, $pedidoQuery, $params, $this->response, "Erro ao criar pedido");
         
         if ($this->conn->affected_rows === 0) {
-            $response["errors"][] = "Falha ao criar o pedido para o usuário: $userId.";
-            ResponseHandler::jsonResponse(false, 'Erro ao criar pedido', $response);
+            $this->response["errors"][] = "Falha ao criar o pedido para o usuário: $userId.";
+            ResponseHandler::jsonResponse(false, 'Erro ao criar pedido', $this->response);
         }
 
         $pedidoId = $this->conn->insert_id;
-        $response["steps"][] = "Pedido criado com ID: $pedidoId.";
+        $this->response["steps"][] = "Pedido criado com ID: $pedidoId.";
 
         return $pedidoId;
     }
@@ -143,12 +141,11 @@ class OrderService {
      *  @return void
      */
     private function insertOrderItems(int $userId, array $items, int $pedidoId): void {
-        $response = [];
 
         foreach ($items as $item) {
             if (is_null($item['preco'])) {
-                $response["steps"][] = "[5] Preço nulo encontrado para o item ID: " . $item['idItem'];
-                ResponseHandler::jsonResponse(false, 'Erro ao realizar pedido (preco nulo)', $response);
+                $this->response["steps"][] = "[5] Preço nulo encontrado para o item ID: " . $item['idItem'];
+                ResponseHandler::jsonResponse(false, 'Erro ao realizar pedido (preco nulo)', $this->response);
             }
 
             $insertQuery = "
@@ -165,10 +162,10 @@ class OrderService {
                 $pedidoId
             ];
 
-            ResponseHandler::executeQuery($this->conn, $insertQuery, $params, $response, "Erro ao inserir item no pedido.");
+            ResponseHandler::executeQuery($this->conn, $insertQuery, $params, $this->response, "Erro ao inserir item no pedido.");
         }
 
-        $response["steps"][] = "Item inserido no pedido.";
+        $this->response["steps"][] = "Item inserido no pedido.";
     }
 
 
@@ -181,7 +178,6 @@ class OrderService {
      * @return void
      */
     private function placeOrder(int $userId, array $items): void {
-        $response = [];
 
         $totalPedido = $this->calculateOrderTotal($items);
         
@@ -191,16 +187,17 @@ class OrderService {
 
             $this->insertOrderItems($userId, $items, $pedidoId);
 
-            $this->cartService->removeCartItems($userId);
+            // indep == false => nao tem "retorno precoce"
+            $this->cartService->removeItemsFromCart($userId, false, true);
 
             $this->conn->commit();
-            $response["steps"][] = "Transação concluída com sucesso.";
-            ResponseHandler::jsonResponse(true, 'Pedido realizado com sucesso.', $response);
+            $this->response["steps"][] = "Transação concluída com sucesso.";
+            ResponseHandler::jsonResponse(true, 'Pedido realizado com sucesso.', $this->response);
 
         } catch(Exception $e) {
             $this->conn->rollback();
-            $response["errors"][] = "Erro ao realizar transação: " . $e->getMessage();
-            ResponseHandler::jsonResponse(false, 'Erro ao realizar pedido', $response);
+            $this->response["errors"][] = "Erro ao realizar transação: " . $e->getMessage();
+            ResponseHandler::jsonResponse(false, 'Erro ao realizar pedido', $this->response);
         }
     }
 
@@ -213,10 +210,9 @@ class OrderService {
      * @return void
      */
     public function orderCheckout(): void {
-        $response = [];
 
         $userId = $this->checkUserSession();
-        $response["steps"][] = "[1] Usuário identificado com ID: $userId.";
+        $this->response["steps"][] = "[1] Usuário identificado com ID: $userId.";
         
         $items = $this->cartService->getCartItems($userId);
         if (!$items) return;
@@ -237,14 +233,13 @@ class OrderService {
 
         $sql = "SELECT * from tb_pedido";
         $msg = "Erro ao executar query";
-        $response = [];
 
-        $result = ResponseHandler::executeQuery($this->conn, $sql, [], $response, $msg);
+        $result = ResponseHandler::executeQuery($this->conn, $sql, [], $this->response, $msg);
         if (!$result) return;
 
         
         if ($result->num_rows <= 0) {
-            ResponseHandler::jsonResponse(false, 'Nenhum pedido encontrado', $response);
+            ResponseHandler::jsonResponse(false, 'Nenhum pedido encontrado', $this->response);
         }
 
         $pedidos = [];
@@ -259,7 +254,7 @@ class OrderService {
             ];
         }
 
-        ResponseHandler::jsonResponse(true, 'Pedidos recuperados', $response, $pedidos);
+        ResponseHandler::jsonResponse(true, 'Pedidos recuperados', $this->response, $pedidos);
     }
 
 
@@ -271,18 +266,17 @@ class OrderService {
      * @return void
      */
     public function getOrderItems(): void {
-        $response = [];
         $this->checkAdmin();
         $sql = "SELECT * FROM tb_itens_pedido";
         $result = ResponseHandler::executeQuery(
-            $this->conn, $sql, [], $response, 
+            $this->conn, $sql, [], $this->response, 
             "Erro ao executar query"
         );
 
         if (!$result) return;
 
         if ($result->num_rows <= 0){
-            ResponseHandler::jsonResponse(false, "Nenhum item encontrado", $response);
+            ResponseHandler::jsonResponse(false, "Nenhum item encontrado", $this->response);
         }
 
         $itens_pedido = [];
@@ -300,7 +294,7 @@ class OrderService {
             ];
         }
 
-        ResponseHandler::jsonResponse(true, "Pedidos encontrados", $response, $itens_pedido);
+        ResponseHandler::jsonResponse(true, "Pedidos encontrados", $this->response, $itens_pedido);
     }
 }
 ?>

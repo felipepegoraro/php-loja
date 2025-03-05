@@ -39,15 +39,12 @@ class CartService {
         };
 
         try {
-            const response = await axios.post(`${this.endpoint}/cart-remove.php`, req, {
+            const res = await axios.post(`${this.endpoint}/cart-remove.php`, req, {
                 withCredentials: true,
-                // timeout: 1000,
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json", },
             });
 
-            return response.data.success ? response.data : null;
+            return res.data.success;
         } catch (error) {
             console.error("Erro na requisição para remover item do carrinho:", error);
             return null;
@@ -57,7 +54,6 @@ class CartService {
     static async clearCart() {
         try {
             const res = await axios.get(`${this.endpoint}/cart-clear.php`, {
-                // timeout: 1000,
                 withCredentials: true,
             });
 
@@ -74,13 +70,10 @@ class CartService {
         try {
             const res = await axios.post(`${this.endpoint}/checkout.php`, obj, {
                 withCredentials: true,
-                // timeout: 1000,
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
             });
 
-            console.log(res.data);
+            console.log(res.data.message);
             return res.data.success ? res.data : null;
         } catch (error) {
             console.log("Erro ao fazer checkout:", error);
@@ -91,7 +84,6 @@ class CartService {
     static async fetchCartItems() {
         try {
             const res = await axios.get(`${this.endpoint}/cart-get.php`, {
-                // timeout: 10000,
                 withCredentials: true,
             });
 
@@ -104,8 +96,9 @@ class CartService {
 
     static async restoreCartItem(userId: number) {
         try {
-            const response = await axios.post(`${this.endpoint}/cart-restore.php`, { idUsuario: userId }, {
-                // timeout: 1000,
+            const response = await axios.post(`${this.endpoint}/cart-restore.php`, {
+                idUsuario: userId 
+            }, {
                 withCredentials: true,
             });
 
@@ -124,12 +117,11 @@ class CartService {
                     quantidade: String(quantidade)
                 }), {
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, 
-                    // timeout: 1000,
                     withCredentials: true,
                 }
             );
     
-            console.log(response);
+            console.log(response.data.message);
             return response.data.success ? response.data : null;
         } catch (error) {
             console.error("Erro ao atualizar a quantidade do item:", error);

@@ -24,7 +24,7 @@ const Catalogo = () => {
 
     const { user } = useUser();
 
-      const fetchCartItems = useCallback(async () => {
+    const fetchCartItems = useCallback(async () => {
         if (user) {
             const fetchedCart = await CartService.fetchCartItems();
             if (fetchedCart) {
