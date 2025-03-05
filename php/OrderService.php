@@ -296,5 +296,29 @@ class OrderService {
 
         ResponseHandler::jsonResponse(true, "Pedidos encontrados", $this->response, $itens_pedido);
     }
+
+
+    public function reassignAllOrdersFromUser(int $idUsuario): void {
+        $sql = "UPDATE tb_pedido SET idUsuario = 0 WHERE idUsuario = ?";
+        $params = ['i', $idUsuario];
+
+        ResponseHandler::executeQuery(
+            $this->conn,
+            $sql,
+            $params,
+            $this->response,
+            "Erro ao reatribuir pedidos para usuário deletado"
+        );
+
+        $sql = "UPDATE tb_itens_pedido SET idUsuario = 0 WHERE idUsuario = ?";
+
+        ResponseHandler::executeQuery(
+            $this->conn,
+            $sql,
+            $params,
+            $this->response,
+            "Erro ao reatribuir itens do pedido para usuário deletado"
+        );
+    }
 }
 ?>

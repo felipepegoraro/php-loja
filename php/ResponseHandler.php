@@ -68,16 +68,17 @@ class ResponseHandler {
                 // $stmt->close();
                 return null;
             } else {
-                $response['error'] = $stmt->error;
                 $stmt->close();
-                self::jsonResponse(false, $errorMsg, $response);
+                throw new Exception("$errorMsg: $stmt->error");
+                // self::jsonResponse(false, $$errorMessage, $response);
             }
         } else {
             $response['error'] = $conn->error;
-            self::jsonResponse(false, $errorMsg, $response);
+            throw new Exception("$errorMsg: " . $conn->error);
+            // self::jsonResponse(false, $errorMsg, $response);
         }
 
-        return null;
+        // return null;
     }
 }
 

@@ -171,6 +171,9 @@ class CartService {
     // permitindo sua recuperação. Usar removeItemsFromCart($idUsuario) preserva os 
     // itens removidos. Já removeItemsFromCart($idUsuario, true) remove todos os itens,
     // incluindo os removidos, tornando impossível sua recuperação.
+    // ser independente quer dizer que ele nao está "dentro" de outras chamadas
+    // chamadas "puras" sao independentes: nao tem problema a chamada de exit()
+    // dentro do jsonResponse :^)
     // @param int $idUsuario : id do usuario
     // @param bool $indep : independente ou nao
     // @param bool $removeAll : removo todos os itens (sem filtro de status)

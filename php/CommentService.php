@@ -184,6 +184,7 @@ class CommentService {
 
 
 
+    // nao vou usar essa coisa (?)
     // 1. mover comentário para usuário genérico deletedUser(id=0)
     public function reassignCommentToDeletedUser(int $commentId): void {
         $response = [];

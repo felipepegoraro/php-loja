@@ -1,12 +1,16 @@
 <?php 
-include_once 'ResponseHandler.php';
-include_once 'Database.php';
-include_once 'verifica-ip.php';
+include_once 'UserService.php';
+include_once 'config-cors.php';
 
-$db = Database::getInstance();
-$conn = $db->getConnection();
+session_start();
 
-$response = ['steps' => [], 'errors' => []];
+$data = json_decode(file_get_contents("php://input"), true);
 
-// tb_usuario (
+$response = [];
+
+if (isset($data['idUsuario'])){
+    $idUsuario = $data['idUsuario'];
+    $us = new UserService();
+    $us->deleteUserFullScheme($idUsuario);
+}
 ?>
